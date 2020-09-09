@@ -10,7 +10,7 @@ https://www.elegantbi.com/post/mastermodel
 https://www.elegantbi.com/post/extractmodelmetadata
 
 ### Metadata Import - Perspectives
-Run this script to automatically update the perspectives in your model. This script coordinates with the output text file from the Metadata Export script.
+Run this script to automatically update the perspectives in your model (or add new perspectives). This script coordinates with the output text file from the Metadata Export script.
 
 ### Metadata Import - Translations
 Run this script to automatically update the translations in your model (or add new translations). This script coordinates with the output text file from the Metadata Export script.
