@@ -545,6 +545,11 @@ foreach (var o in Model.CalculationGroups.ToList())
         var cg = o.Name;
         var ci = i.Name;
         var expr = i.Expression;
+        
+        // Remove tabs and new lines
+        expr = expr.Replace("\n"," ");
+        expr = expr.Replace("\t"," ");
+
         var ord = i.Ordinal.ToString();
         var fs = i.FormatStringExpression;
         var desc = i.Description;
