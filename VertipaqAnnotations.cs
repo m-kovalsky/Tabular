@@ -41,7 +41,10 @@ foreach (var o in Model.Relationships.ToList())
     var rName = o.ID;
     
     Model.Relationships[rName].RemoveAnnotation("Vertipaq_RelationshipID");
-    Model.Relationships[rName].RemoveAnnotation("Vertipaq_RelationshipSize");    
+    Model.Relationships[rName].RemoveAnnotation("Vertipaq_RelationshipSize");   
+    Model.Relationships[rName].RemoveAnnotation("Vertipaq_MaxFromCardinality");   
+    Model.Relationships[rName].RemoveAnnotation("Vertipaq_MaxToCardinality");   
+     
 }
 
 foreach (var o in Model.Tables.ToList())
@@ -363,6 +366,23 @@ foreach (var t in Model.Tables.ToList())
 
 // Set Model Size
 Model.SetAnnotation("Vertipaq_ModelSize",tableSizeCumulative.ToString());
+
+// Set Max From/To Cardinality
+foreach (var r in Model.Relationships.ToList())
+{
+    string rName = r.ID;
+    var fromTbl = r.FromTable.Name;
+    var fromCol = r.FromColumn.Name;
+    var toTbl = r.ToTable.Name;
+    var toCol = r.ToColumn.Name;
+    var obj = Model.Relationships[rName];
+    
+    string fromCard = Model.Tables[fromTbl].Columns[fromCol].GetAnnotation("Vertipaq_Cardinality");
+    string toCard = Model.Tables[toTbl].Columns[toCol].GetAnnotation("Vertipaq_Cardinality");
+    
+    obj.SetAnnotation("Vertipaq_MaxFromCardinality",fromCard);
+    obj.SetAnnotation("Vertipaq_MaxToCardinality",toCard);    
+}
 
 // Remove Vertipaq ID Annotations
 foreach (var o in Model.AllHierarchies)
