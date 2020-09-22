@@ -19,4 +19,4 @@ Run this script to automatically update the translations in your model (or add n
 Coming soon...
 
 ### Vertipaq Annotations
-Run this script against a live-connected model to save Vertipaq Analyzer statistics as annotations on model objects (Tables, Partitions, Columns, Hierarchies, Relationships).
+Run this script against a live-connected model to save Vertipaq Analyzer statistics as annotations on model objects (Model, Tables, Partitions, Columns, Hierarchies, Relationships).
