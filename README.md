@@ -23,7 +23,7 @@ Run this script against a live-connected model to save Vertipaq Analyzer statist
 
 * **Model:** Model Size
 
-* **Tables:** Table Size; Row Count
+* **Tables:** Row Count; Table Size
 
 * **Partitions:** Record Count; Segment Count; Records Per Segment
 
