@@ -31,4 +31,4 @@ Run this script against a live-connected model to save Vertipaq Analyzer statist
 
 * **Hierarchies:** User Hierarchy Size
 
-* **Relationships:** Relationship Size
+* **Relationships:** Relationship Size; Max From Cardinality; Max To Cardinality
