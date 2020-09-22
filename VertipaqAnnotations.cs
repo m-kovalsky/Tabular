@@ -11,7 +11,9 @@ var DMV_StorageTableColumns = ExecuteDax("SELECT [DIMENSION_NAME],[ATTRIBUTE_NAM
 var DMV_StorageTables = ExecuteDax("SELECT [DIMENSION_NAME],[TABLE_ID],[ROWS_COUNT] FROM $SYSTEM.DISCOVER_STORAGE_TABLES").Tables[0];
 var DMV_ColumnSegments = ExecuteDax("SELECT [DIMENSION_NAME],[TABLE_ID],[COLUMN_ID],[USED_SIZE] FROM $SYSTEM.DISCOVER_STORAGE_TABLE_COLUMN_SEGMENTS").Tables[0];
 
-// Remove Existing Annotations
+// Remove Existing Vertipaq Annotations
+Model.RemoveAnnotation("Vertipaq_ModelSize");
+
 foreach (var o in Model.AllHierarchies)
 {
     var tableName = o.Table.Name;
@@ -307,12 +309,15 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
 }
 
 // Set Column & Table Size
+
+int tableSizeCumulative = 0;
+
 foreach (var t in Model.Tables.ToList())
 {
     var tableName = t.Name;
     int colSizeCumulative = 0;
     int userHierSizeCumulative = 0;
-    int relSizeCumulative = 0;
+    int relSizeCumulative = 0;       
     
     foreach (var c in t.Columns.ToList())
     {        
@@ -350,12 +355,16 @@ foreach (var t in Model.Tables.ToList())
     }
     
     int tableSize = colSizeCumulative + userHierSizeCumulative + relSizeCumulative;
+    tableSizeCumulative = tableSizeCumulative + tableSize;
     
     // Set Table Size
     Model.Tables[tableName].SetAnnotation("Vertipaq_TableSize",tableSize.ToString());
 }
 
-// Remove ID Annotations
+// Set Model Size
+Model.SetAnnotation("Vertipaq_ModelSize",tableSizeCumulative.ToString());
+
+// Remove Vertipaq ID Annotations
 foreach (var o in Model.AllHierarchies)
 {
     var tableName = o.Table.Name;
