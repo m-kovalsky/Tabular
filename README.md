@@ -25,10 +25,10 @@ Run this script against a live-connected model to save Vertipaq Analyzer statist
 
 * **Tables:** Table Size; Row Count
 
-* **Partitions** Record Count; Segment Count; Records Per Segment
+* **Partitions:** Record Count; Segment Count; Records Per Segment
 
-* **Columns** Cardinality; Column Hierarchy Size; Column Size; Data Size; Dictionary Size
+* **Columns:** Cardinality; Column Hierarchy Size; Column Size; Data Size; Dictionary Size
 
-* **Hierarchies** User Hierarchy Size
+* **Hierarchies:** User Hierarchy Size
 
-* **Relationships** Relationship Size
+* **Relationships:** Relationship Size
