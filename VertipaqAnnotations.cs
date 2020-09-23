@@ -21,6 +21,7 @@ foreach (var o in Model.AllHierarchies)
     
     Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_HierarchyID");
     Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_UserHierarchySize");
+    Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_TableSizePctOfModel");
 }
 
 foreach (var o in Model.AllColumns)
@@ -34,6 +35,8 @@ foreach (var o in Model.AllColumns)
     Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_DictionarySize");
     Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_Cardinality");
     Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnSize");
+    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnSizePctOfTable");
+    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnSizePctOfModel");
 }
 
 foreach (var o in Model.Relationships.ToList())
@@ -383,6 +386,34 @@ foreach (var r in Model.Relationships.ToList())
     obj.SetAnnotation("Vertipaq_MaxFromCardinality",fromCard);
     obj.SetAnnotation("Vertipaq_MaxToCardinality",toCard);    
 }
+
+// Percent of Table and Model
+float modelSize = Convert.ToInt32(Model.GetAnnotation("Vertipaq_ModelSize"));
+
+foreach (var t in Model.Tables.ToList())
+{
+    var tableName = t.Name;
+    var obj = Model.Tables[tableName];
+    
+    float tableSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_TableSize"));
+    double tblpct = Math.Round(tableSize / modelSize,3);
+        
+    obj.SetAnnotation("Vertipaq_TableSizePctOfModel",tblpct.ToString());
+    
+    foreach (var c in t.Columns.ToList())
+    {
+        var colName = c.Name;
+        var col = Model.Tables[tableName].Columns[colName];
+        
+        float colSize = Convert.ToInt32(col.GetAnnotation("Vertipaq_ColumnSize"));
+        double colpctTbl = Math.Round(colSize / tableSize,3);
+        double colpctModel = Math.Round(colSize / modelSize,3);
+        
+        col.SetAnnotation("Vertipaq_ColumnSizePctOfTable",colpctTbl.ToString());
+        col.SetAnnotation("Vertipaq_ColumnSizePctOfModel",colpctModel.ToString());
+    }
+}
+
 
 // Remove Vertipaq ID Annotations
 foreach (var o in Model.AllHierarchies)
