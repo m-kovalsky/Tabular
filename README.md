@@ -16,7 +16,7 @@ Run this script to automatically update the perspectives in your model (or add n
 Run this script to automatically update the translations in your model (or add new translations). This script coordinates with the output text file from the Metadata Export script.
 
 ### Auto Aggs
-Coming soon...
+https://www.elegantbi.com/post/autoaggs
 
 ### Vertipaq Annotations
 Run this script against a live-connected model to save Vertipaq Analyzer statistics as annotations on model objects.
