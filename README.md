@@ -19,6 +19,8 @@ Run this script to automatically update the translations in your model (or add n
 https://www.elegantbi.com/post/autoaggs
 
 ### Vertipaq Annotations
+https://www.elegantbi.com/post/vertipaqintabulareditor
+
 Run this script against a live-connected model to save Vertipaq Analyzer statistics as annotations on model objects.
 
 * **Model:** Model Size
