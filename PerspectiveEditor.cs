@@ -211,6 +211,7 @@ newmodelButton.Click += (System.Object sender1, System.EventArgs e1) => {​
     enterComboBox.Visible = false;
     goButton.Enabled = true;
     enterComboBox.Text = string.Empty;
+    enterTextBox.Enabled = true;
 };
 
 existingmodelButton.Click += (System.Object sender2, System.EventArgs e2) => {​
