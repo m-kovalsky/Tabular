@@ -38,3 +38,6 @@ https://github.com/TabularEditor/BestPracticeRules
 * **Hierarchies:** User Hierarchy Size
 
 * **Relationships:** Relationship Size; Max From Cardinality; Max To Cardinality
+
+### Perspective Editor
+Running this script opens a program within Tabular Editor that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
