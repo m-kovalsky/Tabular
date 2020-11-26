@@ -3,6 +3,9 @@ Useful code for tabular modeling and automation
 
 For more information on these scripts, check out my blog (https://www.elegantbi.com)
 
+### Blank Row Finder
+Run this script in Tabular Editor to quickly make a list of all relationships that contain a blank row in the 'to-table'.
+
 ### Master Model
 https://www.elegantbi.com/post/mastermodel
 
