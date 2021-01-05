@@ -5,6 +5,7 @@ For more information on these scripts, check out my blog (https://www.elegantbi.
 
 ### Blank Row Finder
 Run this script in Tabular Editor against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
+https://www.elegantbi.com/post/findblankrows
 
 ### Master Model
 https://www.elegantbi.com/post/mastermodel
