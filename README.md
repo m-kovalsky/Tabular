@@ -25,11 +25,9 @@ https://www.elegantbi.com/post/autoaggs
 ### Vertipaq Annotations
 https://www.elegantbi.com/post/vertipaqintabulareditor
 
-Run this script against a live-connected model to save Vertipaq Analyzer statistics as annotations on model objects. These annotations may be referenced to create Best Practice Analyzer rules for your model. See the links below for more info on Tabular Editor's Best Practice Analyzer.
+Run this script against a live-connected model to save Vertipaq Analyzer statistics as annotations on model objects. These annotations may be referenced to create Best Practice Analyzer rules for your model. See the link below for more info on Tabular Editor's Best Practice Analyzer.
 
 https://github.com/otykier/TabularEditor/wiki/Best-Practice-Analyzer
-
-https://github.com/TabularEditor/BestPracticeRules
 
 * **Model:** Model Size
 
