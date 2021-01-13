@@ -228,7 +228,6 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
     int lastInd2 = usedCol.LastIndexOf("(");
     string usedObjID2 = usedCol.Substring(lastInd2+1,usedCol.Length - lastInd2 - 2);    
     
-    
     // User Hierarchy Size
     foreach (var o in Model.Tables[tableName].Hierarchies.Where(a => a.GetAnnotation("Vertipaq_HierarchyID") == usedObjID))
     {
@@ -275,7 +274,7 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
     foreach (var o in Model.Tables[tableName].Columns.Where(a => a.GetAnnotation("Vertipaq_ColumnID") == usedObjID))
     {
         var colName = o.Name;
-        int colSize = Convert.ToInt32(Model.Tables[tableName].Columns[colName].GetAnnotation("Vertipaq_ColumnHierarchySize"));
+        long colSize = Convert.ToInt64(Model.Tables[tableName].Columns[colName].GetAnnotation("Vertipaq_ColumnHierarchySize"));
         
         if (usedObj.StartsWith("H$"))
         {
@@ -285,7 +284,7 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
             }
             else
             {
-                colSize = Convert.ToInt32(usedSize);
+                colSize = Convert.ToInt64(usedSize);
             }
         
             Model.Tables[tableName].Columns[colName].SetAnnotation("Vertipaq_ColumnHierarchySize",colSize.ToString());                
@@ -296,17 +295,17 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
     foreach (var o in Model.Tables[tableName].Columns.Where(a => a.GetAnnotation("Vertipaq_ColumnID") == usedObjID2))
     {
         var colName = o.Name;
-        int colSize = Convert.ToInt32(Model.Tables[tableName].Columns[colName].GetAnnotation("Vertipaq_DataSize"));
+        long colSize = Convert.ToInt64(Model.Tables[tableName].Columns[colName].GetAnnotation("Vertipaq_DataSize"));
         
         if (usedObj.StartsWith("H$") == false && usedObj.StartsWith("R$") == false && usedObj.StartsWith("U$") == false)
         {
             if (colSize != null)
             {
-                colSize = colSize + Convert.ToInt32(usedSize);
+                colSize = colSize + Convert.ToInt64(usedSize);
             }
             else
             {
-                colSize = Convert.ToInt32(usedSize);
+                colSize = Convert.ToInt64(usedSize);
             }
         
             Model.Tables[tableName].Columns[colName].SetAnnotation("Vertipaq_DataSize",colSize.ToString());                
@@ -316,25 +315,25 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
 
 // Set Column & Table Size
 
-int tableSizeCumulative = 0;
+long tableSizeCumulative = 0;
 
 foreach (var t in Model.Tables.ToList())
 {
     var tableName = t.Name;
-    int colSizeCumulative = 0;
-    int userHierSizeCumulative = 0;
-    int relSizeCumulative = 0;       
+    long colSizeCumulative = 0;
+    long userHierSizeCumulative = 0;
+    long relSizeCumulative = 0;       
     
     foreach (var c in t.Columns.ToList())
     {        
         var colName = c.Name;
         var obj = Model.Tables[tableName].Columns[colName];
         
-        int colHierSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_ColumnHierarchySize"));
-        int dataSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_DataSize"));
-        int dictSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_DictionarySize"));
+        long colHierSize = Convert.ToInt64(obj.GetAnnotation("Vertipaq_ColumnHierarchySize"));
+        long dataSize = Convert.ToInt64(obj.GetAnnotation("Vertipaq_DataSize"));
+        long dictSize = Convert.ToInt64(obj.GetAnnotation("Vertipaq_DictionarySize"));
         
-        int colSize = colHierSize + dataSize + dictSize;
+        long colSize = colHierSize + dataSize + dictSize;
         colSizeCumulative = colSizeCumulative + colSize;        
         
         // Set Column Size
@@ -346,7 +345,7 @@ foreach (var t in Model.Tables.ToList())
         var hName = h.Name;
         var obj = Model.Tables[tableName].Hierarchies[hName];
         
-        int userHierSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_UserHierarchySize"));      
+        long userHierSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_UserHierarchySize"));      
         userHierSizeCumulative = userHierSizeCumulative + userHierSize;           
     }
     
@@ -355,12 +354,12 @@ foreach (var t in Model.Tables.ToList())
         var rName = r.ID;
         var obj = Model.Relationships[rName];
         
-        int relSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_RelationshipSize"));
+        long relSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_RelationshipSize"));
         
         relSizeCumulative = relSizeCumulative + relSize;                
     }
     
-    int tableSize = colSizeCumulative + userHierSizeCumulative + relSizeCumulative;
+    long tableSize = colSizeCumulative + userHierSizeCumulative + relSizeCumulative;
     tableSizeCumulative = tableSizeCumulative + tableSize;
     
     // Set Table Size
@@ -388,14 +387,14 @@ foreach (var r in Model.Relationships.ToList())
 }
 
 // Percent of Table and Model
-float modelSize = Convert.ToInt32(Model.GetAnnotation("Vertipaq_ModelSize"));
+float modelSize = Convert.ToInt64(Model.GetAnnotation("Vertipaq_ModelSize"));
 
 foreach (var t in Model.Tables.ToList())
 {
     var tableName = t.Name;
     var obj = Model.Tables[tableName];
     
-    float tableSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_TableSize"));
+    float tableSize = Convert.ToInt64(obj.GetAnnotation("Vertipaq_TableSize"));
     double tblpct = Math.Round(tableSize / modelSize,3);
         
     obj.SetAnnotation("Vertipaq_TableSizePctOfModel",tblpct.ToString());
@@ -405,7 +404,7 @@ foreach (var t in Model.Tables.ToList())
         var colName = c.Name;
         var col = Model.Tables[tableName].Columns[colName];
         
-        float colSize = Convert.ToInt32(col.GetAnnotation("Vertipaq_ColumnSize"));
+        float colSize = Convert.ToInt64(col.GetAnnotation("Vertipaq_ColumnSize"));
         double colpctTbl = Math.Round(colSize / tableSize,3);
         double colpctModel = Math.Round(colSize / modelSize,3);
         
