@@ -1,4 +1,4 @@
-var folderName = @"C:\Users\mikova\Desktop\Metadata"; // Update this location to the destination folder on your computer
+string folderName = @"C:\Users\mikova\OneDrive - Microsoft\Desktop\Metadata"; // Update this location to the destination folder on your computer
 
 /******************************DATA SOURCES****************************/
 
@@ -16,7 +16,7 @@ foreach (var o in Model.DataSources.Where(a => a.Type.ToString() == "Provider").
     string mc = ds.MaxConnections.ToString();
     string prov = ds.Provider;
     
-     sb.Append(n + '\t' + conn + '\t' + prov + '\t' + mc);
+    sb.Append(n + '\t' + conn + '\t' + prov + '\t' + mc);
 }
 
 System.IO.File.WriteAllText(folderName + @"\DataSources.txt", sb.ToString());
@@ -28,7 +28,7 @@ sb = new System.Text.StringBuilder();
 
 // Headers
 sb.Append("TableName" + '\t' + "PartitionName" + '\t' + "DataSource" + '\t' + "Mode" + '\t' +
-          "DataCategory" + '\t' + "Description");
+          "DataCategory" + '\t' + "Description" + '\t' + "Query");
 sb.Append(Environment.NewLine);
 
 foreach (var o in Model.Tables.ToList())
@@ -36,13 +36,12 @@ foreach (var o in Model.Tables.ToList())
     foreach (var p in o.Partitions.ToList())
     {
 
-        var q = Model.Tables[o.Name].Partitions[p.Name].Query;
-        var m = Model.Tables[o.Name].Partitions[p.Name].Mode;
-        var dc = string.Empty;
+        string q = Model.Tables[o.Name].Partitions[p.Name].Query;
+        string m = Model.Tables[o.Name].Partitions[p.Name].Mode.ToString();
+        string dc = o.DataCategory;
     
-    dc = o.DataCategory;
 
-    sb.Append(o.Name + '\t' + p.Name + '\t' + o.Source + '\t' + m + '\t' + dc + '\t' + o.Description);
+    sb.Append(o.Name + '\t' + p.Name + '\t' + o.Source + '\t' + m + '\t' + dc + '\t' + o.Description + '\t' + q);
     sb.Append(Environment.NewLine);
     }
 }
@@ -65,15 +64,14 @@ foreach (var t in Model.Tables.ToList())
 {
     foreach (var o in t.Columns.ToList())
     {
-        var sc = string.Empty;
-        var dt = o.DataType;
-        var expr = string.Empty;
-        var hid = string.Empty;
-        var fmt = o.FormatString;
-        var pk = string.Empty;
-        var sumb = o.SummarizeBy.ToString();
-        var sbc = string.Empty;
-        var fs = o.FormatString;
+        string sc = string.Empty;
+        string dt = o.DataType.ToString();
+        string expr = string.Empty;
+        string hid = string.Empty;
+        string pk = string.Empty;
+        string sumb = o.SummarizeBy.ToString();
+        string sbc = string.Empty;
+        string fs = o.FormatString;
         
         if (o.Type == ColumnType.Data)
         {
@@ -130,10 +128,14 @@ foreach (var t in Model.Tables.ToList())
 {
     foreach (var o in t.Measures.ToList())
     {
-        var hid = string.Empty;
-        var fs = o.FormatString;
+        string hid = string.Empty;
+        string fs = o.FormatString;
+        string expr = o.Expression;
+        // Remove tabs and new lines
+        expr = expr.Replace("\n"," ");
+        expr = expr.Replace("\t"," ");
         
-        if (o.IsHidden == true)
+        if (o.IsHidden)
         {
             hid = "Yes";
         }
@@ -141,11 +143,6 @@ foreach (var t in Model.Tables.ToList())
         {
             hid = "No";
         }
-        
-        var expr = o.Expression;
-        // Remove tabs and new lines
-        expr = expr.Replace("\n"," ");
-        expr = expr.Replace("\t"," ");
         
         sb.Append(o.Name + '\t' + t.Name + '\t' + "Measure" + '\t' + "" + '\t' + "" + '\t' + expr + '\t' + hid + '\t' + 
         fs + '\t' + "" + '\t' + "" + '\t' + o.DisplayFolder + '\t' + "" + '\t' + "" + '\t' + o.Description);
@@ -164,8 +161,8 @@ sb = new System.Text.StringBuilder();
 sb.Append("ModelName" + '\t' + "DefaultMode" + '\t' + "PowerBIDataSourceVersion");
 sb.Append(Environment.NewLine);
 
-var dm = "Import";
-var pbi = string.Empty;
+string dm = "Import";
+string pbi = string.Empty;
 
 if (Model.DefaultMode == ModeType.DirectQuery)
 {
@@ -194,7 +191,7 @@ foreach (var r in Model.Roles.ToList())
 {
     foreach (var rm in r.Members.ToList())
     {
-        var mp = string.Empty;
+        string mp = string.Empty;
         if (r.ModelPermission == ModelPermission.Administrator)
         {
             mp = r.ModelPermission.ToString().Substring(0,5);
@@ -223,7 +220,7 @@ foreach (var t in Model.Tables)
 {
     foreach(var r in Model.Roles)
     {
-        var rls = Model.Tables[t.Name].RowLevelSecurity[r.Name];
+        string rls = Model.Tables[t.Name].RowLevelSecurity[r.Name];
         if (!String.IsNullOrEmpty(rls))
         {
             sb.Append(r.Name + '\t' + t.Name + '\t' + rls);
@@ -246,13 +243,13 @@ sb.Append(Environment.NewLine);
 
 foreach (var r in Model.Relationships)
 {
-    var act = string.Empty;
-    var relType = string.Empty;
-    var cfb = string.Empty;
-    var sfb = string.Empty;
-    var rori = string.Empty;
+    string act = string.Empty;
+    string relType = string.Empty;
+    string cfb = string.Empty;
+    string sfb = string.Empty;
+    string rori = string.Empty;
     
-    if (r.IsActive == true)
+    if (r.IsActive)
     {
         act = "Yes";
     }
@@ -286,7 +283,7 @@ foreach (var r in Model.Relationships)
     {
         sfb = "Bi";
     }
-    if (r.RelyOnReferentialIntegrity == true)
+    if (r.RelyOnReferentialIntegrity)
     {
         rori = "Yes";
     }
@@ -346,8 +343,8 @@ foreach (var o in Model.AllMeasures.ToList())
     
     foreach (var p in Model.Perspectives.ToList())
     {
-        var per = string.Empty;
-        if (o.InPerspective[p] == true)
+        string per = string.Empty;
+        if (o.InPerspective[p])
         {
             per = "Yes";
         }
@@ -367,8 +364,8 @@ foreach (var o in Model.AllColumns.ToList())
     
     foreach (var p in Model.Perspectives.ToList())
     {
-        var per = string.Empty;
-        if (o.InPerspective[p] == true)
+        string per = string.Empty;
+        if (o.InPerspective[p])
         {
             per = "Yes";
         }
@@ -388,8 +385,8 @@ foreach (var o in Model.AllHierarchies.ToList())
     
     foreach (var p in Model.Perspectives.ToList())
     {
-        var per = string.Empty;
-        if (o.InPerspective[p] == true)
+        string per = string.Empty;
+        if (o.InPerspective[p])
         {
             per = "Yes";
         }
@@ -430,15 +427,15 @@ foreach (var cul in Model.Cultures.ToList())
     foreach (var t in Model.Tables.ToList())
     {
     
-        var objectName = t.Name;
-        var objectType = "Table";
-        var tableName = t.Name;
-        var transLang = string.Empty;
-        var transName = string.Empty;
-        var transDesc = string.Empty;
-        var transDF = string.Empty;
+        string objectName = t.Name;
+        string objectType = "Table";
+        string tableName = t.Name;
+        string transLang = string.Empty;
+        string transName = string.Empty;
+        string transDesc = string.Empty;
+        string transDF = string.Empty;
     
-        if (hasTranslation == true)
+        if (hasTranslation)
         {
             transLang = cul.Name;
             transName = t.TranslatedNames[transLang];
@@ -453,15 +450,15 @@ foreach (var cul in Model.Cultures.ToList())
     // Columns
     foreach (var c in Model.AllColumns.ToList())
     {
-        var objectName = c.Name;
-        var objectType = "Column";
-        var tableName = c.Table.Name;
-        var transLang = string.Empty;
-        var transName = string.Empty;
-        var transDesc = string.Empty;
-        var transDF = string.Empty;
+        string objectName = c.Name;
+        string objectType = "Column";
+        string tableName = c.Table.Name;
+        string transLang = string.Empty;
+        string transName = string.Empty;
+        string transDesc = string.Empty;
+        string transDF = string.Empty;
                 
-        if (hasTranslation == true)
+        if (hasTranslation)
         {
             transLang = cul.Name;
             transName = c.TranslatedNames[transLang];
@@ -476,15 +473,15 @@ foreach (var cul in Model.Cultures.ToList())
     // Measures
     foreach (var m in Model.AllMeasures.ToList())
     {
-        var objectName = m.Name;
-        var objectType = "Measure";
-        var tableName = m.Table.Name;
-        var transLang = string.Empty;
-        var transName = string.Empty;
-        var transDesc = string.Empty;
-        var transDF = string.Empty;
+        string objectName = m.Name;
+        string objectType = "Measure";
+        string tableName = m.Table.Name;
+        string transLang = string.Empty;
+        string transName = string.Empty;
+        string transDesc = string.Empty;
+        string transDF = string.Empty;
         
-        if (hasTranslation == true)
+        if (hasTranslation)
         {
             transLang = cul.Name;
             transName = m.TranslatedNames[transLang];
@@ -499,15 +496,15 @@ foreach (var cul in Model.Cultures.ToList())
     // Hierarchies
     foreach (var h in Model.AllHierarchies.ToList())
     {
-        var objectName = h.Name;
-        var objectType = "Hierarchy";
-        var tableName = h.Table.Name;
-        var transLang = string.Empty;
-        var transName = string.Empty;
-        var transDesc = string.Empty;
-        var transDF = string.Empty;
+        string objectName = h.Name;
+        string objectType = "Hierarchy";
+        string tableName = h.Table.Name;
+        string transLang = string.Empty;
+        string transName = string.Empty;
+        string transDesc = string.Empty;
+        string transDF = string.Empty;
         
-        if (hasTranslation == true)
+        if (hasTranslation)
         {
             transLang = cul.Name;
             transName = h.TranslatedNames[transLang];
@@ -541,23 +538,21 @@ foreach (var o in Model.CalculationGroups.ToList())
 {
     foreach (var i in o.CalculationItems.ToList())
     {
-        var cg = o.Name;
-        var ci = i.Name;
-        var expr = i.Expression;
+        string cg = o.Name;
+        string ci = i.Name;
+        string expr = i.Expression;
         
         // Remove tabs and new lines
         expr = expr.Replace("\n"," ");
         expr = expr.Replace("\t"," ");
 
-        var ord = i.Ordinal.ToString();
-        var fs = i.FormatStringExpression;
-        var desc = i.Description;
-        
+        string ord = i.Ordinal.ToString();
+        string fs = i.FormatStringExpression;
+        string desc = i.Description;
         
         sb.Append(cg + '\t' + ci + '\t' + expr + '\t' + ord + '\t' + fs + '\t' + desc);
         sb.Append(Environment.NewLine);
     }
-
 }
 
 System.IO.File.WriteAllText(folderName + @"\CalculationGroups.txt", sb.ToString());
