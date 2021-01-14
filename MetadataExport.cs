@@ -8,16 +8,15 @@ var sb = new System.Text.StringBuilder();
 sb.Append("DataSource" + '\t' + "ConnectionString" + '\t' + "Provider" + '\t' + "MaxConnections");
 sb.Append(Environment.NewLine);
 
-foreach (var o in Model.DataSources.ToList())
+foreach (var o in Model.DataSources.Where(a => a.Type.ToString() == "Provider").ToList())
 {
-
     var ds = (Model.DataSources[o.Name] as ProviderDataSource);
-    var n = o.Name;
-    var conn = ds.ConnectionString;
-    var mc = ds.MaxConnections.ToString();
-    var prov = ds.Provider;
+    string n = o.Name;
+    string conn = ds.ConnectionString;
+    string mc = ds.MaxConnections.ToString();
+    string prov = ds.Provider;
     
-    sb.Append(n + '\t' + conn + '\t' + prov + '\t' + mc);
+     sb.Append(n + '\t' + conn + '\t' + prov + '\t' + mc);
 }
 
 System.IO.File.WriteAllText(folderName + @"\DataSources.txt", sb.ToString());
