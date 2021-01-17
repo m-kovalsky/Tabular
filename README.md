@@ -6,7 +6,7 @@ For more information on these scripts, check out my blog (https://www.elegantbi.
 ### Blank Row Finder
 https://www.elegantbi.com/post/findblankrows
 
-Run this script in Tabular Editor against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
 
 ### Master Model
 https://www.elegantbi.com/post/mastermodel
@@ -26,7 +26,7 @@ https://www.elegantbi.com/post/autoaggs
 ### Vertipaq Annotations
 https://www.elegantbi.com/post/vertipaqintabulareditor
 
-Run this script against a live-connected model to save [Vertipaq Analyzer](https://www.sqlbi.com/tools/vertipaq-analyzer/ "Vertipaq Analyzer") statistics as annotations on model objects. These annotations may be referenced to create Best Practice Analyzer rules for your model. See the link below for more info on Tabular Editor's [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer").
+Run this script against a live-connected model to save [Vertipaq Analyzer](https://www.sqlbi.com/tools/vertipaq-analyzer/ "Vertipaq Analyzer") statistics as annotations on model objects. These annotations may be referenced to create Best Practice Analyzer rules for your model. See the link below for more info on [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")'s [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer").
 
 * **Model:** Model Size
 
@@ -43,7 +43,7 @@ Run this script against a live-connected model to save [Vertipaq Analyzer](https
 ### Perspective Editor
 https://www.elegantbi.com/post/perspectiveeditor
 
-Running this script opens a program within Tabular Editor that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
+Running this script opens a program within [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
 
 ### Vpax to Tabular Editor
 
