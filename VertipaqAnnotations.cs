@@ -15,60 +15,47 @@ var DMV_ColumnSegments = ExecuteDax("SELECT [DIMENSION_NAME],[TABLE_ID],[COLUMN_
 Model.RemoveAnnotation("Vertipaq_ModelSize");
 
 foreach (var o in Model.AllHierarchies)
-{
-    var tableName = o.Table.Name;
-    var hName = o.Name;
-    
-    Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_HierarchyID");
-    Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_UserHierarchySize");    
+{   
+    o.RemoveAnnotation("Vertipaq_HierarchyID");
+    o.RemoveAnnotation("Vertipaq_UserHierarchySize");    
 }
 
 foreach (var o in Model.AllColumns)
-{
-    var tableName = o.Table.Name;
-    var cName = o.Name;
-    
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnID");
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnHierarchySize");
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_DataSize");
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_DictionarySize");
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_Cardinality");
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnSize");
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnSizePctOfTable");
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnSizePctOfModel");
+{   
+    o.RemoveAnnotation("Vertipaq_ColumnID");
+    o.RemoveAnnotation("Vertipaq_ColumnHierarchySize");
+    o.RemoveAnnotation("Vertipaq_DataSize");
+    o.RemoveAnnotation("Vertipaq_DictionarySize");
+    o.RemoveAnnotation("Vertipaq_Cardinality");
+    o.RemoveAnnotation("Vertipaq_ColumnSize");
+    o.RemoveAnnotation("Vertipaq_ColumnSizePctOfTable");
+    o.RemoveAnnotation("Vertipaq_ColumnSizePctOfModel");
 }
 
 foreach (var o in Model.Relationships.ToList())
 {    
-    var rName = o.ID;
-    
-    Model.Relationships[rName].RemoveAnnotation("Vertipaq_RelationshipID");
-    Model.Relationships[rName].RemoveAnnotation("Vertipaq_RelationshipSize");   
-    Model.Relationships[rName].RemoveAnnotation("Vertipaq_MaxFromCardinality");   
-    Model.Relationships[rName].RemoveAnnotation("Vertipaq_MaxToCardinality");   
+    o.RemoveAnnotation("Vertipaq_RelationshipID");
+    o.RemoveAnnotation("Vertipaq_RelationshipSize");   
+    o.RemoveAnnotation("Vertipaq_MaxFromCardinality");   
+    o.RemoveAnnotation("Vertipaq_MaxToCardinality");   
      
 }
 
 foreach (var o in Model.Tables.ToList())
 {
-    var tableName = o.Name;    
-    
-    Model.Tables[tableName].RemoveAnnotation("Vertipaq_TableID");
-    Model.Tables[tableName].RemoveAnnotation("Vertipaq_RowCount");
-    Model.Tables[tableName].RemoveAnnotation("Vertipaq_TableSize");
-    Model.Tables[tableName].RemoveAnnotation("Vertipaq_TableSizePctOfModel");
+    o.RemoveAnnotation("Vertipaq_TableID");
+    o.RemoveAnnotation("Vertipaq_RowCount");
+    o.RemoveAnnotation("Vertipaq_TableSize");
+    o.RemoveAnnotation("Vertipaq_TableSizePctOfModel");
 }
 
 foreach (var o in Model.AllPartitions)
 {
-    var tableName = o.Table.Name;
-    var pName = o.Name;
-    
-    Model.Tables[tableName].Partitions[pName].RemoveAnnotation("Vertipaq_PartitionID");
-    Model.Tables[tableName].Partitions[pName].RemoveAnnotation("Vertipaq_PartitionStorageID");
-    Model.Tables[tableName].Partitions[pName].RemoveAnnotation("Vertipaq_RecordCount");
-    Model.Tables[tableName].Partitions[pName].RemoveAnnotation("Vertipaq_RecordsPerSegment");
-    Model.Tables[tableName].Partitions[pName].RemoveAnnotation("Vertipaq_SegmentCount");
+    o.RemoveAnnotation("Vertipaq_PartitionID");
+    o.RemoveAnnotation("Vertipaq_PartitionStorageID");
+    o.RemoveAnnotation("Vertipaq_RecordCount");
+    o.RemoveAnnotation("Vertipaq_RecordsPerSegment");
+    o.RemoveAnnotation("Vertipaq_SegmentCount");
 }
 
 // Set Table IDs
@@ -83,8 +70,8 @@ for (int r = 0; r < DMV_Tables.Rows.Count; r++)
 // Set Table Row Counts
 for (int r = 0; r < DMV_Dimensions.Rows.Count; r++)
 {
-    var tblName = DMV_Dimensions.Rows[r][0].ToString();
-    var recordCount = DMV_Dimensions.Rows[r][1].ToString();
+    string tblName = DMV_Dimensions.Rows[r][0].ToString();
+    string recordCount = DMV_Dimensions.Rows[r][1].ToString();
     
     if (tblName != "Measures")
     {
@@ -95,8 +82,8 @@ for (int r = 0; r < DMV_Dimensions.Rows.Count; r++)
 // Set Relationship IDs
 for (int r = 0; r < DMV_Relationships.Rows.Count; r++)
 {
-    var ID = DMV_Relationships.Rows[r][0].ToString();   
-    var relID = DMV_Relationships.Rows[r][1].ToString();    
+    string ID = DMV_Relationships.Rows[r][0].ToString();   
+    string relID = DMV_Relationships.Rows[r][1].ToString();    
     
     Model.Relationships[relID].SetAnnotation("Vertipaq_RelationshipID",ID);    
 }
@@ -104,13 +91,13 @@ for (int r = 0; r < DMV_Relationships.Rows.Count; r++)
 // Set Hierarchy IDs
 for (int r = 0; r < DMV_Hierarchies.Rows.Count; r++)
 {
-    var hID = DMV_Hierarchies.Rows[r][0].ToString();
-    var tableID = DMV_Hierarchies.Rows[r][1].ToString();
-    var hName = DMV_Hierarchies.Rows[r][2].ToString();
+    string hID = DMV_Hierarchies.Rows[r][0].ToString();
+    string tableID = DMV_Hierarchies.Rows[r][1].ToString();
+    string hName = DMV_Hierarchies.Rows[r][2].ToString();
     
     foreach (var t in Model.Tables.Where(a => a.GetAnnotation("Vertipaq_TableID") == tableID))
     {
-        var tableName = t.Name;
+        string tableName = t.Name;
         Model.Tables[tableName].Hierarchies[hName].SetAnnotation("Vertipaq_HierarchyID",hID);
     }        
 }
@@ -118,13 +105,13 @@ for (int r = 0; r < DMV_Hierarchies.Rows.Count; r++)
 // Set Column IDs
 for (int r = 0; r < DMV_Columns.Rows.Count; r++)
 {
-    var colID = DMV_Columns.Rows[r][0].ToString();
-    var tableID = DMV_Columns.Rows[r][1].ToString();
-    var colName = DMV_Columns.Rows[r][2].ToString();
+    string colID = DMV_Columns.Rows[r][0].ToString();
+    string tableID = DMV_Columns.Rows[r][1].ToString();
+    string colName = DMV_Columns.Rows[r][2].ToString();
     
     foreach (var t in Model.Tables.Where(a => a.GetAnnotation("Vertipaq_TableID") == tableID))
     {
-        var tableName = t.Name;
+        string tableName = t.Name;
         
         if (colName.StartsWith("RowNumber-") == false && colName != "")
         {
@@ -136,13 +123,13 @@ for (int r = 0; r < DMV_Columns.Rows.Count; r++)
 // Set Partition IDs
 for (int r = 0; r < DMV_Partitions.Rows.Count; r++)
 {
-    var pID = DMV_Partitions.Rows[r][0].ToString();
-    var tableID = DMV_Partitions.Rows[r][1].ToString();
-    var pName = DMV_Partitions.Rows[r][2].ToString();
+    string pID = DMV_Partitions.Rows[r][0].ToString();
+    string tableID = DMV_Partitions.Rows[r][1].ToString();
+    string pName = DMV_Partitions.Rows[r][2].ToString();
     
     foreach (var t in Model.Tables.Where(a => a.GetAnnotation("Vertipaq_TableID") == tableID))
     {
-        var tableName = t.Name;
+        string tableName = t.Name;
         
         Model.Tables[tableName].Partitions[pName].SetAnnotation("Vertipaq_PartitionID",pID);        
     }
@@ -152,13 +139,13 @@ for (int r = 0; r < DMV_Partitions.Rows.Count; r++)
 // Set Partition Storage IDs
 for (int r = 0; r < DMV_PartitionStorages.Rows.Count; r++)
 {
-    var psID = DMV_PartitionStorages.Rows[r][0].ToString();
-    var pID = DMV_PartitionStorages.Rows[r][1].ToString();    
+    string psID = DMV_PartitionStorages.Rows[r][0].ToString();
+    string pID = DMV_PartitionStorages.Rows[r][1].ToString();    
     
     foreach (var p in Model.AllPartitions.Where(a => a.GetAnnotation("Vertipaq_PartitionID") == pID))
     {
-        var tableName = p.Table.Name;
-        var pName = p.Name;
+        string tableName = p.Table.Name;
+        string pName = p.Name;
         
         Model.Tables[tableName].Partitions[pName].SetAnnotation("Vertipaq_PartitionStorageID",psID);        
     }
@@ -167,15 +154,15 @@ for (int r = 0; r < DMV_PartitionStorages.Rows.Count; r++)
 // Set Partition Stats
 for (int r = 0; r < DMV_SegmentMapStorages.Rows.Count; r++)
 {
-    var psID = DMV_SegmentMapStorages.Rows[r][0].ToString();
-    var recordCount = DMV_SegmentMapStorages.Rows[r][1].ToString();    
-    var segmentCount = DMV_SegmentMapStorages.Rows[r][2].ToString();    
-    var recordsPerSegment = DMV_SegmentMapStorages.Rows[r][3].ToString();    
+    string psID = DMV_SegmentMapStorages.Rows[r][0].ToString();
+    string recordCount = DMV_SegmentMapStorages.Rows[r][1].ToString();    
+    string segmentCount = DMV_SegmentMapStorages.Rows[r][2].ToString();    
+    string recordsPerSegment = DMV_SegmentMapStorages.Rows[r][3].ToString();    
     
     foreach (var p in Model.AllPartitions.Where(a => a.GetAnnotation("Vertipaq_PartitionStorageID") == psID))
     {
-        var tableName = p.Table.Name;
-        var pName = p.Name;
+        string tableName = p.Table.Name;
+        string pName = p.Name;
         
         Model.Tables[tableName].Partitions[pName].SetAnnotation("Vertipaq_RecordCount",recordCount);
         Model.Tables[tableName].Partitions[pName].SetAnnotation("Vertipaq_SegmentCount",segmentCount);
@@ -186,10 +173,10 @@ for (int r = 0; r < DMV_SegmentMapStorages.Rows.Count; r++)
 // Set Dictionary Size
 for (int r = 0; r < DMV_StorageTableColumns.Rows.Count; r++)
 {
-    var tableName = DMV_StorageTableColumns.Rows[r][0].ToString();    
-    var colName = DMV_StorageTableColumns.Rows[r][1].ToString();
-    var colType = DMV_StorageTableColumns.Rows[r][2].ToString();
-    var dictSize = DMV_StorageTableColumns.Rows[r][3].ToString();
+    string tableName = DMV_StorageTableColumns.Rows[r][0].ToString();    
+    string colName = DMV_StorageTableColumns.Rows[r][1].ToString();
+    string colType = DMV_StorageTableColumns.Rows[r][2].ToString();
+    string dictSize = DMV_StorageTableColumns.Rows[r][3].ToString();
       
     if (colType == "BASIC_DATA" && colName.StartsWith("RowNumber-") == false)
     {
@@ -231,7 +218,7 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
     // User Hierarchy Size
     foreach (var o in Model.Tables[tableName].Hierarchies.Where(a => a.GetAnnotation("Vertipaq_HierarchyID") == usedObjID))
     {
-        var hName = o.Name;
+        string hName = o.Name;
         int hSize = Convert.ToInt32(Model.Tables[tableName].Hierarchies[hName].GetAnnotation("Vertipaq_UserHierarchySize"));
         
         if (usedObj.StartsWith("U$"))
@@ -252,7 +239,7 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
     // Relationship Size
     foreach (var o in Model.Relationships.Where(a => a.GetAnnotation("Vertipaq_RelationshipID") == usedObjID))
     {
-        var rName = o.ID;
+        string rName = o.ID;
         int rSize = Convert.ToInt32(Model.Relationships[rName].GetAnnotation("Vertipaq_RelationshipSize"));
         
         if (usedObj.StartsWith("R$"))
@@ -273,7 +260,7 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
     // Column Hierarchy Size
     foreach (var o in Model.Tables[tableName].Columns.Where(a => a.GetAnnotation("Vertipaq_ColumnID") == usedObjID))
     {
-        var colName = o.Name;
+        string colName = o.Name;
         long colSize = Convert.ToInt64(Model.Tables[tableName].Columns[colName].GetAnnotation("Vertipaq_ColumnHierarchySize"));
         
         if (usedObj.StartsWith("H$"))
@@ -294,7 +281,7 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
     // Column Data Size
     foreach (var o in Model.Tables[tableName].Columns.Where(a => a.GetAnnotation("Vertipaq_ColumnID") == usedObjID2))
     {
-        var colName = o.Name;
+        string colName = o.Name;
         long colSize = Convert.ToInt64(Model.Tables[tableName].Columns[colName].GetAnnotation("Vertipaq_DataSize"));
         
         if (usedObj.StartsWith("H$") == false && usedObj.StartsWith("R$") == false && usedObj.StartsWith("U$") == false)
@@ -314,19 +301,18 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
 }
 
 // Set Column & Table Size
-
 long tableSizeCumulative = 0;
 
 foreach (var t in Model.Tables.ToList())
 {
-    var tableName = t.Name;
+    string tableName = t.Name;
     long colSizeCumulative = 0;
     long userHierSizeCumulative = 0;
     long relSizeCumulative = 0;       
     
     foreach (var c in t.Columns.ToList())
     {        
-        var colName = c.Name;
+        string colName = c.Name;
         var obj = Model.Tables[tableName].Columns[colName];
         
         long colHierSize = Convert.ToInt64(obj.GetAnnotation("Vertipaq_ColumnHierarchySize"));
@@ -342,7 +328,7 @@ foreach (var t in Model.Tables.ToList())
     
     foreach (var h in t.Hierarchies.ToList())
     {
-        var hName = h.Name;
+        string hName = h.Name;
         var obj = Model.Tables[tableName].Hierarchies[hName];
         
         long userHierSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_UserHierarchySize"));      
@@ -351,7 +337,7 @@ foreach (var t in Model.Tables.ToList())
     
     foreach (var r in Model.Relationships.Where(a => a.FromTable.Name == tableName).ToList())
     {
-        var rName = r.ID;
+        string rName = r.ID;
         var obj = Model.Relationships[rName];
         
         long relSize = Convert.ToInt32(obj.GetAnnotation("Vertipaq_RelationshipSize"));
@@ -373,10 +359,10 @@ Model.SetAnnotation("Vertipaq_ModelSize",tableSizeCumulative.ToString());
 foreach (var r in Model.Relationships.ToList())
 {
     string rName = r.ID;
-    var fromTbl = r.FromTable.Name;
-    var fromCol = r.FromColumn.Name;
-    var toTbl = r.ToTable.Name;
-    var toCol = r.ToColumn.Name;
+    string fromTbl = r.FromTable.Name;
+    string fromCol = r.FromColumn.Name;
+    string toTbl = r.ToTable.Name;
+    string toCol = r.ToColumn.Name;
     var obj = Model.Relationships[rName];
     
     string fromCard = Model.Tables[fromTbl].Columns[fromCol].GetAnnotation("Vertipaq_Cardinality");
@@ -391,7 +377,7 @@ float modelSize = Convert.ToInt64(Model.GetAnnotation("Vertipaq_ModelSize"));
 
 foreach (var t in Model.Tables.ToList())
 {
-    var tableName = t.Name;
+    string tableName = t.Name;
     var obj = Model.Tables[tableName];
     
     float tableSize = Convert.ToInt64(obj.GetAnnotation("Vertipaq_TableSize"));
@@ -401,7 +387,7 @@ foreach (var t in Model.Tables.ToList())
     
     foreach (var c in t.Columns.ToList())
     {
-        var colName = c.Name;
+        string colName = c.Name;
         var col = Model.Tables[tableName].Columns[colName];
         
         float colSize = Convert.ToInt64(col.GetAnnotation("Vertipaq_ColumnSize"));
@@ -413,43 +399,29 @@ foreach (var t in Model.Tables.ToList())
     }
 }
 
-
 // Remove Vertipaq ID Annotations
 foreach (var o in Model.AllHierarchies)
-{
-    var tableName = o.Table.Name;
-    var hName = o.Name;
-    
-    Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_HierarchyID");
+{   
+    o.RemoveAnnotation("Vertipaq_HierarchyID");
 }
 
 foreach (var o in Model.AllColumns)
 {
-    var tableName = o.Table.Name;
-    var cName = o.Name;
-    
-    Model.Tables[tableName].Columns[cName].RemoveAnnotation("Vertipaq_ColumnID");
+    o.RemoveAnnotation("Vertipaq_ColumnID");
 }
 
 foreach (var o in Model.Relationships.ToList())
 {    
-    var rName = o.ID;
-    
-    Model.Relationships[rName].RemoveAnnotation("Vertipaq_RelationshipID");    
+    o.RemoveAnnotation("Vertipaq_RelationshipID");    
 }
 
 foreach (var o in Model.Tables.ToList())
 {
-    var tableName = o.Name;    
-    
-    Model.Tables[tableName].RemoveAnnotation("Vertipaq_TableID");
+    o.RemoveAnnotation("Vertipaq_TableID");
 }
 
 foreach (var o in Model.AllPartitions)
 {
-    var tableName = o.Table.Name;
-    var pName = o.Name;
-    
-    Model.Tables[tableName].Partitions[pName].RemoveAnnotation("Vertipaq_PartitionID");
-    Model.Tables[tableName].Partitions[pName].RemoveAnnotation("Vertipaq_PartitionStorageID");
+    o.RemoveAnnotation("Vertipaq_PartitionID");
+    o.RemoveAnnotation("Vertipaq_PartitionStorageID");
 }
