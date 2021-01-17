@@ -47,4 +47,4 @@ Running this script opens a program within Tabular Editor that allows you to cre
 
 ### Vpax to Tabular Editor
 
-This script creates the same annotations as the Vertipaq Annotations script. The only difference is that this script loads the Vertipaq Analyzer data from a Vertipaq Analyzer (.vpax) file.
+This script creates the same annotations as the [Vertipaq Annotations](https://github.com/m-kovalsky/Tabular/blob/master/VertipaqAnnotations.cs "Vertipaq Annotations") script. The only difference is that this script loads the [Vertipaq Analyzer](https://www.sqlbi.com/tools/vertipaq-analyzer/ "Vertipaq Analyzer") data from a Vertipaq Analyzer (.vpax) file.
