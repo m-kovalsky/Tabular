@@ -20,8 +20,7 @@ foreach (var o in Model.AllHierarchies)
     var hName = o.Name;
     
     Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_HierarchyID");
-    Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_UserHierarchySize");
-    Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_TableSizePctOfModel");
+    Model.Tables[tableName].Hierarchies[hName].RemoveAnnotation("Vertipaq_UserHierarchySize");    
 }
 
 foreach (var o in Model.AllColumns)
@@ -57,6 +56,7 @@ foreach (var o in Model.Tables.ToList())
     Model.Tables[tableName].RemoveAnnotation("Vertipaq_TableID");
     Model.Tables[tableName].RemoveAnnotation("Vertipaq_RowCount");
     Model.Tables[tableName].RemoveAnnotation("Vertipaq_TableSize");
+    Model.Tables[tableName].RemoveAnnotation("Vertipaq_TableSizePctOfModel");
 }
 
 foreach (var o in Model.AllPartitions)
