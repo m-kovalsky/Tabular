@@ -1,4 +1,4 @@
-string folderName = @"C:\Users\mikova\OneDrive - Microsoft\Desktop\Metadata"; // Update this location to the destination folder on your computer
+string folderName = @"C:\Desktop\Metadata"; // Update this location to the destination folder on your computer
 
 /******************************DATA SOURCES****************************/
 
