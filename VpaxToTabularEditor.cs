@@ -80,6 +80,15 @@ var formattedJson = Newtonsoft.Json.Linq.JToken.Parse(unformattedJson).ToString(
 
 dynamic json = Newtonsoft.Json.Linq.JObject.Parse(formattedJson);
 
+// Delete previously created folder
+try
+{
+    Directory.Delete(folderName + fileName,true);
+}
+catch
+{
+}
+
 int tableCount = (int)json["Tables"].Count;
 int columnCount = (int)json["Columns"].Count;
 int relationshipCount = (int)json["Relationships"].Count;
@@ -206,6 +215,10 @@ foreach (var t in Model.Tables.ToList())
         {
             p.SetAnnotation(rps,maxRPS.ToString());            
         }
+        else if (sc == null || sc == 0)
+        {
+            p.SetAnnotation(rps,"0");
+        }
         else
         {
             p.SetAnnotation(rps,(rc / sc).ToString());
@@ -242,13 +255,4 @@ foreach (var t in Model.Tables.ToList())
         col.SetAnnotation("Vertipaq_ColumnSizePctOfTable",colpctTbl.ToString());
         col.SetAnnotation("Vertipaq_ColumnSizePctOfModel",colpctModel.ToString());
     }
-}
-
-// Delete previously created folder
-try
-{
-    Directory.Delete(folderName + fileName,true);
-}
-catch
-{
 }
