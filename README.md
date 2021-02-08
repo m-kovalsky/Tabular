@@ -43,6 +43,6 @@ Run this script against a live-connected model to save [Vertipaq Analyzer](https
 
 Running this script opens a program within [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
 
-### Vpax to Tabular Editor
+### [Vpax to Tabular Editor](https://www.elegantbi.com/post/vpaxtotabulareditor "Vpax to Tabular Editor")
 
 This script creates the same annotations as the [Vertipaq Annotations](https://github.com/m-kovalsky/Tabular/blob/master/VertipaqAnnotations.cs "Vertipaq Annotations") script. The only difference is that this script loads the [Vertipaq Analyzer](https://www.sqlbi.com/tools/vertipaq-analyzer/ "Vertipaq Analyzer") data from a Vertipaq Analyzer (.vpax) file.
