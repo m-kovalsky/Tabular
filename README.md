@@ -3,7 +3,7 @@ Useful code for tabular modeling and automation
 
 For more information on these scripts, check out my [blog](https://www.elegantbi.com "blog").
 
-### Automated Data Dictionary
+### [Automated Data Dictionary](https://www.elegantbi.com/post/datadictionaryreinvented "Automated Data Dictionary")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models (XMLA R/W Endpoints enabled).
 
