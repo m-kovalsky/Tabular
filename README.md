@@ -3,6 +3,10 @@ Useful code for tabular modeling and automation
 
 For more information on these scripts, check out my [blog](https://www.elegantbi.com "blog").
 
+### Automated Data Dictionary
+
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models (XMLA R/W Endpoints enabled).
+
 ### [Blank Row Finder](https://www.elegantbi.com/post/findblankrows "Blank Row Finder")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
