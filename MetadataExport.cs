@@ -556,3 +556,35 @@ foreach (var o in Model.CalculationGroups.ToList())
 }
 
 System.IO.File.WriteAllText(folderName + @"\CalculationGroups.txt", sb.ToString());
+
+/**********************************************************************/
+/*********************************KPI**********************************/
+
+sb = new System.Text.StringBuilder();
+
+// Headers
+sb.Append("TableName" + '\t' + "MeasureName" + '\t' + "StatusExpresssion" + '\t' + "StatusGraphic" + '\t' +
+          "StatusDescription" + '\t' + "TargetExpression" + '\t' + "TargetFormatString" + '\t' + "TargetDescription" + '\t' + "TrendExpression" + '\t' + "TrendGraphic" + '\t' + "TrendDescription");
+sb.Append(Environment.NewLine);
+
+foreach (var m in Model.AllMeasures.Where(a => a.KPI != null))
+{
+    
+    string tableName = m.Table.Name;
+    string measureName = m.Name;
+    var k = m.KPI;
+    string statusExpr = k.StatusExpression.Replace("\n"," ").Replace("\t"," ");;
+    string statusDesc = k.StatusDescription;
+    string statusGraphic = k.StatusGraphic;
+    string targetExpr = k.TargetExpression.Replace("\n"," ").Replace("\t"," ");
+    string targetDesc = k.TargetDescription;
+    string targetFS = k.TargetFormatString;
+    string trendExpr = k.TrendExpression.Replace("\n"," ").Replace("\t"," ");;
+    string trendDesc = k.TrendDescription;
+    string trendGraphic = k.TrendGraphic;
+ 
+    sb.Append(tableName + '\t' + measureName + '\t' + statusExpr + '\t' + statusGraphic + '\t' + statusDesc + '\t' + targetExpr + '\t' + targetFS + '\t' + targetDesc + '\t' + trendExpr + '\t' + trendGraphic + '\t' + trendDesc);
+    sb.Append(Environment.NewLine);   
+}
+
+System.IO.File.WriteAllText(folderName + @"\KPI.txt", sb.ToString());
