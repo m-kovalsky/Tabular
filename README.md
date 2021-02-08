@@ -29,7 +29,7 @@ Run this script against a live-connected model to save [Vertipaq Analyzer](https
 
 *Note: If running this script against a Power BI Desktop model (using Tabular Editor as an External Tool), you must select the following setting within Tabular Editor:*
 
-    File -> Preferences -> Features -> Allow Unsuported Power BI features (experimental)
+    File -> Preferences -> Features -> Allow Unsupported Power BI features (experimental)
 
 * **Model:** Model Size
 
