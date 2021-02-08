@@ -27,6 +27,10 @@ Run this script to automatically update the translations in your model (or add n
 
 Run this script against a live-connected model to save [Vertipaq Analyzer](https://www.sqlbi.com/tools/vertipaq-analyzer/ "Vertipaq Analyzer") statistics as annotations on model objects. These annotations may be referenced to create Best Practice Analyzer rules for your model. See the link below for more info on [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")'s [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer").
 
+*Note: If running this script against a Power BI Desktop model (using Tabular Editor as an External Tool), you must select the following setting within Tabular Editor:*
+
+    File -> Preferences -> Features -> Allow Unsuported Power BI features (experimental)
+
 * **Model:** Model Size
 
 * **Tables:** Row Count; Table Size; Table Size as a Percentage of the Model Size
