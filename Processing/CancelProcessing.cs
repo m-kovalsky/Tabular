@@ -5,8 +5,6 @@ bool runTMSL = true;
 string databaseID = Model.Database.ID;
 string databaseName = Model.Database.Name;
 string sID = string.Empty;
-string newline = Environment.NewLine;
-var sb = new System.Text.StringBuilder();
 
 for (int r = 0; r < DMV_Cmd.Rows.Count; r++)
 {
@@ -26,18 +24,12 @@ if (sID == string.Empty)
     return;
 }
 
-sb.Append("<Cancel xmlns=\"http://schemas.microsoft.com/analysisservices/2003/engine\">"+newline+"     <SessionID>");
-sb.Append(sID);
-sb.Append("</SessionID>"+newline+"</Cancel>");
-
-string tmsl = sb.ToString();
-
 if (runTMSL)
 {
-    Model.Database.TOMDatabase.Server.Execute(tmsl);
+    Model.Database.TOMDatabase.Server.CancelSession(sID);
     Info("Processing for the '"+databaseName+"' model has been cancelled (Session ID: "+sID+").");
 }
 else
 {
-    tmsl.Output();
+    sID.Output();
 }
