@@ -11,7 +11,7 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
 
-## Cancel Processing
+## [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel the data refresh of that model.
 
