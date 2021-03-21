@@ -5,7 +5,7 @@ For more information on these scripts, check out my blog [Elegant BI](https://ww
 
 ### [Automated Data Dictionary](https://www.elegantbi.com/post/datadictionaryreinvented "Automated Data Dictionary")
 
-Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models (XMLA R/W Endpoints enabled).
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models ([XMLA R/W endpoints](https://docs.microsoft.com/en-us/power-bi/admin/service-premium-connect-tools#enable-xmla-read-write "XMLA R/W endpoints") enabled).
 
 ### [Blank Row Finder](https://www.elegantbi.com/post/findblankrows "Blank Row Finder")
 
