@@ -1,5 +1,5 @@
 # Tabular
-This repo is a collection of useful code for automating processes within tabular modeling.
+This repo is a collection of useful code for automating processes within tabular modeling. All of these scripts are executed in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") so make sure to download and install it.
 
 For more information on these scripts, check out my [blog](https://www.elegantbi.com "blog").
 
