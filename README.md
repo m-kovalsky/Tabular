@@ -1,7 +1,7 @@
 # Tabular
 This repo is a collection of useful code for automating processes within tabular modeling. All of these scripts are to be executed in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") so make sure to download and install it.
 
-For more information on these scripts, check out my [blog](https://www.elegantbi.com "blog").
+For more information on these scripts, check out my blog [Elegant BI](https://www.elegantbi.com "Elegant BI").
 
 ### [Automated Data Dictionary](https://www.elegantbi.com/post/datadictionaryreinvented "Automated Data Dictionary")
 
