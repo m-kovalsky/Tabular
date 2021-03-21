@@ -1,5 +1,5 @@
 # Tabular
-Useful code for tabular modeling and automation
+This repo is a collection of useful code for automating processes within tabular modeling.
 
 For more information on these scripts, check out my [blog](https://www.elegantbi.com "blog").
 
