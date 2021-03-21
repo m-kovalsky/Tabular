@@ -27,6 +27,10 @@ Run this script to automatically update the translations in your model (or add n
 
 ### [Auto Aggs](https://www.elegantbi.com/post/autoaggs "Auto Aggs")
 
+### [Perspective Editor](https://www.elegantbi.com/post/perspectiveeditor "Perspective Editor")
+
+Running this script opens a program within [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
+
 ### [Vertipaq Annotations](https://www.elegantbi.com/post/vertipaqintabulareditor "Vertipaq Annotations")
 
 Run this script against a live-connected model to save [Vertipaq Analyzer](https://www.sqlbi.com/tools/vertipaq-analyzer/ "Vertipaq Analyzer") statistics as annotations on model objects. These annotations may be referenced to create Best Practice Analyzer rules for your model. See the link below for more info on [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")'s [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer").
@@ -46,10 +50,6 @@ Run this script against a live-connected model to save [Vertipaq Analyzer](https
 * **Hierarchies:** User Hierarchy Size
 
 * **Relationships:** Relationship Size; Max From Cardinality; Max To Cardinality
-
-### [Perspective Editor](https://www.elegantbi.com/post/perspectiveeditor "Perspective Editor")
-
-Running this script opens a program within [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
 
 ### [Vpax to Tabular Editor](https://www.elegantbi.com/post/vpaxtotabulareditor "Vpax to Tabular Editor")
 
