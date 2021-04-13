@@ -1,32 +1,33 @@
 var sb = new System.Text.StringBuilder();
+string newline = Environment.NewLine;
 
-sb.Append("FromTable" + '\t' + "ToTable" + '\t' + "BlankRowCount");
-sb.Append(Environment.NewLine);
+sb.Append("FromTable" + '\t' + "ToTable" + '\t' + "BlankRowCount" + newline);
 
 foreach (var r in Model.Relationships.ToList())
 {
     bool   act = r.IsActive;
     string fromTable = r.FromTable.Name;
-    string fromColumn = r.FromColumn.Name;
     string toTable = r.ToTable.Name;
-    string toColumn = r.ToColumn.Name;
+    string fromTableFull = r.FromTable.DaxObjectFullName;    
+    string fromObject = r.FromColumn.DaxObjectFullName;
+    string toObject = r.ToColumn.DaxObjectFullName;
     string dax;
     
     if (act)
     {
-        dax = "SUMMARIZECOLUMNS(\"test\",CALCULATE(COUNTROWS('"+fromTable+"'),ISBLANK('"+toTable+"'["+toColumn+"])))";
+        dax = "SUMMARIZECOLUMNS(\"test\",CALCULATE(COUNTROWS("+fromTableFull+"),ISBLANK("+toObject+")))";
     }
     else
     {
-        dax = "SUMMARIZECOLUMNS(\"test\",CALCULATE(COUNTROWS('"+fromTable+"'),USERELATIONSHIP('"+fromTable+"'["+fromColumn+"],'"+toTable+"'["+toColumn+"]),ISBLANK('"+toTable+"'["+toColumn+"])))";
+        dax = "SUMMARIZECOLUMNS(\"test\",CALCULATE(COUNTROWS("+fromTableFull+"),USERELATIONSHIP("+fromObject+","+toObject+"),ISBLANK("+toObject+")))";
     }
     
     var daxResult = EvaluateDax(dax);
+    string blankRowCount = daxResult.ToString();
     
-    if (daxResult.ToString() != "Table")
+    if (blankRowCount != "Table")
     {
-        sb.Append(fromTable + '\t' + toTable + '\t' + daxResult.ToString());
-        sb.Append(Environment.NewLine);
+        sb.Append(fromTable + '\t' + toTable + '\t' + blankRowCount + newline);        
     }
 }
 
