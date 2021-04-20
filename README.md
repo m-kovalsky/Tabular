@@ -7,6 +7,10 @@ For more information on these scripts, check out my blog [Elegant BI](https://ww
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models ([XMLA R/W endpoints](https://docs.microsoft.com/en-us/power-bi/admin/service-premium-connect-tools#enable-xmla-read-write "XMLA R/W endpoints") enabled).
 
+### [Automated Data Dictionary via Excel](https://www.elegantbi.com/post/datadictionaryexcel "Automated Data Dictionary via Excel")
+
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary where the Data Dictionary table is stored in Excel. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models ([XMLA R/W endpoints](https://docs.microsoft.com/en-us/power-bi/admin/service-premium-connect-tools#enable-xmla-read-write "XMLA R/W endpoints") enabled).
+
 ### [Blank Row Finder](https://www.elegantbi.com/post/findblankrows "Blank Row Finder")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
