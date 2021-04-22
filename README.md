@@ -18,6 +18,7 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 ### [Descriptions](https://github.com/m-kovalsky/Tabular/tree/master/Descriptions "Descriptions")
 
 Run the ExportDescriptions.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to export objects and existing descriptions in your tabular model to an Excel file.
+
 Run the ImportDescriptions.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to import object descriptions back into your tabular model from the Excel file.
 
 ### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
