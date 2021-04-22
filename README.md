@@ -15,6 +15,11 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
 
+### [Descriptions](https://github.com/m-kovalsky/Tabular/tree/master/Descriptions "Descriptions")
+
+Run the ExportDescriptions.cs script to export objects and existing descriptions in your tabular model to an Excel file.
+Run the ImportDescriptions.cs script to import object descriptions back into your tabular model from the Excel file.
+
 ### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel the data refresh of that model.
