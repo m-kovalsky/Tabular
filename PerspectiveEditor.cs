@@ -21,13 +21,13 @@ System.Drawing.Color hiddenColor = Color.Gray;
 System.Drawing.Color bkgrdColor =  ColorTranslator.FromHtml("#F2F2F2");
 
 // Add images from web to Image List
-var urlPrefix = "https://github.com/m-kovalsky/Tabular/raw/master/Icons/";
-var urlSuffix = "Icon.png";
+string urlPrefix = "https://github.com/m-kovalsky/Tabular/raw/master/Icons/";
+string urlSuffix = "Icon.png";
 
 string[] imageURLList = { "Table", "Column", "Measure", "Hierarchy" };
 for (int b = 0; b < imageURLList.Count(); b++)
 {
-    var url = urlPrefix + imageURLList[b] + urlSuffix;      
+    string url = urlPrefix + imageURLList[b] + urlSuffix;      
     byte[] imageByte = w.DownloadData(url);
     System.IO.MemoryStream ms = new System.IO.MemoryStream(imageByte);
     System.Drawing.Image im = System.Drawing.Image.FromStream(ms);
@@ -105,12 +105,12 @@ enterComboBox.Visible = false;
 enterComboBox.Size = new Size(100,40);
 enterComboBox.Location = new Point(startScreenX+25,startScreenY+80);
 
-    // Add items to combo box
-    foreach (var p in Model.Perspectives.ToList())
-    {
-        string pName = p.Name;
-        enterComboBox.Items.Add(pName);
-    }
+// Add items to combo box
+foreach (var p in Model.Perspectives.ToList())
+{
+    string pName = p.Name;
+    enterComboBox.Items.Add(pName);
+}
 
 // New Model Button
 goButton.Size = new Size(100,25);
@@ -143,7 +143,7 @@ int i=0;
 foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
 {  
     // Add table nodes
-    var tableName = t.Name;    
+    string tableName = t.Name;    
     var tn = treeView.Nodes.Add(tableName);
     tn.ImageIndex = 0;
     tn.StateImageIndex = 0;
@@ -157,7 +157,7 @@ foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     // Add column sub-nodes
     foreach (var c in t.Columns.OrderBy(a => a.Name).ToList())
     {
-        var columnName = c.Name;
+        string columnName = c.Name;
         var x = treeView.Nodes[i].Nodes.Add(columnName);        
         x.ImageIndex = 1;
         x.StateImageIndex = 0;
@@ -187,7 +187,7 @@ foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     // Add hierarchy sub-nodes
     foreach (var h in t.Hierarchies.OrderBy(a => a.Name).ToList())
     {
-        var hierarchyName = h.Name;
+        string hierarchyName = h.Name;
         var x = treeView.Nodes[i].Nodes.Add(hierarchyName); 
          x.ImageIndex = 3;
          x.StateImageIndex = 0;   
@@ -202,7 +202,7 @@ foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     i++;
 }
 
-newmodelButton.Click += (System.Object sender1, System.EventArgs e1) => {​
+newmodelButton.Click += (System.Object sender1, System.EventArgs e1) => {
 
     goButton.Visible = true;
     existingmodelButton.Checked = false;
@@ -215,7 +215,7 @@ newmodelButton.Click += (System.Object sender1, System.EventArgs e1) => {​
     enterTextBox.Enabled = true;
 };
 
-existingmodelButton.Click += (System.Object sender2, System.EventArgs e2) => {​
+existingmodelButton.Click += (System.Object sender2, System.EventArgs e2) => {
 
     goButton.Location = new Point(startScreenX+25, startScreenY+120);
     enterComboBox.Visible = true;
@@ -239,12 +239,12 @@ existingmodelButton.Click += (System.Object sender2, System.EventArgs e2) => {�
     } 
 };
 
-enterComboBox.SelectedValueChanged += (System.Object sender3, System.EventArgs e3) => {​
+enterComboBox.SelectedValueChanged += (System.Object sender3, System.EventArgs e3) => {
 
     goButton.Enabled = true;         
 };
 
-goButton.Click += (System.Object sender4, System.EventArgs e4) => {​
+goButton.Click += (System.Object sender4, System.EventArgs e4) => {
 
     // Hide initial buttons    
     newmodelButton.Visible = false;
@@ -268,7 +268,7 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {​
      
         foreach (System.Windows.Forms.TreeNode rootNode in treeView.Nodes)
         {
-             var tableName = rootNode.Text;             
+             string tableName = rootNode.Text;             
          
              int childNodeCount = rootNode.Nodes.Count;   
              int childNodeCheckedCount = 0;  
@@ -325,7 +325,7 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {​
      }                      
 };
 
-treeView.NodeMouseClick += (System.Object sender, System.Windows.Forms.TreeNodeMouseClickEventArgs e) => {​ 
+treeView.NodeMouseClick += (System.Object sender, System.Windows.Forms.TreeNodeMouseClickEventArgs e) => {
     
     if (IsExpOrCol == false)
     {
@@ -392,17 +392,17 @@ treeView.NodeMouseClick += (System.Object sender, System.Windows.Forms.TreeNodeM
     IsExpOrCol = false;
 };
 
-treeView.AfterExpand += (System.Object sender9, System.Windows.Forms.TreeViewEventArgs e9) => {​ 
+treeView.AfterExpand += (System.Object sender9, System.Windows.Forms.TreeViewEventArgs e9) => {
     
     IsExpOrCol = true;
 };
 
-treeView.AfterCollapse += (System.Object sender10, System.Windows.Forms.TreeViewEventArgs e10) => {​ 
+treeView.AfterCollapse += (System.Object sender10, System.Windows.Forms.TreeViewEventArgs e10) => {
     
     IsExpOrCol = true;
 };
 
-createButton.Click += (System.Object sender6, System.EventArgs e6) => {​
+createButton.Click += (System.Object sender6, System.EventArgs e6) => {
    
      perspName = enterTextBox.Text;     
      
@@ -429,12 +429,12 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {​
          // Loop through root nodes (tables)
          foreach (System.Windows.Forms.TreeNode rootNode in treeView.Nodes)
          {
-             var tableName = rootNode.Text;
+             string tableName = rootNode.Text;
          
              // Loop through checked child nodes (columns, measures, hierarchies)
              foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
              {
-                 var objectName = childNode.Text;
+                 string objectName = childNode.Text;
                  
                  if (childNode.StateImageIndex == 1)
                  {
