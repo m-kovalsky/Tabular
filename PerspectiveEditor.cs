@@ -5,6 +5,7 @@ using System.Drawing;
 // Create elements
 System.Windows.Forms.Form newForm = new System.Windows.Forms.Form();
 System.Windows.Forms.Panel newPanel = new System.Windows.Forms.Panel();
+System.Windows.Forms.Label toolLabel = new System.Windows.Forms.Label();
 System.Windows.Forms.TreeView treeView = new System.Windows.Forms.TreeView();
 System.Windows.Forms.Button createButton = new System.Windows.Forms.Button();
 System.Windows.Forms.TextBox enterTextBox = new System.Windows.Forms.TextBox();
@@ -17,12 +18,21 @@ System.Windows.Forms.ComboBox enterComboBox = new System.Windows.Forms.ComboBox(
 System.Net.WebClient w = new System.Net.WebClient();
 
 // Colors
+System.Drawing.Color visibleColor = Color.Black;
 System.Drawing.Color hiddenColor = Color.Gray;
 System.Drawing.Color bkgrdColor =  ColorTranslator.FromHtml("#F2F2F2");
+System.Drawing.Color darkblackColor =  ColorTranslator.FromHtml("#0D1117");
+System.Drawing.Color darkgrayColor =  ColorTranslator.FromHtml("#21262D");
+System.Drawing.Color lightgrayColor =  ColorTranslator.FromHtml("#C9D1D9");
+
+// Fonts
+System.Drawing.Font homeToolNameFont = new Font("Century Gothic", 24);
+System.Drawing.Font stdFont = new Font("Century Gothic", 10);
 
 // Add images from web to Image List
 string urlPrefix = "https://github.com/m-kovalsky/Tabular/raw/master/Icons/";
 string urlSuffix = "Icon.png";
+string toolName = "Perspective Editor";
 
 string[] imageURLList = { "Table", "Column", "Measure", "Hierarchy" };
 for (int b = 0; b < imageURLList.Count(); b++)
@@ -38,14 +48,15 @@ for (int b = 0; b < imageURLList.Count(); b++)
 treeView.ImageList = imageList;
 treeView.ImageIndex = 0;   
 imageList.ImageSize = new Size(16, 16);   
-        
+     
 // Form
-newForm.Text = "Perspective Editor";
+newForm.Text = toolName;
 int formWidth = 600;
 int formHeight = 600;
 newForm.TopMost = true;
 newForm.Size = new Size(formWidth,formHeight);
 newForm.Controls.Add(newPanel);
+newForm.BackColor = bkgrdColor;
 
 // Panel
 newPanel.Size = new Size(formWidth,formHeight);
@@ -69,6 +80,7 @@ treeView.Location = new Point(treeViewX,treeViewY);
 treeView.StateImageList = new System.Windows.Forms.ImageList();
 treeView.Visible = false;
 bool IsExpOrCol = false;
+string perspName = string.Empty;
 
 // Add images for tri-state tree view
 string[] stateimageURLList = { "Unchecked", "Checked", "PartiallyChecked" };
@@ -82,28 +94,38 @@ for (int c = 0; c < stateimageURLList.Count(); c++)
 }  
             
 // Create Button
-createButton.Size = new Size(100,40);
-createButton.Location = new Point(treeViewWidth + 47,treeViewY);
+createButton.Size = new Size(130,55);
+createButton.Location = new Point(treeViewWidth + 35,treeViewY);
 createButton.Text = "Create Perspective";
 createButton.Visible = false;
+createButton.Font = stdFont;
 
-int startScreenX = 230;
-int startScreenY = 150;
+int startScreenX = 200;
+int startScreenY = 200;
+
+toolLabel.Size = new Size(300,60);
+toolLabel.Text = toolName;
+toolLabel.Location = new Point(150,100);
+toolLabel.Font = homeToolNameFont;
+toolLabel.ForeColor = visibleColor;
 
 // New Model Button
-newmodelButton.Size = new Size(180,40);
+newmodelButton.Size = new Size(250,40);
 newmodelButton.Location = new Point(startScreenX,startScreenY);
 newmodelButton.Text = "Create New Perspective";
+newmodelButton.Font = stdFont;
 
 // Existing Model Button
-existingmodelButton.Size = new Size(180,40);
+existingmodelButton.Size = new Size(250,40);
 existingmodelButton.Location = new Point(startScreenX,startScreenY+30);
 existingmodelButton.Text = "Modify Existing Perspective";
+existingmodelButton.Font = stdFont;
 
 // Enter Combo Box
 enterComboBox.Visible = false;
-enterComboBox.Size = new Size(100,40);
-enterComboBox.Location = new Point(startScreenX+25,startScreenY+80);
+enterComboBox.Size = new Size(215,40);
+enterComboBox.Location = new Point(startScreenX-10,startScreenY+80);
+enterComboBox.Font = stdFont;
 
 // Add items to combo box
 foreach (var p in Model.Perspectives.ToList())
@@ -113,9 +135,10 @@ foreach (var p in Model.Perspectives.ToList())
 }
 
 // New Model Button
-goButton.Size = new Size(100,25);
-goButton.Location = new Point(startScreenX+25,startScreenY+80);
+goButton.Size = new Size(140,30);
+goButton.Location = new Point(startScreenX+80,startScreenY+80);
 goButton.Text = "Go";
+goButton.Font = stdFont;
 goButton.Visible = false;
 goButton.Enabled = false; 
 
@@ -124,29 +147,29 @@ newForm.Controls.Add(newmodelButton);
 newForm.Controls.Add(existingmodelButton);
 newForm.Controls.Add(enterComboBox);
 newForm.Controls.Add(goButton);
+newForm.Controls.Add(toolLabel);
 
 // Label
-nameLabel.Size = new Size(50,40);
+nameLabel.Size = new Size(60,40);
 nameLabel.Location = new Point(treeViewX,20);
 nameLabel.Text = "Name:";
+nameLabel.Font = stdFont;
 nameLabel.Visible = false;
 
 // Text box
-enterTextBox.Size = new Size(358,40);
-enterTextBox.Location = new Point(52,17);
+enterTextBox.Size = new Size(348,40);
+enterTextBox.Location = new Point(63,18);
 enterTextBox.Visible = false;
-        
-string perspName = string.Empty;
+enterTextBox.Font = stdFont;
 
 // Add nodes to treeview
-int i=0;
 foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
 {  
     // Add table nodes
     string tableName = t.Name;    
-    var tn = treeView.Nodes.Add(tableName);
-    tn.ImageIndex = 0;
+    var tn = treeView.Nodes.Add(tableName);    
     tn.StateImageIndex = 0;
+    tn.ImageIndex = 0;
     tn.SelectedImageIndex = 0;
     
     if (t.IsHidden)
@@ -158,9 +181,9 @@ foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     foreach (var c in t.Columns.OrderBy(a => a.Name).ToList())
     {
         string columnName = c.Name;
-        var x = treeView.Nodes[i].Nodes.Add(columnName);        
-        x.ImageIndex = 1;
+        var x = tn.Nodes.Add(columnName);        
         x.StateImageIndex = 0;
+        x.ImageIndex = 1;        
         x.SelectedImageIndex = 1;
         
         if (c.IsHidden)
@@ -172,10 +195,10 @@ foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     // Add measure sub-nodes
     foreach (var m in t.Measures.OrderBy(a => a.Name).ToList())
     {
-        var measureName = m.Name;
-        var x = treeView.Nodes[i].Nodes.Add(measureName);        
-        x.ImageIndex = 2;
+        string measureName = m.Name;
+        var x = tn.Nodes.Add(measureName);
         x.StateImageIndex = 0;
+        x.ImageIndex = 2;        
         x.SelectedImageIndex = 2;
         
         if (m.IsHidden)
@@ -188,18 +211,16 @@ foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     foreach (var h in t.Hierarchies.OrderBy(a => a.Name).ToList())
     {
         string hierarchyName = h.Name;
-        var x = treeView.Nodes[i].Nodes.Add(hierarchyName); 
+        var x = tn.Nodes.Add(hierarchyName);
          x.ImageIndex = 3;
-         x.StateImageIndex = 0;   
-         x.SelectedImageIndex = 3;   
+         x.StateImageIndex = 0;
+         x.SelectedImageIndex = 3;
          
         if (h.IsHidden)
         {
             x.ForeColor = hiddenColor;
         }
-    }  
-    
-    i++;
+    }    
 }
 
 newmodelButton.Click += (System.Object sender1, System.EventArgs e1) => {
@@ -236,7 +257,7 @@ existingmodelButton.Click += (System.Object sender2, System.EventArgs e2) => {
     if (enterComboBox.SelectedItem == null)
     {
         goButton.Enabled = false;
-    } 
+    }
 };
 
 enterComboBox.SelectedValueChanged += (System.Object sender3, System.EventArgs e3) => {
@@ -251,6 +272,7 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {
     existingmodelButton.Visible = false;    
     enterComboBox.Visible = false;
     goButton.Visible = false;
+    toolLabel.Visible = false;
     
     string p = enterComboBox.Text;
     
@@ -268,10 +290,10 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {
      
         foreach (System.Windows.Forms.TreeNode rootNode in treeView.Nodes)
         {
-             string tableName = rootNode.Text;             
-         
-             int childNodeCount = rootNode.Nodes.Count;   
-             int childNodeCheckedCount = 0;  
+             string tableName = rootNode.Text;
+             int childNodeCount = rootNode.Nodes.Count;
+             int childNodeCheckedCount = 0;
+
              // Loop through checked child nodes (columns, measures, hierarchies)
              foreach (System.Windows.Forms.TreeNode childNode in rootNode.Nodes)
              {
@@ -344,7 +366,6 @@ treeView.NodeMouseClick += (System.Object sender, System.Windows.Forms.TreeNodeM
             foreach (System.Windows.Forms.TreeNode childNode in e.Node.Nodes)
             {
                 childNode.StateImageIndex = 1;
-                //childNode.Checked = true;
             }
         }       
         
@@ -354,7 +375,6 @@ treeView.NodeMouseClick += (System.Object sender, System.Windows.Forms.TreeNodeM
             foreach (System.Windows.Forms.TreeNode childNode in e.Node.Nodes)
             {
                 childNode.StateImageIndex = 0;
-                //childNode.Checked = false;
             }
         }
         
@@ -409,11 +429,11 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
      if (perspName == string.Empty)
      {
          // Invalid perspective name
-         Error("Must enter a name for your mini model");
+         Error("Please enter a name for the new perspective.");
      }
      else
      {
-         if (Model.Perspectives.Where(a => a.Name == perspName).Count() == 0)
+         if (!Model.Perspectives.Any(a => a.Name == perspName))
          {
              // Create new perspective
              Model.AddPerspective(perspName);
@@ -439,22 +459,19 @@ createButton.Click += (System.Object sender6, System.EventArgs e6) => {
                  if (childNode.StateImageIndex == 1)
                  {
                      // Columns
-                     if(childNode.ImageIndex == 1)                    
+                     if (childNode.ImageIndex == 1)                    
                      {
-                         var o = Model.Tables[tableName].Columns[objectName];
-                         o.InPerspective[perspName] = true;                                                 
+                         Model.Tables[tableName].Columns[objectName].InPerspective[perspName] = true;                                              
                      }                    
                      // Measures
-                     else if(childNode.ImageIndex == 2)                    
+                     else if (childNode.ImageIndex == 2)                    
                      {
-                         var o = Model.Tables[tableName].Measures[objectName];
-                         o.InPerspective[perspName] = true;                                                
+                         Model.Tables[tableName].Measures[objectName].InPerspective[perspName] = true;                                            
                      }
                      // Hierarchies
-                     else if(childNode.ImageIndex == 3)                    
+                     else if (childNode.ImageIndex == 3)                    
                      {
-                         var o = Model.Tables[tableName].Hierarchies[objectName];
-                         o.InPerspective[perspName] = true;                                                                     
+                         Model.Tables[tableName].Hierarchies[objectName].InPerspective[perspName] = true;
                      }
                  }
              }
