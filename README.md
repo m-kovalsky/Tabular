@@ -21,6 +21,10 @@ Run the ExportDescriptions.cs script in [Tabular Editor](https://tabulareditor.c
 
 Run the ImportDescriptions.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to import object descriptions back into your tabular model from the Excel file.
 
+### [Export BPA Results](https://www.elegantbi.com/post/exportbparesults "Export BPA Results")
+
+Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") will run the [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer") and output the results. The output can easily be copied into Excel for futher analysis.
+
 ### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel the data refresh of that model.
