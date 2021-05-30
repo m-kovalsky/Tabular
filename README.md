@@ -23,7 +23,7 @@ Run the ImportDescriptions.cs script in [Tabular Editor](https://tabulareditor.c
 
 ### [Export BPA Results](https://www.elegantbi.com/post/exportbparesults "Export BPA Results")
 
-Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") will run the [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer") and output the results. The output can easily be copied into Excel for futher analysis.
+Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") will run the [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer") and output the results. The output can easily be copied into Excel for further analysis.
 
 ### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
 
