@@ -1,0 +1,221 @@
+// This script is only for a data source, its only tested with MSSQL
+// Created By: Ben Arendse
+// Created on: 2021-05-30
+// Updated on: 2021-05-30
+// This script is based on the script of Micheal Kovalsky: https://github.com/m-kovalsky/Tabular/blob/master/AutomatedDataDictionary.cs
+
+// Initial Parameters
+    // This is the table name in the model for the Data Dictionary
+string ddTableName = "Data Dictionary";
+    // This is for the columns in the partition of the ddTableName
+string ddColName = "[ModelName],[TableName],[ObjectType],[ObjectName],[DataCategory],[DataType],[HiddenFlag],[Description],[FormatString],[SummarizeBy],[DisplayFolder],[MeasureFormula]";
+    // This is for the source columns in the table regarding the DataDictionary
+string[] sourceColName = {"ModelName","TableName","ObjectType","ObjectName","DataCategory","DataType","HiddenFlag","Description","FormatString","SummarizeBy","DisplayFolder","MeasureFormula"};
+    // This is for the column names in the table regarding the DataDictionary
+string[] colName = {"Model","Table","Object Type","Object","Data Category","Data Type","Hidden Flag","Description","Format String","Summarize By","Display Folder","Measure Formula"};
+
+// Check if the Model has DataSources
+if(Model.DataSources.Count == 0) {
+    Error("There isnt a data source set in the model, this script only works with a data source (Only tested with MSSQL)");
+    return;
+}
+
+// Set up the model info
+string modelName = Model.Database.Name;
+string dataSource = Model.DataSources.First().Name.ToString();
+
+// Set up the insert statement for sending the metadata to the data warehouse
+string insertSQL;
+var sb_InsertSQL = new System.Text.StringBuilder();
+
+//Delete Data Dictionary table
+foreach(var t in Model.Tables.ToList()) {
+    if(t.Name == ddTableName) t.Delete();
+ }
+
+//Model.Tables.Where(t => t.Name.ToString() = ddTableName).t.Delete();
+
+// Extract model metadata in the data dictionary format
+foreach (var t in Model.Tables.Where(a => a.ObjectType.ToString() != "CalculationGroupTable" && a.Name != ddTableName).OrderBy(a => a.Name).ToList())
+{
+    string tableName = t.Name;
+    string tableDesc = t.Description.Replace("'","''");
+    string objectType = "Table";
+    string tableDC = t.DataCategory.ToString();
+    string hiddenFlag;                 
+    string expr;
+
+    if (t.IsHidden)
+    {
+        hiddenFlag = "Yes";
+    }
+    else
+    {
+        hiddenFlag = "No";
+    }
+    
+    if (t.SourceType.ToString() == "Calculated")
+    {
+        expr = (Model.Tables[tableName] as CalculatedTable).Expression;
+ 
+        // Remove tabs and new lines
+        expr = expr.Replace("\n"," ");
+        expr = expr.Replace("\t"," ");
+        expr = expr.Replace("'","''");
+        
+        sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','"+objectType+"','"+tableName+"','"+tableDC+"','','"+hiddenFlag+"','"+tableDesc+"','"+"','"+"','"+"','"+expr+"')");                        
+    }
+    else
+    {
+        sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','"+objectType+"','"+tableName+"','"+tableDC+"','','"+hiddenFlag+"','"+tableDesc+"','"+"','"+"','"+"','"+"')");             
+    }
+    
+    sb_InsertSQL.Append(Environment.NewLine);
+    
+    foreach (var o in t.Columns.OrderBy(a => a.Name).ToList())
+    {
+        string objectName = o.Name;
+        string objectDesc = o.Description.Replace("'","''");
+        string objectDF = o.DisplayFolder.Replace("'","''");
+        string objectDC = o.DataCategory.ToString();
+        string objectDT = o.DataType.ToString();
+        string objectFormat = o.FormatString.ToString();
+        string objectSummarizeBy = o.SummarizeBy.ToString();
+        objectType = "Column";
+        
+        if (o.IsHidden)
+        {
+            hiddenFlag = "Yes";
+        }
+        else
+        {
+            hiddenFlag = "No";
+        }
+        
+        if (o.Type.ToString() == "Calculated")
+        {
+            expr = (Model.Tables[tableName].Columns[objectName] as CalculatedColumn).Expression;
+            
+            // Remove tabs and new lines
+            expr = expr.Replace("\n"," ");
+            expr = expr.Replace("\t"," ");
+            expr = expr.Replace("'","''");
+            sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','"+objectType+"','"+objectName+"','"+objectDC+"','"+objectDT+"','"+hiddenFlag+"','"+objectDesc+"','"+objectFormat+"','"+objectSummarizeBy+"','"+objectDF+"','"+expr+"')");                
+            
+        }
+        else
+        {
+            sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','"+objectType+"','"+objectName+"','"+objectDC+"','"+objectDT+"','"+hiddenFlag+"','"+objectDesc+"','"+objectFormat+"','"+objectSummarizeBy+"','"+objectDF+"','')");        
+        }
+        
+        sb_InsertSQL.Append(Environment.NewLine);        
+    }
+    
+    foreach (var o in t.Measures.OrderBy(a => a.Name).ToList())
+    {
+        string objectName = o.Name;
+        string objectDesc = o.Description.Replace("'","''");
+        string objectDF = o.DisplayFolder.Replace("'","''");
+        string objectDC = o.DataCategory.ToString();
+        string objectDT = o.DataType.ToString();
+        string objectFormat = o.FormatString.ToString();
+        string objectSummarizeBy = "";
+        objectType = "Measure";
+        expr = o.Expression;                    
+        
+        // Remove tabs and new lines
+        expr = expr.Replace("\n"," ");
+        expr = expr.Replace("\t"," ");
+        expr = expr.Replace("'","''");
+        
+        if (o.IsHidden)
+        {
+            hiddenFlag = "Yes";
+        }
+        else
+        {
+            hiddenFlag = "No";
+        }
+        
+        sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','"+objectType+"','"+objectName+"','"+objectDC+"','"+objectDT+"','"+hiddenFlag+"','"+objectDesc+"','"+objectFormat+"','"+objectSummarizeBy+"','"+objectDF+"','"+expr+"')");        
+        sb_InsertSQL.Append(Environment.NewLine);
+    }
+    
+    foreach (var o in t.Hierarchies.OrderBy(a => a.Name).ToList())
+    {
+        string objectName = o.Name;
+        string objectDesc = o.Description.Replace("'","''");
+        string objectDF = o.DisplayFolder.Replace("'","''");
+        objectType = "Hierarchy";
+        
+        if (o.IsHidden)
+        {
+            hiddenFlag = "Yes";
+        }
+        else
+        {
+            hiddenFlag = "No";
+        }
+        
+        sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','"+objectType+"','"+objectName+"','','','"+hiddenFlag+"','"+objectDesc+"','"+"','"+"','"+objectDF+"','')");
+        sb_InsertSQL.Append(Environment.NewLine);
+    }            
+}
+
+foreach (var o in Model.CalculationGroups.ToList())
+{
+    string tableName = o.Name;
+    string tableDesc = o.Description.Replace("'","''");
+    string hiddenFlag;
+    
+    if (o.IsHidden)
+    {
+        hiddenFlag = "Yes";
+    }
+    else
+    {
+        hiddenFlag = "No";
+    }
+    
+    sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','Calculation Group','"+tableName+"','','','"+hiddenFlag+"','"+tableDesc+"','"+"','"+"','"+"',"+"'')");    
+    sb_InsertSQL.Append(Environment.NewLine);
+    
+    foreach (var i in o.CalculationItems.ToList())
+    {        
+        string objectName = i.Name;
+        string objectDesc = i.Description.Replace("'","''");
+        string objectFormat = "";
+        string expr = i.Expression;            
+        
+        // Remove tabs and new lines
+          expr = expr.Replace("\n"," ");
+          expr = expr.Replace("\t"," ");
+          expr = expr.Replace("'","''");
+                              
+          sb_InsertSQL.Append(",("+"'"+modelName+"','"+tableName+"','Calculation Item','"+objectName+"','','','No','"+objectDesc+"','"+objectFormat+"','"+"','"+"','"+expr+"')");                
+        sb_InsertSQL.Append(Environment.NewLine);
+    }
+} 
+
+// Remove the extra comma 
+insertSQL = sb_InsertSQL.ToString().Trim();
+//insertSQL = insertSQL.Substring(0,insertSQL.Length-10);
+insertSQL = "SELECT * \r\n FROM ( \r\n VALUES \r\n" + insertSQL + "\r\n )Q1 (" + ddColName +")";
+insertSQL = insertSQL.Replace("VALUES \r\n,","VALUES \r\n");
+
+// Create Data Dictionary table within the model (if it does not already exist)
+if (Model.Tables.Any(a => a.Name == ddTableName) == false)
+{
+    var t = Model.AddTable(ddTableName);    
+    t.Partitions[0].DataSource = Model.DataSources[dataSource];
+    t.Partitions[0].Query = insertSQL;
+
+    for (int i=0;i<colName.Length; i++)
+    {
+        var c = t.AddDataColumn(colName[i]);
+        c.SourceColumn = sourceColName[i];
+        c.DataType = DataType.String;
+    }
+}
+
+Output("/*The scrip is done and created the table "Data Dictionary" in the model. \r\n ================================= \r\nThis is if you want te to test \r\nThe partition in MSSQL is: \r\n*/ \r\n "+insertSQL);
