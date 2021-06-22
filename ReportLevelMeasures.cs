@@ -60,58 +60,65 @@ string formattedconfigJson = Newtonsoft.Json.Linq.JToken.Parse(config).ToString(
 dynamic configJson = Newtonsoft.Json.Linq.JObject.Parse(formattedconfigJson);
 
 int i=0;
-foreach (var o in configJson["modelExtensions"].Children())
-{    
-    foreach (var o2 in o["entities"].Children())
-    {
-        string tableName = (string)o2["name"];
-        
-        foreach (var o3 in o2["measures"].Children())
+
+try{
+    foreach (var o in configJson["modelExtensions"].Children())
+    {    
+        foreach (var o2 in o["entities"].Children())
         {
-            string measureName = (string)o3["name"];
-            string expr = (string)o3["expression"];
-            bool hid = (bool)o3["hidden"];
-            string fs = (string)o3["formatInformation"]["formatString"];
+            string tableName = (string)o2["name"];
             
-            sb.Append(tableName + '\t' + measureName + '\t' + expr + '\t' + hid + '\t' + fs + '\t');
-            
-            if (createMeasures)
+            foreach (var o3 in o2["measures"].Children())
             {
-                try
-                {
-                    if (Model.AllMeasures.Any(a => a.Name == measureName))
-                    {
-                        Warning("Unable to create the '"+measureName+"' measure as this measure already exists in the model.");
-                        sb.Append("No" + newline);
-                    }
-                    else
-                    {
-                        var m = Model.Tables[tableName].AddMeasure(measureName);
-                        m.Expression = expr;
-                        m.IsHidden = hid;
-                        m.FormatString = fs;
-                        
-                        sb.Append("Yes" + newline);
-                    }
-                }
-                catch
-                {
-                    Warning("Unable to create the '"+measureName+"' measure as the '"+tableName+"' table does not exist.");
-                    sb.Append("No" + newline);
-                }                
-            }
-            else
-            {
-                expr = expr.Replace("\"",@"\""").Replace("\r","\\r").Replace("\n","\\n").Replace("\t","\\t");
+                string measureName = (string)o3["name"];
+                string expr = (string)o3["expression"];
+                bool hid = (bool)o3["hidden"];
+                string fs = (string)o3["formatInformation"]["formatString"];
                 
-                sb_Script.Append("var m"+i+" = Model.Tables[\"" + tableName + "\"].AddMeasure(\"" + measureName + "\");" + newline);
-                sb_Script.Append("m"+i+".Expression = \"" + expr + "\";" + newline);
-                sb_Script.Append("m"+i+".IsHidden = " + hid.ToString().ToLower() + ";" + newline);
-                sb_Script.Append("m"+i+".FormatString = @\"" + fs + "\";" + newline + newline);
-            }
-            i++;
-        }        
-    }    
+                sb.Append(tableName + '\t' + measureName + '\t' + expr + '\t' + hid + '\t' + fs + '\t');
+                
+                if (createMeasures)
+                {
+                    try
+                    {
+                        if (Model.AllMeasures.Any(a => a.Name == measureName))
+                        {
+                            Warning("Unable to create the '"+measureName+"' measure as this measure already exists in the model.");
+                            sb.Append("No" + newline);
+                        }
+                        else
+                        {
+                            var m = Model.Tables[tableName].AddMeasure(measureName);
+                            m.Expression = expr;
+                            m.IsHidden = hid;
+                            m.FormatString = fs;
+                            
+                            sb.Append("Yes" + newline);
+                        }
+                    }
+                    catch
+                    {
+                        Warning("Unable to create the '"+measureName+"' measure as the '"+tableName+"' table does not exist.");
+                        sb.Append("No" + newline);
+                    }                
+                }
+                else
+                {
+                    expr = expr.Replace("\"",@"\""").Replace("\r","\\r").Replace("\n","\\n").Replace("\t","\\t");
+                    
+                    sb_Script.Append("var m"+i+" = Model.Tables[\"" + tableName + "\"].AddMeasure(\"" + measureName + "\");" + newline);
+                    sb_Script.Append("m"+i+".Expression = \"" + expr + "\";" + newline);
+                    sb_Script.Append("m"+i+".IsHidden = " + hid.ToString().ToLower() + ";" + newline);
+                    sb_Script.Append("m"+i+".FormatString = @\"" + fs + "\";" + newline + newline);
+                }
+                i++;
+            }        
+        }    
+    }
+}
+catch
+{
+    Error("There are no report level measures in this report. All the measures in this report are in the model itself.");
 }
 
 sb.Output(); // Outputs a list of the report-level measures
