@@ -45,7 +45,7 @@ Run this script to automatically update the translations in your model (or add n
 
 Running this script opens a program within [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
 
-### [Report Level Measures](https://www.elegantbi.com/post/reportlevelmeasures "Report Level Measures")
+### [Report-Level Measures](https://www.elegantbi.com/post/reportlevelmeasures "Report-Level Measures")
 
 Want to migrate measures created within a Power BI Desktop report to your tabular model? This script does exactly that. Setting the 'createMeasures' parameter to 'true' will create the measures in the model file within Tabular Editor. Setting this paramter to 'false' will dynamically generate C# code which can be copied and executed in order to create the measures in a model.
 
