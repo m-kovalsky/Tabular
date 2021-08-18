@@ -17,7 +17,7 @@ Model.RemoveAnnotation("Vertipaq_ModelSize");
 foreach (var o in Model.AllHierarchies)
 {   
     o.RemoveAnnotation("Vertipaq_HierarchyID");
-    o.RemoveAnnotation("Vertipaq_UserHierarchySize");    
+    o.RemoveAnnotation("Vertipaq_UserHierarchySize");
 }
 
 foreach (var o in Model.AllColumns)
@@ -35,10 +35,10 @@ foreach (var o in Model.AllColumns)
 foreach (var o in Model.Relationships.ToList())
 {    
     o.RemoveAnnotation("Vertipaq_RelationshipID");
-    o.RemoveAnnotation("Vertipaq_RelationshipSize");   
-    o.RemoveAnnotation("Vertipaq_MaxFromCardinality");   
-    o.RemoveAnnotation("Vertipaq_MaxToCardinality");   
-     
+    o.RemoveAnnotation("Vertipaq_RelationshipSize");
+    o.RemoveAnnotation("Vertipaq_MaxFromCardinality");
+    o.RemoveAnnotation("Vertipaq_MaxToCardinality");
+    o.RemoveAnnotation("Vertipaq_RIViolationInvalidRows");
 }
 
 foreach (var o in Model.Tables.ToList())
@@ -254,7 +254,7 @@ for (int r = 0; r < DMV_ColumnSegments.Rows.Count; r++)
             }
         
             Model.Relationships[rName].SetAnnotation("Vertipaq_RelationshipSize",rSize.ToString());                
-        } 
+        }
     }
     
     // Column Hierarchy Size
@@ -355,7 +355,7 @@ foreach (var t in Model.Tables.ToList())
 // Set Model Size
 Model.SetAnnotation("Vertipaq_ModelSize",tableSizeCumulative.ToString());
 
-// Set Max From/To Cardinality
+// Set Max From/To Cardinality, Referential Integrity Violations
 foreach (var r in Model.Relationships.ToList())
 {
     string rName = r.ID;
@@ -363,13 +363,41 @@ foreach (var r in Model.Relationships.ToList())
     string fromCol = r.FromColumn.Name;
     string toTbl = r.ToTable.Name;
     string toCol = r.ToColumn.Name;
-    var obj = Model.Relationships[rName];
+    //var obj = Model.Relationships[rName];
+    bool act = r.IsActive;
+    string fromTableFull = r.FromTable.DaxObjectFullName;    
+    string fromObject = r.FromColumn.DaxObjectFullName;
+    string toObject = r.ToColumn.DaxObjectFullName;
+    string dax;
     
+    // Set Max From/To Cardinality
     string fromCard = Model.Tables[fromTbl].Columns[fromCol].GetAnnotation("Vertipaq_Cardinality");
     string toCard = Model.Tables[toTbl].Columns[toCol].GetAnnotation("Vertipaq_Cardinality");
     
-    obj.SetAnnotation("Vertipaq_MaxFromCardinality",fromCard);
-    obj.SetAnnotation("Vertipaq_MaxToCardinality",toCard);    
+    r.SetAnnotation("Vertipaq_MaxFromCardinality",fromCard);
+    r.SetAnnotation("Vertipaq_MaxToCardinality",toCard);   
+
+    // Set Referential Integrity Violations
+    if (act)
+    {
+        dax = "SUMMARIZECOLUMNS(\"test\",CALCULATE(COUNTROWS("+fromTableFull+"),ISBLANK("+toObject+")))";
+    }
+    else
+    {
+        dax = "SUMMARIZECOLUMNS(\"test\",CALCULATE(COUNTROWS("+fromTableFull+"),USERELATIONSHIP("+fromObject+","+toObject+"),ISBLANK("+toObject+")))";
+    }
+    
+    var daxResult = EvaluateDax(dax);
+    string blankRowCount = daxResult.ToString();
+    
+    if (blankRowCount != "Table")
+    {
+        r.SetAnnotation("Vertipaq_RIViolationInvalidRows",blankRowCount);        
+    }
+    else
+    {
+        r.SetAnnotation("Vertipaq_RIViolationInvalidRows","0");
+    }
 }
 
 // Percent of Table and Model
@@ -412,7 +440,7 @@ foreach (var o in Model.AllColumns)
 
 foreach (var o in Model.Relationships.ToList())
 {    
-    o.RemoveAnnotation("Vertipaq_RelationshipID");    
+    o.RemoveAnnotation("Vertipaq_RelationshipID");     
 }
 
 foreach (var o in Model.Tables.ToList())
