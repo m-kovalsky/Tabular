@@ -41,6 +41,8 @@ Run this script to automatically update the translations in your model (or add n
 
 ### [Auto Aggs](https://www.elegantbi.com/post/autoaggs "Auto Aggs")
 
+Auto-generated aggregations supporting base fact tables in both import mode and direct query. Also check out the [Agg Wizard](https://github.com/m-kovalsky/AggWizard "Agg Wizard") which has additional functionalities and a supporting user interface.
+
 ### [Perspective Editor](https://www.elegantbi.com/post/perspectiveeditor "Perspective Editor")
 
 Running this script opens a program within [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") that allows you to create or modify perspectives akin to the way it is done in SQL Server Development Tools (SSDT). It also gives you a tree-view of all the objects that are in a perspective relative to all the objects in the model.
