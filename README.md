@@ -69,7 +69,7 @@ Run this script against a live-connected model to save [Vertipaq Analyzer](https
 
 * **Hierarchies:** User Hierarchy Size
 
-* **Relationships:** Relationship Size; Max From Cardinality; Max To Cardinality
+* **Relationships:** Relationship Size; Max From Cardinality; Max To Cardinality; Referential Integrity Violation Invalid Rows
 
 ### [Vpax to Tabular Editor](https://www.elegantbi.com/post/vpaxtotabulareditor "Vpax to Tabular Editor")
 
