@@ -55,9 +55,10 @@ foreach (var o in Model.AllColumns)
 
 foreach (var o in Model.Relationships.ToList())
 {        
-    o.RemoveAnnotation("Vertipaq_RelationshipSize");   
-    o.RemoveAnnotation("Vertipaq_MaxFromCardinality");   
-    o.RemoveAnnotation("Vertipaq_MaxToCardinality");        
+    o.RemoveAnnotation("Vertipaq_RelationshipSize"); 
+    o.RemoveAnnotation("Vertipaq_MaxFromCardinality");
+    o.RemoveAnnotation("Vertipaq_MaxToCardinality");
+    o.RemoveAnnotation("Vertipaq_RIViolationInvalidRows");
 }
 
 foreach (var o in Model.Tables.ToList())
@@ -142,6 +143,7 @@ for (int i=0; i<relationshipCount; i++)
     string fromCardinality = (string)json["Relationships"][i]["FromCardinality"];
     string toCardinality = (string)json["Relationships"][i]["ToCardinality"];
     string usedSize = (string)json["Relationships"][i]["UsedSize"];
+    string invalidRows = (string)json["Relationships"][i]["InvalidRows"];
     
     if (Model.Relationships.Where(a => a.ID == relationshipName).Count() == 1)
     {
@@ -150,6 +152,7 @@ for (int i=0; i<relationshipCount; i++)
         obj.SetAnnotation("Vertipaq_MaxFromCardinality",fromCardinality);
         obj.SetAnnotation("Vertipaq_MaxToCardinality",toCardinality);
         obj.SetAnnotation("Vertipaq_RelationshipSize",usedSize);
+        obj.SetAnnotation("Vertipaq_RIViolationInvalidRows",invalidRows);
     }
 }
 
