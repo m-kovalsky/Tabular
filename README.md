@@ -25,6 +25,17 @@ Run the ImportDescriptions.cs script in [Tabular Editor](https://tabulareditor.c
 
 Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") will run the [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer") and output the results. The output can easily be copied into Excel for further analysis.
 
+### Export Report Objects
+
+Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to export the objects used in a Power BI report (or a collection of Power BI reports within a specified folder). Below shows the output:
+
+* Custom Visuals (list of custom visuals used in the Power BI report.
+* Report Filters (and associated objects)
+* Page Filters (and associated objects)
+* Visual Filters (and associated objects)
+* Visuals (and associated objects)
+* Bookmarks
+
 ### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel the data refresh of that model.
