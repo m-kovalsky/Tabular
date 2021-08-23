@@ -29,17 +29,17 @@ Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Edit
 
 Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to export the objects used in a Power BI report (or a collection of Power BI reports within a specified folder). Below shows the output:
 
-* Custom Visuals
+* **Custom Visuals**
    * Report Name, Custom Visual Name 
-* Report Filters
+* **Report Filters**
    * Report Name, Filter Name, Table Name, Object Name, Object Type, Filter Type
-* Page Filters
+* **Page Filters**
    * Report Name, Page Name, Filter Name, Table Name, Object Name, Object Type, Filter Type 
-* Visual Filters
+* **Visual Filters**
    * Report Name, Page Name, Visual Id, Table Name, Object Name, Object Type, Filter Type 
-* Visuals
+* **Visuals**
    * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type  
-* Bookmarks
+* **Bookmarks**
    * Report Name, Bookmark Name, Bookmark Id, Page Id 
 
 ### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
