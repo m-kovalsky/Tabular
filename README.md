@@ -25,7 +25,7 @@ Run the ImportDescriptions.cs script in [Tabular Editor](https://tabulareditor.c
 
 Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") will run the [Best Practice Analyzer](https://docs.tabulareditor.com/Best-Practice-Analyzer.html "Best Practice Analyzer") and output the results. The output can easily be copied into Excel for further analysis.
 
-### Export Report Objects
+### [Export Report Objects](https://www.elegantbi.com/post/exportreportobjects "Export Report Objects")
 
 Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to export the objects used in a Power BI report (or a collection of Power BI reports within a specified folder). Below shows the output:
 
