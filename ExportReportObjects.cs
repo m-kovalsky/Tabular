@@ -53,7 +53,7 @@ var sb_VisualFilters = new System.Text.StringBuilder();
 sb_VisualFilters.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
 
 var sb_PageFilters = new System.Text.StringBuilder();
-sb_PageFilters.Append("ReportName" + '\t' + "PageName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
+sb_PageFilters.Append("ReportName" + '\t' + "PageName" + '\t' + "FilterName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
 
 var sb_Bookmarks = new System.Text.StringBuilder();
 sb_Bookmarks.Append("ReportName" + '\t' + "BookmarkName" + '\t' + "BookmarkId" + '\t' + "PageId" + newline);
@@ -187,6 +187,7 @@ foreach (var rpt in FileList)
 
         try
         {
+            string pgFltName = (string)pageFltJson[0]["name"];
             string pgFltType = (string)pageFltJson[0]["type"];
             string objType = string.Empty;
             string objName = string.Empty;
@@ -212,7 +213,7 @@ foreach (var rpt in FileList)
             {
             }
 
-            PageFilters.Add(new PageFilter {PageName = pageName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType });
+            PageFilters.Add(new PageFilter {PageName = pageName, FilterName = pgFltName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType });
         }
         catch
         {            
@@ -345,7 +346,7 @@ foreach (var rpt in FileList)
     }
     foreach (var x in PageFilters.ToList())
     {
-        sb_PageFilters.Append(fileName + '\t' + x.PageName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
+        sb_PageFilters.Append(fileName + '\t' + x.PageName + '\t' + x.FilterName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
     }
     foreach (var x in VisualFilters.ToList())
     {
@@ -430,6 +431,7 @@ public class VisualFilter
 public class PageFilter
 {
     public string PageName { get; set; }
+    public string FilterName {get; set; }
     public string TableName { get; set; }
     public string ObjectName { get; set; }
     public string ObjectType { get; set; }
