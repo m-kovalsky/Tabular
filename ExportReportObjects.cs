@@ -26,8 +26,8 @@ using System.IO.Compression;
 ************************************************************************************************************/
 
 // User Parameters
-string pbiFolderName = @"C:\Desktop\MyReports";
-string pbiFile = @"MyReport.pbix";
+string pbiFolderName = @"C:\Users\mikova\OneDrive - Microsoft\Power BI CAT\GitHub\ReportObjects";
+string pbiFile = @"CoronaB.pbix";
 bool saveToFile = true;
 string savePrefix = "ReportObjects";
 
@@ -169,6 +169,17 @@ foreach (var rpt in FileList)
             catch
             {
             }
+            try
+            {
+                string levelName = (string)o["expression"]["HierarchyLevel"]["Level"];
+                string hierName = (string)o["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
+                objectName = hierName + "." + levelName;
+                objectType = "Hierarchy";
+                tableName = (string)o["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];
+            }
+            catch
+            {
+            }
             
             ReportFilters.Add(new ReportFilter {FilterName = filterName, TableName = tableName, ObjectName = objectName, ObjectType = objectType, FilterType = filterType});
         }
@@ -212,6 +223,17 @@ foreach (var rpt in FileList)
             catch
             {
             }
+            try
+            {
+                string levelName = (string)pageFltJson[0]["expression"]["HierarchyLevel"]["Level"];
+                string hierName = (string)pageFltJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
+                objName = hierName + "." + levelName;
+                objType = "Hierarchy";
+                tblName = (string)pageFltJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
+            }
+            catch
+            {
+            }
 
             PageFilters.Add(new PageFilter {PageName = pageName, FilterName = pgFltName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType });
         }
@@ -250,11 +272,11 @@ foreach (var rpt in FileList)
                     string name = (string)o2["Name"];
                     int nameInd = name.IndexOf(".");
                     string tableName = name.Substring(0,nameInd);
-                    string objectName = name.Substring(nameInd+1);                
+                    string objectName = string.Empty;                
                     
                     try
                     {
-                        string x = (string)o2["Column"]["Property"];
+                        objectName = (string)o2["Column"]["Property"];
                         objectType = "Column";
                     }
                     catch
@@ -262,8 +284,18 @@ foreach (var rpt in FileList)
                     }
                     try
                     {
-                        string x = (string)o2["Measure"]["Property"];
+                        objectName = (string)o2["Measure"]["Property"];
                         objectType = "Measure";
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        string levelName = (string)o2["HierarchyLevel"]["Level"];
+                        string hierName = (string)o2["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
+                        objectName = hierName + "." + levelName;
+                        objectType = "Hierarchy";
                     }
                     catch
                     {
@@ -305,6 +337,17 @@ foreach (var rpt in FileList)
                         objName1 = (string)visfilterJson[0]["expression"]["Measure"]["Property"];
                         objType1 = "Measure";
                         tblName1 = (string)visfilterJson[0]["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        string levelName1 = (string)visfilterJson[0]["expression"]["HierarchyLevel"]["Level"];
+                        string hierName1 = (string)visfilterJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
+                        objName1 = hierName1 + "." + levelName1;
+                        objType1 = "Hierarchy";
+                        tblName1 = (string)visfilterJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
                     }
                     catch
                     {
