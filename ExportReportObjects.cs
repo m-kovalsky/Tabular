@@ -196,10 +196,10 @@ foreach (var rpt in FileList)
         string formattedpagfltJson = Newtonsoft.Json.Linq.JToken.Parse(pageFlt).ToString();
         dynamic pageFltJson = Newtonsoft.Json.Linq.JArray.Parse(formattedpagfltJson);
 
-        try
+        foreach (var o2 in pageFltJson.Children())
         {
-            string pgFltName = (string)pageFltJson[0]["name"];
-            string pgFltType = (string)pageFltJson[0]["type"];
+            string pgFltName = (string)o2["name"];
+            string pgFltType = (string)o2["type"];
             string objType = string.Empty;
             string objName = string.Empty;
             string tblName = string.Empty;
@@ -207,38 +207,35 @@ foreach (var rpt in FileList)
             // Note: Add filter conditions
             try
             {
-                objName = (string)pageFltJson[0]["expression"]["Column"]["Property"];
+                objName = (string)o2["expression"]["Column"]["Property"];
                 objType = "Column";
-                tblName = (string)pageFltJson[0]["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];                    
+                tblName = (string)o2["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];                    
             }
             catch
             {
             }
             try
             {
-                objName = (string)pageFltJson[0]["expression"]["Measure"]["Property"];
+                objName = (string)o2["expression"]["Measure"]["Property"];
                 objType = "Measure";
-                tblName = (string)pageFltJson[0]["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
+                tblName = (string)o2["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
             }
             catch
             {
             }
             try
             {
-                string levelName = (string)pageFltJson[0]["expression"]["HierarchyLevel"]["Level"];
-                string hierName = (string)pageFltJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
+                string levelName = (string)o2["expression"]["HierarchyLevel"]["Level"];
+                string hierName = (string)o2["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
                 objName = hierName + "." + levelName;
                 objType = "Hierarchy";
-                tblName = (string)pageFltJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
+                tblName = (string)o2["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
             }
             catch
             {
             }
 
             PageFilters.Add(new PageFilter {PageName = pageName, FilterName = pgFltName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType });
-        }
-        catch
-        {            
         }
 
         // Visuals
@@ -316,8 +313,8 @@ foreach (var rpt in FileList)
                 dynamic visfilterJson = Newtonsoft.Json.Linq.JArray.Parse(formattedvisfilterJson);
                                 
                 foreach (var o3 in visfilterJson.Children())
-                {
-                    string filterType = (string)visfilterJson[0]["type"];
+                {                  
+                    string filterType = (string)o3["type"];
                     string objType1 = string.Empty;
                     string objName1 = string.Empty;
                     string tblName1 = string.Empty;
@@ -325,29 +322,29 @@ foreach (var rpt in FileList)
                     // Note: Add filter conditions
                     try
                     {
-                        objName1 = (string)visfilterJson[0]["expression"]["Column"]["Property"];
+                        objName1 = (string)o3["expression"]["Column"]["Property"];
                         objType1 = "Column";
-                        tblName1 = (string)visfilterJson[0]["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];                    
+                        tblName1 = (string)o3["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];                    
                     }
                     catch
                     {
                     }
                     try
                     {
-                        objName1 = (string)visfilterJson[0]["expression"]["Measure"]["Property"];
+                        objName1 = (string)o3["expression"]["Measure"]["Property"];
                         objType1 = "Measure";
-                        tblName1 = (string)visfilterJson[0]["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
+                        tblName1 = (string)o3["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
                     }
                     catch
                     {
                     }
                     try
                     {
-                        string levelName1 = (string)visfilterJson[0]["expression"]["HierarchyLevel"]["Level"];
-                        string hierName1 = (string)visfilterJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
+                        string levelName1 = (string)o3["expression"]["HierarchyLevel"]["Level"];
+                        string hierName1 = (string)o3["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
                         objName1 = hierName1 + "." + levelName1;
                         objType1 = "Hierarchy";
-                        tblName1 = (string)visfilterJson[0]["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
+                        tblName1 = (string)o3["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
                     }
                     catch
                     {
