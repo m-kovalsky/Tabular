@@ -263,18 +263,19 @@ foreach (var rpt in FileList)
 
             try
             {
+
                 foreach (var o2 in configJson["singleVisual"]["prototypeQuery"]["Select"].Children())
                 {
                     string objectType = string.Empty;
-                    string name = (string)o2["Name"];
-                    int nameInd = name.IndexOf(".");
-                    string tableName = name.Substring(0,nameInd);
-                    string objectName = string.Empty;                
+                    string tableName = string.Empty;
+                    string objectName = string.Empty;
+                    string src = string.Empty;
                     
                     try
                     {
                         objectName = (string)o2["Column"]["Property"];
                         objectType = "Column";
+                        src = (string)o2["Column"]["Expression"]["SourceRef"]["Source"];
                     }
                     catch
                     {
@@ -283,6 +284,7 @@ foreach (var rpt in FileList)
                     {
                         objectName = (string)o2["Measure"]["Property"];
                         objectType = "Measure";
+                        src = (string)o2["Measure"]["Expression"]["SourceRef"]["Source"];
                     }
                     catch
                     {
@@ -293,9 +295,30 @@ foreach (var rpt in FileList)
                         string hierName = (string)o2["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
                         objectName = hierName + "." + levelName;
                         objectType = "Hierarchy";
+                        src = (string)o2["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Source"];
                     }
                     catch
                     {
+                    }
+                    try
+                    {
+                        objectName = (string)o2["Aggregation"]["Expression"]["Column"]["Property"];
+                        objectType = "Column";
+                        src = (string)o2["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }
+
+                    foreach (var t in configJson["singleVisual"]["prototypeQuery"]["From"].Children())
+                    {
+                        string n = (string)t["Name"];
+                        string tbl = (string)t["Entity"];
+
+                        if (src == n)
+                        {
+                            tableName = tbl;
+                        }
                     }
                     Visuals.Add(new Visual {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType});
                 }
