@@ -26,8 +26,8 @@ using System.IO.Compression;
 ************************************************************************************************************/
 
 // User Parameters
-string pbiFolderName = @"C:\Users\mikova\OneDrive - Microsoft\Power BI CAT\GitHub\ReportObjects";
-string pbiFile = @"CoronaB.pbix";
+string pbiFolderName = @"C:\Desktop\MyReports";
+string pbiFile = @"MyReport.pbix";
 bool saveToFile = true;
 string savePrefix = "ReportObjects";
 
