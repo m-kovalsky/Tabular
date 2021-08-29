@@ -33,12 +33,6 @@ string savePrefix = "ReportObjects";
 
 string newline = Environment.NewLine;
 List<string> FileList = new List<string>();
-var CustomVisuals = new List<CustomVisual>();
-var Bookmarks = new List<Bookmark>();
-var ReportFilters = new List<ReportFilter>();
-var Visuals = new List<Visual>();
-var VisualFilters = new List<VisualFilter>();
-var PageFilters = new List<PageFilter>();
 
 var sb_CustomVisuals = new System.Text.StringBuilder();
 sb_CustomVisuals.Append("ReportName" + '\t' + "CustomVisualName" + newline);
@@ -77,6 +71,12 @@ else
 
 foreach (var rpt in FileList)
 {
+    var CustomVisuals = new List<CustomVisual>();
+    var Bookmarks = new List<Bookmark>();
+    var ReportFilters = new List<ReportFilter>();
+    var Visuals = new List<Visual>();
+    var VisualFilters = new List<VisualFilter>();
+    var PageFilters = new List<PageFilter>();
     string fileExt = Path.GetExtension(rpt);
     string fileName = Path.GetFileNameWithoutExtension(rpt);
     string folderName = Path.GetDirectoryName(rpt) + @"\";
@@ -122,15 +122,21 @@ foreach (var rpt in FileList)
     }
 
     // Custom Visuals
-    foreach (var o in json["resourcePackages"].Children())
+    try
     {
-        int resType = (int)o["resourcePackage"]["type"];
-        string visualName = (string)o["resourcePackage"]["name"];
-            
-        if (resType == 0)
-        {            
-            CustomVisuals.Add( new CustomVisual {Name = visualName});
-        }    
+        foreach (var o in json["resourcePackages"].Children())
+        {
+            int resType = (int)o["resourcePackage"]["type"];
+            string visualName = (string)o["resourcePackage"]["name"];
+                
+            if (resType == 0)
+            {            
+                CustomVisuals.Add( new CustomVisual {Name = visualName});
+            }    
+        }
+    }
+    catch
+    {
     }
 
     // Report-Level Filters
@@ -423,7 +429,6 @@ foreach (var rpt in FileList)
     {
         sb_Bookmarks.Append(fileName + '\t' + x.Name + '\t' + x.Id + '\t' + x.PageId + newline);
     }
-
 }
 
 // Save to text files or print out results
