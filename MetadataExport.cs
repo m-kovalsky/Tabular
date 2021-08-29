@@ -8,7 +8,7 @@ string newline = Environment.NewLine;
 // Headers
 sb.Append("DataSource" + '\t' + "ConnectionString" + '\t' + "Provider" + '\t' + "MaxConnections" + newline);
 
-foreach (var o in Model.DataSources.Where(a => a.Type.ToString() == "Provider").ToList())
+foreach (var o in Model.DataSources.Where(a => a.Type.ToString() == "Provider").OrderBy(a => a.Name).ToList())
 {
     var ds = (Model.DataSources[o.Name] as ProviderDataSource);
     string n = o.Name;
@@ -30,9 +30,9 @@ sb = new System.Text.StringBuilder();
 sb.Append("TableName" + '\t' + "PartitionName" + '\t' + "DataSource" + '\t' + "Mode" + '\t' +
           "DataCategory" + '\t' + "Description" + '\t' + "Query" + newline);
           
-foreach (var o in Model.Tables.Where(a => a.ObjectTypeName != "Calculation Group Table").OrderBy(b => b.Name).ToList())
+foreach (var o in Model.Tables.Where(a => a.ObjectTypeName != "Calculation Group Table").OrderBy(a => a.Name).ToList())
 {
-    foreach (var p in o.Partitions.ToList())
+    foreach (var p in o.Partitions.OrderBy(a => a.Name).ToList())
     {
         string q = Model.Tables[o.Name].Partitions[p.Name].Query.Replace("\t"," ").Replace("\r"," ").Replace("\n"," ");
         string m = Model.Tables[o.Name].Partitions[p.Name].Mode.ToString();
@@ -54,9 +54,9 @@ sb.Append("ObjectName" + '\t' + "TableName" + '\t' + "ObjectType" + '\t' + "Sour
           "HiddenFlag" + '\t' + "Format" + '\t' + "PrimaryKey" + '\t' + "SummarizeBy" +'\t' + "DisplayFolder" + '\t' + "DataCategory" + '\t' + "SortByColumn" + '\t' + "Description" + '\t' + "EncodingHint" + newline);
 
 // Columns
-foreach (var t in Model.Tables.ToList())
+foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
 {
-    foreach (var o in t.Columns.ToList())
+    foreach (var o in t.Columns.OrderBy(a => a.Name).ToList())
     {
         string sc = string.Empty;
         string dt = o.DataType.ToString();
@@ -118,9 +118,9 @@ foreach (var t in Model.Tables.ToList())
     }
 }
 
-foreach (var t in Model.Tables.ToList())
+foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
 {
-    foreach (var o in t.Measures.ToList())
+    foreach (var o in t.Measures.OrderBy(a => a.Name).ToList())
     {
         string hid = string.Empty;
         string fs = o.FormatString;
@@ -178,9 +178,9 @@ sb = new System.Text.StringBuilder();
 // Headers
 sb.Append("RoleName" + '\t' + "RoleMember" + '\t' + "ModelPermission" + newline);
 
-foreach (var r in Model.Roles.ToList())
+foreach (var r in Model.Roles.OrderBy(a => a.Name).ToList())
 {
-    foreach (var rm in r.Members.ToList())
+    foreach (var rm in r.Members.OrderBy(a => a.Name).ToList())
     {
         string mp = string.Empty;
         if (r.ModelPermission == ModelPermission.Administrator)
@@ -205,9 +205,9 @@ sb = new System.Text.StringBuilder();
 // Headers
 sb.Append("RoleName" + '\t' + "TableName" + '\t' + "FilterExpression" + newline);
 
-foreach (var t in Model.Tables)
+foreach (var r in Model.Roles.OrderBy(a => a.Name).ToList())
 {
-    foreach(var r in Model.Roles)
+    foreach(var t in Model.Tables.OrderBy(a => a.Name).ToList())
     {
         string rls = Model.Tables[t.Name].RowLevelSecurity[r.Name];
         if (!String.IsNullOrEmpty(rls))
@@ -228,7 +228,7 @@ sb = new System.Text.StringBuilder();
 sb.Append("FromTable" + '\t' + "FromColumn" + '\t' + "ToTable" + '\t' + "ToColumn" + '\t' +
           "Active" + '\t' + "CrossFilteringBehavior" + '\t' + "RelationshipType" + '\t' + "SecurityFilteringBehavior" + '\t' + "RelyOnReferentialIntegrity" + newline);
 
-foreach (var r in Model.Relationships)
+foreach (var r in Model.Relationships.ToList())
 {
     string actv = string.Empty;
     string relType = string.Empty;
@@ -294,9 +294,9 @@ sb = new System.Text.StringBuilder();
 sb.Append("HierarchyName" + '\t' + "TableName" + '\t' + "ColumnName" + '\t' + "Ordinal" + newline);
 
 // Hierarchies
-foreach (var h in Model.AllHierarchies.ToList())
+foreach (var h in Model.AllHierarchies.OrderBy(a => a.Name).ToList())
 {
-    foreach (var lev in h.Levels.ToList())
+    foreach (var lev in h.Levels.OrderBy(a => a.Name).ToList())
     {
         sb.Append(h.Name + '\t' + h.Table.Name + '\t' + lev.Name + '\t' + lev.Ordinal.ToString() + newline);
     }
@@ -313,19 +313,19 @@ sb = new System.Text.StringBuilder();
 sb.Append("TableName" + '\t' + "ObjectName" + '\t' + "ObjectType");
 
 // Loop header for each perspective
-foreach (var p in Model.Perspectives.ToList())
+foreach (var p in Model.Perspectives.OrderBy(a => a.Name).ToList())
 {
     sb.Append('\t' + p.Name);
 }
 
-sb.Append(Environment.NewLine);
+sb.Append(newline);
 
 // Measures
-foreach (var o in Model.AllMeasures.ToList())
+foreach (var o in Model.AllMeasures.OrderBy(a => a.Name).ToList())
 {
     sb.Append(o.Parent.Name + '\t' + o.Name + '\t' + "Measure");
     
-    foreach (var p in Model.Perspectives.ToList())
+    foreach (var p in Model.Perspectives.OrderBy(a => a.Name).ToList())
     {
         string per = string.Empty;
         if (o.InPerspective[p])
@@ -338,15 +338,15 @@ foreach (var o in Model.AllMeasures.ToList())
         }
         sb.Append('\t' + per);
     }
-    sb.Append(Environment.NewLine);
+    sb.Append(newline);
 }
 
 // Columns
-foreach (var o in Model.AllColumns.ToList())
+foreach (var o in Model.AllColumns.OrderBy(a => a.Name).ToList())
 {
     sb.Append(o.Table.Name + '\t' + o.Name + '\t' + "Column");
     
-    foreach (var p in Model.Perspectives.ToList())
+    foreach (var p in Model.Perspectives.OrderBy(a => a.Name).ToList())
     {
         string per = string.Empty;
         if (o.InPerspective[p])
@@ -359,15 +359,15 @@ foreach (var o in Model.AllColumns.ToList())
         }
         sb.Append('\t' + per);
     }
-    sb.Append(Environment.NewLine);
+    sb.Append(newline);
 }
 
 // Hierarchies
-foreach (var o in Model.AllHierarchies.ToList())
+foreach (var o in Model.AllHierarchies.OrderBy(a => a.Name).ToList())
 {
     sb.Append(o.Parent.Name + '\t' + o.Name + '\t' + "Hierarchy");
     
-    foreach (var p in Model.Perspectives.ToList())
+    foreach (var p in Model.Perspectives.OrderBy(a => a.Name).ToList())
     {
         string per = string.Empty;
         if (o.InPerspective[p])
@@ -380,7 +380,7 @@ foreach (var o in Model.AllHierarchies.ToList())
         }
         sb.Append('\t' + per);
     }
-    sb.Append(Environment.NewLine);
+    sb.Append(newline);
 }
 
 System.IO.File.WriteAllText(folderName + @"\Perspectives.txt", sb.ToString());
@@ -406,7 +406,7 @@ if (Model.Cultures.Count() == 0)
 foreach (var cul in Model.Cultures.ToList()) 
 { 
     // Tables
-    foreach (var t in Model.Tables.ToList())
+    foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     {    
         string objectName = t.Name;
         string objectType = "Table";
@@ -428,7 +428,7 @@ foreach (var cul in Model.Cultures.ToList())
     }
     
     // Columns
-    foreach (var c in Model.AllColumns.ToList())
+    foreach (var c in Model.AllColumns.OrderBy(a => a.Name).ToList())
     {
         string objectName = c.Name;
         string objectType = "Column";
@@ -450,7 +450,7 @@ foreach (var cul in Model.Cultures.ToList())
     }
     
     // Measures
-    foreach (var m in Model.AllMeasures.ToList())
+    foreach (var m in Model.AllMeasures.OrderBy(a => a.Name).ToList())
     {
         string objectName = m.Name;
         string objectType = "Measure";
@@ -472,7 +472,7 @@ foreach (var cul in Model.Cultures.ToList())
     }
     
     // Hierarchies
-    foreach (var h in Model.AllHierarchies.ToList())
+    foreach (var h in Model.AllHierarchies.OrderBy(a => a.Name).ToList())
     {
         string objectName = h.Name;
         string objectType = "Hierarchy";
@@ -510,9 +510,9 @@ sb = new System.Text.StringBuilder();
 // Headers
 sb.Append("CalculationGroup" + '\t' + "CalculationItem" + '\t' + "Expression" + '\t' + "Ordinal" + '\t' + "FormatString" + '\t' + "Description" + newline);
 
-foreach (var o in Model.CalculationGroups.ToList())
+foreach (var o in Model.CalculationGroups.OrderBy(a => a.Name).ToList())
 {
-    foreach (var i in o.CalculationItems.ToList())
+    foreach (var i in o.CalculationItems.OrderBy(a => a.Name).ToList())
     {
         string cg = o.Name;
         string ci = i.Name;
@@ -541,7 +541,7 @@ sb = new System.Text.StringBuilder();
 sb.Append("TableName" + '\t' + "MeasureName" + '\t' + "StatusExpresssion" + '\t' + "StatusGraphic" + '\t' +
           "StatusDescription" + '\t' + "TargetExpression" + '\t' + "TargetFormatString" + '\t' + "TargetDescription" + '\t' + "TrendExpression" + '\t' + "TrendGraphic" + '\t' + "TrendDescription" + newline);
 
-foreach (var m in Model.AllMeasures.Where(a => a.KPI != null))
+foreach (var m in Model.AllMeasures.Where(a => a.KPI != null).OrderBy(a => a.Name).ToList())
 {
     
     string tableName = m.Table.Name;
