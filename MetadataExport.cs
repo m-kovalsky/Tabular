@@ -29,8 +29,8 @@ sb = new System.Text.StringBuilder();
 // Headers
 sb.Append("TableName" + '\t' + "PartitionName" + '\t' + "DataSource" + '\t' + "Mode" + '\t' +
           "DataCategory" + '\t' + "Description" + '\t' + "Query" + newline);
-
-foreach (var o in Model.Tables.ToList())
+          
+foreach (var o in Model.Tables.Where(a => a.ObjectTypeName != "Calculation Group Table").OrderBy(b => b.Name).ToList())
 {
     foreach (var p in o.Partitions.ToList())
     {
@@ -570,31 +570,33 @@ sb = new System.Text.StringBuilder();
 // Headers
 sb.Append("RoleName" + '\t' + "ObjectType" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectLevelSecurity" + newline);
 
-foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
+if (Model.Database.CompatibilityLevel >= 1400)
 {
-    string tableName = t.Name;
-    
-    foreach(var r in Model.Roles.OrderBy(a => a.Name).ToList())
+    foreach (var t in Model.Tables.OrderBy(a => a.Name).ToList())
     {
-        string roleName = r.Name;
-        string tableOLS = Model.Tables[tableName].ObjectLevelSecurity[roleName].ToString();
-        if (!String.IsNullOrEmpty(tableOLS))
-        {
-            sb.Append(roleName + '\t' + "Table" + '\t' + tableName + '\t' + tableName + '\t' + tableOLS + newline);
-        }
+        string tableName = t.Name;
         
-        foreach (var c in t.Columns.OrderBy(a => a.Name).ToList())
+        foreach(var r in Model.Roles.OrderBy(a => a.Name).ToList())
         {
-            string colName = c.Name;
-            string colOLS = Model.Tables[tableName].Columns[colName].ObjectLevelSecurity[roleName].ToString();
-            
-            if (!String.IsNullOrEmpty(colOLS))
+            string roleName = r.Name;
+            string tableOLS = Model.Tables[tableName].ObjectLevelSecurity[roleName].ToString();
+            if (!String.IsNullOrEmpty(tableOLS))
             {
-                sb.Append(roleName + '\t' + "Column" + '\t' + tableName + '\t' + colName + '\t' + colOLS + newline);
+                sb.Append(roleName + '\t' + "Table" + '\t' + tableName + '\t' + tableName + '\t' + tableOLS + newline);
             }
-        }
-    }    
+            
+            foreach (var c in t.Columns.OrderBy(a => a.Name).ToList())
+            {
+                string colName = c.Name;
+                string colOLS = Model.Tables[tableName].Columns[colName].ObjectLevelSecurity[roleName].ToString();
+                
+                if (!String.IsNullOrEmpty(colOLS))
+                {
+                    sb.Append(roleName + '\t' + "Column" + '\t' + tableName + '\t' + colName + '\t' + colOLS + newline);
+                }
+            }
+        }    
+    }
 }
 
 System.IO.File.WriteAllText(folderName + @"\OLS.txt", sb.ToString());
-
