@@ -3,6 +3,10 @@ This repo is a collection of useful code for automating processes within tabular
 
 For addtional information on these scripts and more, check out my blog [Elegant BI](https://www.elegantbi.com "Elegant BI").
 
+### [Auto Aggs](https://www.elegantbi.com/post/autoaggs "Auto Aggs")
+
+Auto-generated aggregations supporting base fact tables in both import mode and direct query. Also check out the [Agg Wizard](https://github.com/m-kovalsky/AggWizard "Agg Wizard") which has additional functionalities and a supporting user interface.
+
 ### [Automated Data Dictionary](https://www.elegantbi.com/post/datadictionaryreinvented "Automated Data Dictionary")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models ([XMLA R/W endpoints](https://docs.microsoft.com/en-us/power-bi/admin/service-premium-connect-tools#enable-xmla-read-write "XMLA R/W endpoints") enabled).
@@ -13,7 +17,17 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 
 ### [Blank Row Finder](https://www.elegantbi.com/post/findblankrows "Blank Row Finder")
 
-Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'.
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'. This has now been integrated into the Vertipaq Analyzer scripts (see below) as well as the latest [Best Practice Rules](https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules "Best Practice Rules").
+
+### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
+
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel the data refresh of that model.
+
+### [Data Preview - Table](https://www.elegantbi.com/post/datapreview "Data Preview")
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting a single table within the TOM (Object) Explorer. It will return a data preview of the table.
+
+### [Data Preview - Columns](https://www.elegantbi.com/post/datapreview "Data Preview")
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting one or more columns from a table within the TOM (Object) Explorer. It will return a data preview of the columns (distinct values).
 
 ### [Descriptions](https://github.com/m-kovalsky/Tabular/tree/master/Descriptions "Descriptions")
 
@@ -42,10 +56,6 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Bookmarks**
    * Report Name, Bookmark Name, Bookmark Id, Page Id 
 
-### [Cancel Processing](https://www.elegantbi.com/post/canceldatarefreshte "Cancel Processing")
-
-Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel the data refresh of that model.
-
 ### [Master Model](https://www.elegantbi.com/post/mastermodel "Master Model")
 
 ### [Metadata Export](https://www.elegantbi.com/post/extractmodelmetadata "Metadata Export")
@@ -55,16 +65,6 @@ Run this script to automatically update the perspectives in your model (or add n
 
 ### Metadata Import - Translations
 Run this script to automatically update the translations in your model (or add new translations). This script coordinates with the output text file from the Metadata Export script.
-
-### [Data Preview - Table](https://www.elegantbi.com/post/datapreview "Data Preview")
-Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting a single table within the TOM (Object) Explorer. It will return a data preview of the table.
-
-### [Data Preview - Columns](https://www.elegantbi.com/post/datapreview "Data Preview")
-Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting one or more columns from a table within the TOM (Object) Explorer. It will return a data preview of the columns (distinct values).
-
-### [Auto Aggs](https://www.elegantbi.com/post/autoaggs "Auto Aggs")
-
-Auto-generated aggregations supporting base fact tables in both import mode and direct query. Also check out the [Agg Wizard](https://github.com/m-kovalsky/AggWizard "Agg Wizard") which has additional functionalities and a supporting user interface.
 
 ### [Perspective Editor](https://www.elegantbi.com/post/perspectiveeditor "Perspective Editor")
 
