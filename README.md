@@ -56,6 +56,12 @@ Run this script to automatically update the perspectives in your model (or add n
 ### Metadata Import - Translations
 Run this script to automatically update the translations in your model (or add new translations). This script coordinates with the output text file from the Metadata Export script.
 
+### [Data Preview - Table](https://www.elegantbi.com/post/datapreview "Data Preview")
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting a single table within the TOM (Object) Explorer. It will return a data preview of the table.
+
+### [Data Preview - Columns](https://www.elegantbi.com/post/datapreview "Data Preview")
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting one or more columns from a table within the TOM (Object) Explorer. It will return a data preview of the columns (distinct values).
+
 ### [Auto Aggs](https://www.elegantbi.com/post/autoaggs "Auto Aggs")
 
 Auto-generated aggregations supporting base fact tables in both import mode and direct query. Also check out the [Agg Wizard](https://github.com/m-kovalsky/AggWizard "Agg Wizard") which has additional functionalities and a supporting user interface.
