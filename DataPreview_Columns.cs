@@ -6,5 +6,5 @@ foreach (var x in Selected.Columns.ToList())
 }
 
 dax = dax.Substring(0,dax.Length-1);
-var result = EvaluateDax("TOPN(500,SUMMARIZECOLUMNS("+dax+"))");
+var result = EvaluateDax("TOPN(500,SUMMARIZECOLUMNS("+dax+")) ORDER BY " + dax);
 result.Output();
