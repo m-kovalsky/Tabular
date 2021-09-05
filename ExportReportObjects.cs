@@ -40,17 +40,26 @@ sb_CustomVisuals.Append("ReportName" + '\t' + "CustomVisualName" + newline);
 var sb_ReportFilters = new System.Text.StringBuilder();
 sb_ReportFilters.Append("ReportName" + '\t' + "FilterName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
 
-var sb_Visuals = new System.Text.StringBuilder();
-sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + newline);
+var sb_VisualObjects = new System.Text.StringBuilder();
+sb_VisualObjects.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + newline);
 
 var sb_VisualFilters = new System.Text.StringBuilder();
 sb_VisualFilters.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
 
 var sb_PageFilters = new System.Text.StringBuilder();
-sb_PageFilters.Append("ReportName" + '\t' + "PageName" + '\t' + "FilterName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
+sb_PageFilters.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "FilterName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
 
 var sb_Bookmarks = new System.Text.StringBuilder();
 sb_Bookmarks.Append("ReportName" + '\t' + "BookmarkName" + '\t' + "BookmarkId" + '\t' + "PageId" + newline);
+
+var sb_Pages = new System.Text.StringBuilder();
+sb_Pages.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "PageNumber" + '\t' + "PageWidth" + '\t' + "PageHeight" + '\t' + "VisualCount" + newline);
+
+var sb_Visuals = new System.Text.StringBuilder();
+sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + newline);
+
+var sb_Connections = new System.Text.StringBuilder();
+sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ConnectionType" + newline);
 
 if (pbiFile.Length > 0 && pbiFolderName.Length == 0)
 {
@@ -75,8 +84,11 @@ foreach (var rpt in FileList)
     var Bookmarks = new List<Bookmark>();
     var ReportFilters = new List<ReportFilter>();
     var Visuals = new List<Visual>();
+    var VisualObjects = new List<VisualObject>();
     var VisualFilters = new List<VisualFilter>();
     var PageFilters = new List<PageFilter>();
+    var Pages = new List<Page>();
+    var Connections = new List<Connection>();
     string fileExt = Path.GetExtension(rpt);
     string fileName = Path.GetFileNameWithoutExtension(rpt);
     string folderName = Path.GetDirectoryName(rpt) + @"\";
@@ -104,6 +116,7 @@ foreach (var rpt in FileList)
         return;
     }
 
+    // Layout file
     string layoutPath = unzipPath + @"\Report\Layout";
     string jsonFilePath = Path.ChangeExtension(layoutPath, ".json");
     File.Move(layoutPath, jsonFilePath); 
@@ -111,6 +124,15 @@ foreach (var rpt in FileList)
     string unformattedJson = File.ReadAllText(jsonFilePath,System.Text.UnicodeEncoding.Unicode);
     string formattedJson = Newtonsoft.Json.Linq.JToken.Parse(unformattedJson).ToString();
     dynamic json = Newtonsoft.Json.Linq.JObject.Parse(formattedJson);
+
+    // Connections file
+    string connPath = unzipPath + @"\Connections";
+    string jsonconnFilePath = Path.ChangeExtension(connPath, ".json");
+    File.Move(connPath, jsonconnFilePath); 
+
+    string unformattedconnJson = File.ReadAllText(jsonconnFilePath,System.Text.Encoding.UTF8);
+    string formattedconnJson = Newtonsoft.Json.Linq.JToken.Parse(unformattedconnJson).ToString();
+    dynamic connjson = Newtonsoft.Json.Linq.JObject.Parse(formattedconnJson);
 
     //Delete previously created folder
     try
@@ -120,6 +142,59 @@ foreach (var rpt in FileList)
     catch
     {
     }
+
+    string svName = string.Empty;
+    string dbName = string.Empty;
+    string connType = string.Empty;
+    
+    // Connection info
+    try
+    {
+        foreach (var o in connjson["Connections"].Children())
+        {
+            connType = (string)o["ConnectionType"];
+            try
+            {
+                
+                dbName = (string)o["PbiModelDatabaseName"];
+            }
+            catch
+            {
+            }
+            if (connType != "pbiServiceLive")
+            {
+                try
+                {
+                    
+                    string x = (string)o["ConnectionString"];
+                    string dsCatch = "Data Source=";
+                    string icCatch = ";Initial Catalog=";
+                    int dsCatchLen = dsCatch.Length;
+                    int icCatchLen = icCatch.Length;
+                    svName = x.Substring(x.IndexOf(dsCatch)+dsCatchLen,x.IndexOf(";")-x.IndexOf(dsCatch)-dsCatchLen);
+                    int svNameLen = svName.Length;
+                    dbName = x.Substring(x.IndexOf(icCatch)+icCatchLen);
+                    
+                }
+                catch
+                {                    
+                }
+            }            
+        }
+    }
+    catch
+    {
+        try
+        {
+            dbName = (string)connjson["RemoteArtifacts"][0]["DatasetId"];
+            connType = "localPowerQuery";
+        }
+        catch
+        {
+        }            
+    }
+    
+    Connections.Add(new Connection {ServerName = svName, DatabaseName = dbName, Type = connType});
 
     // Custom Visuals
     try
@@ -197,11 +272,19 @@ foreach (var rpt in FileList)
     // Page-Level Filters
     foreach (var o in json["sections"].Children())
     {
+        string pageId = (string)o["name"];
         string pageName = (string)o["displayName"];
         string pageFlt = (string)o["filters"];
+        int pageNumber = (int)o["ordinal"];
+        int pageWidth = (int)o["width"];
+        int pageHeight = (int)o["height"];
+        int visualCount = (int)o["visualContainers"].Count;
         string formattedpagfltJson = Newtonsoft.Json.Linq.JToken.Parse(pageFlt).ToString();
         dynamic pageFltJson = Newtonsoft.Json.Linq.JArray.Parse(formattedpagfltJson);
 
+        Pages.Add(new Page {Id = pageId, Name = pageName, Number = pageNumber, Width = pageWidth, Height = pageHeight, VisualCount = visualCount });
+
+        // Page-Level Filters
         foreach (var o2 in pageFltJson.Children())
         {
             string pgFltName = (string)o2["name"];
@@ -241,7 +324,7 @@ foreach (var rpt in FileList)
             {
             }
 
-            PageFilters.Add(new PageFilter {PageName = pageName, FilterName = pgFltName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType });
+            PageFilters.Add(new PageFilter {PageId = pageId, PageName = pageName, FilterName = pgFltName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType });
         }
 
         // Visuals
@@ -251,8 +334,15 @@ foreach (var rpt in FileList)
             string formattedconfigJson = Newtonsoft.Json.Linq.JToken.Parse(config).ToString();
             dynamic configJson = Newtonsoft.Json.Linq.JObject.Parse(formattedconfigJson);
             string visualId = (string)configJson["name"];
+            int cx = Convert.ToInt32(Math.Ceiling((double)vc["x"]));
+            int cy = Convert.ToInt32(Math.Ceiling((double)vc["y"]));
+            int cz = Convert.ToInt32(Math.Ceiling((double)vc["z"]));
+            int cw = Convert.ToInt32(Math.Ceiling((double)vc["width"]));
+            int ch = Convert.ToInt32(Math.Ceiling((double)vc["height"]));
             string visualType = string.Empty;
+            string visualName = string.Empty;
             bool customVisualFlag = false;
+            int objCount = 0;
 
             try
             {
@@ -260,6 +350,7 @@ foreach (var rpt in FileList)
             }
             catch
             {
+                visualType = "visualGroup";
             }
             
             if (CustomVisuals.Exists(a => a.Name == visualType))
@@ -269,7 +360,18 @@ foreach (var rpt in FileList)
 
             try
             {
+                visualName = (string)configJson["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"];
+                visualName = visualName.Substring(1,visualName.Length-2);
+            }
+            catch
+            {
+                visualName = visualType;
+            }
 
+            // Visual Objects
+            try
+            {
+                objCount = configJson["singleVisual"]["prototypeQuery"]["Select"].Count;
                 foreach (var o2 in configJson["singleVisual"]["prototypeQuery"]["Select"].Children())
                 {
                     string objectType = string.Empty;
@@ -326,12 +428,14 @@ foreach (var rpt in FileList)
                             tableName = tbl;
                         }
                     }
-                    Visuals.Add(new Visual {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType});
                 }
             }
             catch
             {
             }
+            
+            Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount});
             
             // Visual Filters
             string visfilter = (string)vc["filters"];
@@ -415,19 +519,31 @@ foreach (var rpt in FileList)
     }
     foreach (var x in PageFilters.ToList())
     {
-        sb_PageFilters.Append(fileName + '\t' + x.PageName + '\t' + x.FilterName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
+        sb_PageFilters.Append(fileName + '\t' + x.PageId + '\t' + x.PageName + '\t' + x.FilterName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
     }
     foreach (var x in VisualFilters.ToList())
     {
         sb_VisualFilters.Append(fileName + '\t' + x.PageName + '\t' + x.VisualId + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
     }
-    foreach (var x in Visuals.ToList())
+    foreach (var x in VisualObjects.ToList())
     {
-        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.VisualId + '\t' + x.VisualType + '\t' + x.CustomVisualFlag + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + newline);
+        sb_VisualObjects.Append(fileName + '\t' + x.PageName + '\t' + x.VisualId + '\t' + x.VisualType + '\t' + x.CustomVisualFlag + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + newline);
     }
     foreach (var x in Bookmarks.ToList())
     {
         sb_Bookmarks.Append(fileName + '\t' + x.Name + '\t' + x.Id + '\t' + x.PageId + newline);
+    }
+    foreach (var x in Pages.ToList())
+    {
+        sb_Pages.Append(fileName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Number + '\t' + x.Width + '\t' + x.Height + '\t' + x.VisualCount + newline);
+    }
+    foreach (var x in Visuals.ToList())
+    {
+        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + newline);
+    }
+    foreach (var x in Connections.ToList())
+    {
+        sb_Connections.Append(fileName + '\t' + x.ServerName + '\t' + x.DatabaseName + '\t' + x.Type + newline);
     }
 }
 
@@ -438,8 +554,11 @@ if (saveToFile)
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_ReportFilters.txt", sb_ReportFilters.ToString());
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_PageFilters.txt", sb_PageFilters.ToString());
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_VisualFilters.txt", sb_VisualFilters.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_VisualObjects.txt", sb_VisualObjects.ToString());
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Visuals.txt", sb_Visuals.ToString());
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Bookmarks.txt", sb_Bookmarks.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Pages.txt", sb_Pages.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Connections.txt", sb_Connections.ToString());
 }
 else
 {
@@ -447,8 +566,11 @@ else
     sb_ReportFilters.Output();
     sb_PageFilters.Output();
     sb_VisualFilters.Output();
+    sb_VisualObjects.Output();
     sb_Visuals.Output();
-    sb_Bookmarks.Output();    
+    sb_Bookmarks.Output();
+    sb_Pages.Output();
+    sb_Connections.Output();  
 }
 
 }
@@ -475,7 +597,7 @@ public class ReportFilter
     public string FilterType { get; set; }
 }
 
-public class Visual
+public class VisualObject
 {
     public string PageName { get; set; }
     public string VisualId { get; set; }
@@ -484,6 +606,21 @@ public class Visual
     public string TableName { get; set; }
     public string ObjectName { get; set; }
     public string ObjectType { get; set; }
+}
+
+public class Visual
+{
+    public string PageName { get; set; }
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Type { get; set; }
+    public bool CustomVisualFlag { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
+    public int Z { get; set; }
+    public int Width { get; set; }
+    public int Height { get; set; }
+    public int ObjectCount { get; set; }
 }
 
 public class VisualFilter
@@ -498,12 +635,30 @@ public class VisualFilter
 
 public class PageFilter
 {
+    public string PageId { get; set; }
     public string PageName { get; set; }
     public string FilterName {get; set; }
     public string TableName { get; set; }
     public string ObjectName { get; set; }
     public string ObjectType { get; set; }
     public string FilterType { get; set; }    
+}
+
+public class Page
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public int Number { get; set; }
+    public int Width { get; set; }
+    public int Height { get; set; }
+    public int VisualCount {get; set; }
+}
+
+public class Connection
+{
+    public string ServerName { get; set; }
+    public string DatabaseName { get; set; }
+    public string Type { get; set; }
 }
 
 static void _() {
