@@ -53,10 +53,10 @@ var sb_Bookmarks = new System.Text.StringBuilder();
 sb_Bookmarks.Append("ReportName" + '\t' + "BookmarkName" + '\t' + "BookmarkId" + '\t' + "PageId" + newline);
 
 var sb_Pages = new System.Text.StringBuilder();
-sb_Pages.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "PageNumber" + '\t' + "PageWidth" + '\t' + "PageHeight" + '\t' + "VisualCount" + newline);
+sb_Pages.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "PageNumber" + '\t' + "PageWidth" + '\t' + "PageHeight" + '\t' + "PageHiddenFlag" + '\t' + "VisualCount" + newline);
 
 var sb_Visuals = new System.Text.StringBuilder();
-sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + newline);
+sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "VisualHiddenFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + newline);
 
 var sb_Connections = new System.Text.StringBuilder();
 sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ConnectionType" + newline);
@@ -215,7 +215,6 @@ foreach (var rpt in FileList)
     }
 
     // Report-Level Filters
-
     string rptFilters = json["filters"];
 
     try
@@ -269,20 +268,38 @@ foreach (var rpt in FileList)
     {        
     }
 
-    // Page-Level Filters
+    // Pages
     foreach (var o in json["sections"].Children())
     {
         string pageId = (string)o["name"];
         string pageName = (string)o["displayName"];
-        string pageFlt = (string)o["filters"];
         int pageNumber = (int)o["ordinal"];
         int pageWidth = (int)o["width"];
         int pageHeight = (int)o["height"];
         int visualCount = (int)o["visualContainers"].Count;
+        string pageFlt = (string)o["filters"];
         string formattedpagfltJson = Newtonsoft.Json.Linq.JToken.Parse(pageFlt).ToString();
         dynamic pageFltJson = Newtonsoft.Json.Linq.JArray.Parse(formattedpagfltJson);
 
-        Pages.Add(new Page {Id = pageId, Name = pageName, Number = pageNumber, Width = pageWidth, Height = pageHeight, VisualCount = visualCount });
+        bool pageHid = false;
+        string pageConfig = (string)o["config"];
+        string formattedpagconfigJson = Newtonsoft.Json.Linq.JToken.Parse(pageConfig).ToString();
+        dynamic pageConfigJson = Newtonsoft.Json.Linq.JObject.Parse(formattedpagconfigJson);
+
+        try
+        {
+            int pageV = (int)pageConfigJson["visibility"];
+
+            if (pageV == 1)
+            {
+                pageHid = true;
+            }
+        }
+        catch
+        {            
+        }
+
+        Pages.Add(new Page {Id = pageId, Name = pageName, Number = pageNumber, Width = pageWidth, Height = pageHeight, HiddenFlag = pageHid, VisualCount = visualCount });
 
         // Page-Level Filters
         foreach (var o2 in pageFltJson.Children())
@@ -343,6 +360,7 @@ foreach (var rpt in FileList)
             string visualName = string.Empty;
             bool customVisualFlag = false;
             int objCount = 0;
+            bool visHid = false;
 
             try
             {
@@ -358,14 +376,52 @@ foreach (var rpt in FileList)
                 customVisualFlag = true;
             }
 
+            // Visual Name
+            try
+            {
+                visualName = (string)configJson["singleVisualGroup"]["displayName"];
+            }
+            catch
+            {                
+            }
             try
             {
                 visualName = (string)configJson["singleVisual"]["vcObjects"]["title"][0]["properties"]["text"]["expr"]["Literal"]["Value"];
                 visualName = visualName.Substring(1,visualName.Length-2);
             }
             catch
+            {                
+            }
+            if (visualName.Length == 0)
             {
                 visualName = visualType;
+            }
+
+            // Visual Hidden
+            try
+            {
+                string visH = (string)configJson["singleVisual"]["display"]["mode"];
+
+                if (visH == "hidden")
+                {
+                    visHid = true;
+                }
+            }
+            catch
+            {                
+            }
+
+            try
+            {
+                bool visH = (bool)configJson["singleVisualGroup"]["isHidden"];
+
+                if (visH)
+                {
+                    visHid = true;
+                }
+            }
+            catch
+            {                
             }
 
             // Visual Objects
@@ -435,7 +491,7 @@ foreach (var rpt in FileList)
             {
             }
             
-            Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount});
+            Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount});
             
             // Visual Filters
             string visfilter = (string)vc["filters"];
@@ -535,11 +591,11 @@ foreach (var rpt in FileList)
     }
     foreach (var x in Pages.ToList())
     {
-        sb_Pages.Append(fileName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Number + '\t' + x.Width + '\t' + x.Height + '\t' + x.VisualCount + newline);
+        sb_Pages.Append(fileName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Number + '\t' + x.Width + '\t' + x.Height + '\t' + x.HiddenFlag + '\t' + x.VisualCount + newline);
     }
     foreach (var x in Visuals.ToList())
     {
-        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + newline);
+        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.HiddenFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + newline);
     }
     foreach (var x in Connections.ToList())
     {
@@ -615,6 +671,7 @@ public class Visual
     public string Name { get; set; }
     public string Type { get; set; }
     public bool CustomVisualFlag { get; set; }
+    public bool HiddenFlag { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
     public int Z { get; set; }
@@ -651,6 +708,7 @@ public class Page
     public int Number { get; set; }
     public int Width { get; set; }
     public int Height { get; set; }
+    public bool HiddenFlag { get; set; }
     public int VisualCount {get; set; }
 }
 
