@@ -46,11 +46,11 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Report Filters**
    * Report Name, Filter Name, Table Name, Object Name, Object Type, Filter Type
 * **Pages**
-   * Report Name, Page Id, Page Name, Page Number, Page Width, Page Height, Visual Count 
+   * Report Name, Page Id, Page Name, Page Number, Page Width, Page Height, Page Hidden Flag, Visual Count 
 * **Page Filters**
    * Report Name, Page Id, Page Name, Filter Name, Table Name, Object Name, Object Type, Filter Type 
 * **Visuals**
-   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count
+   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count
 * **Visual Filters**
    * Report Name, Page Name, Visual Id, Table Name, Object Name, Object Type, Filter Type 
 * **Visuals Objects**
