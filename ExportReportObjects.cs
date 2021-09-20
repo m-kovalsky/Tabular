@@ -15,6 +15,10 @@ using System.IO.Compression;
     Method 1: For a single Power BI Desktop (.pbix) or Power BI Template (.pbit) file:
         1. Enter the folder location of the file in the 'pbiFolderName' parameter.
         2. Enter the file name (including the extension) in the 'pbiFile' parameter.
+    
+        // You must open the model/dataset (behind the Power BI Report) in Tabular Editor in order for the following steps to work properly.
+        3. Setting the 'addPersp' parameter to 'true' will create a new perspective which contains all of the objects used in the Power BI report including object dependencies.
+        4. (Optional) Set the 'perspName' parameter to set the name of the perspective referenced in Step 3.
 
     Method 2: For looping through multiple .pbix or .pbit files within a folder:
         1. Enter the location of the folder in the 'pbiFolderName' parameter.
@@ -26,12 +30,32 @@ using System.IO.Compression;
 ************************************************************************************************************/
 
 // User Parameters
-string pbiFolderName = @"C:\Desktop\MyReports";
-string pbiFile = @"MyReport.pbix";
+string pbiFolderName = @"C:\Users\mikova\OneDrive - Microsoft\Power BI CAT\GitHub\ReportObjects";
+string pbiFile = @"CoronaB.pbix";
 bool saveToFile = true;
-string savePrefix = "ReportObjects";
+bool addPersp = true;
+string perspName = "RptObj";
 
+// Do not modify these parameters
 string newline = Environment.NewLine;
+string savePrefix = "ReportObjects";
+bool singleFile = true;
+bool createPersp = false;
+if (pbiFile.Length == 0)
+{
+    singleFile = false;
+}
+
+if (singleFile && addPersp)
+{
+    createPersp = true;
+    if (Model.Perspectives.Any(a => a.Name == perspName))
+    {
+        Model.Perspectives[perspName].Delete();
+    }
+    Model.AddPerspective(perspName);
+}
+
 List<string> FileList = new List<string>();
 
 var sb_CustomVisuals = new System.Text.StringBuilder();
@@ -191,7 +215,7 @@ foreach (var rpt in FileList)
         }
         catch
         {
-        }            
+        }
     }
     
     Connections.Add(new Connection {ServerName = svName, DatabaseName = dbName, Type = connType});
@@ -236,6 +260,17 @@ foreach (var rpt in FileList)
                 objectName = (string)o["expression"]["Column"]["Property"];
                 objectType = "Column";
                 tableName = (string)o["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                
+                if (createPersp)
+                {
+                    try
+                    {
+                        Model.Tables[tableName].Columns[objectName].InPerspective[perspName] = true;
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             catch
             {
@@ -245,6 +280,17 @@ foreach (var rpt in FileList)
                 objectName = (string)o["expression"]["Measure"]["Property"];
                 objectType = "Measure";
                 tableName = (string)o["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                
+                if (createPersp)
+                {
+                    try
+                    {
+                        Model.Tables[tableName].Measures[objectName].InPerspective[perspName] = true;
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             catch
             {
@@ -256,11 +302,21 @@ foreach (var rpt in FileList)
                 objectName = hierName + "." + levelName;
                 objectType = "Hierarchy";
                 tableName = (string)o["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];
+                
+                if (createPersp)
+                {
+                    try
+                    {
+                        Model.Tables[tableName].Hierarchies[hierName].InPerspective[perspName] = true;
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             catch
             {
-            }
-            
+            }           
             ReportFilters.Add(new ReportFilter {FilterName = filterName, TableName = tableName, ObjectName = objectName, ObjectType = objectType, FilterType = filterType});
         }
     }
@@ -273,14 +329,14 @@ foreach (var rpt in FileList)
     {
         string pageId = (string)o["name"];
         string pageName = (string)o["displayName"];
+        string pageFlt = (string)o["filters"];
         int pageNumber = (int)o["ordinal"];
         int pageWidth = (int)o["width"];
         int pageHeight = (int)o["height"];
         int visualCount = (int)o["visualContainers"].Count;
-        string pageFlt = (string)o["filters"];
         string formattedpagfltJson = Newtonsoft.Json.Linq.JToken.Parse(pageFlt).ToString();
         dynamic pageFltJson = Newtonsoft.Json.Linq.JArray.Parse(formattedpagfltJson);
-
+        
         bool pageHid = false;
         string pageConfig = (string)o["config"];
         string formattedpagconfigJson = Newtonsoft.Json.Linq.JToken.Parse(pageConfig).ToString();
@@ -315,7 +371,18 @@ foreach (var rpt in FileList)
             {
                 objName = (string)o2["expression"]["Column"]["Property"];
                 objType = "Column";
-                tblName = (string)o2["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];                    
+                tblName = (string)o2["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                
+                if (createPersp)
+                {
+                    try
+                    {
+                        Model.Tables[tblName].Columns[objName].InPerspective[perspName] = true;
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             catch
             {
@@ -324,7 +391,18 @@ foreach (var rpt in FileList)
             {
                 objName = (string)o2["expression"]["Measure"]["Property"];
                 objType = "Measure";
-                tblName = (string)o2["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
+                tblName = (string)o2["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                
+                if (createPersp)
+                {
+                    try
+                    {
+                        Model.Tables[tblName].Measures[objName].InPerspective[perspName] = true;
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             catch
             {
@@ -335,7 +413,18 @@ foreach (var rpt in FileList)
                 string hierName = (string)o2["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
                 objName = hierName + "." + levelName;
                 objType = "Hierarchy";
-                tblName = (string)o2["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
+                tblName = (string)o2["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];
+                
+                if (createPersp)
+                {
+                    try
+                    {
+                        Model.Tables[tblName].Hierarchies[hierName].InPerspective[perspName] = true;
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             catch
             {
@@ -382,7 +471,7 @@ foreach (var rpt in FileList)
                 visualName = (string)configJson["singleVisualGroup"]["displayName"];
             }
             catch
-            {                
+            {
             }
             try
             {
@@ -390,7 +479,7 @@ foreach (var rpt in FileList)
                 visualName = visualName.Substring(1,visualName.Length-2);
             }
             catch
-            {                
+            {
             }
             if (visualName.Length == 0)
             {
@@ -408,7 +497,7 @@ foreach (var rpt in FileList)
                 }
             }
             catch
-            {                
+            {
             }
 
             try
@@ -421,7 +510,7 @@ foreach (var rpt in FileList)
                 }
             }
             catch
-            {                
+            {
             }
 
             // Visual Objects
@@ -484,13 +573,47 @@ foreach (var rpt in FileList)
                             tableName = tbl;
                         }
                     }
+                    
+                    if (createPersp)
+                    {
+                        if (objectType == "Column")
+                        {
+                            try
+                            {
+                                Model.Tables[tableName].Columns[objectName].InPerspective[perspName] = true;
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        else if (objectType == "Measure")
+                        {
+                            try
+                            {
+                                Model.Tables[tableName].Measures[objectName].InPerspective[perspName] = true;
+                            }
+                            catch
+                            {
+                            }
+                        }
+                        else if (objectType == "Hierarchy")
+                        {
+                            try
+                            {
+                                Model.Tables[tableName].Hierarchies[objectName].InPerspective[perspName] = true;
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }                    
                     VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType});
                 }
             }
             catch
             {
             }
-            
+
             Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount});
             
             // Visual Filters
@@ -513,7 +636,18 @@ foreach (var rpt in FileList)
                     {
                         objName1 = (string)o3["expression"]["Column"]["Property"];
                         objType1 = "Column";
-                        tblName1 = (string)o3["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];                    
+                        tblName1 = (string)o3["expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        
+                        if (createPersp)
+                        {
+                            try
+                            {
+                                Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                            }
+                            catch
+                            {
+                            }
+                        }
                     }
                     catch
                     {
@@ -522,7 +656,18 @@ foreach (var rpt in FileList)
                     {
                         objName1 = (string)o3["expression"]["Measure"]["Property"];
                         objType1 = "Measure";
-                        tblName1 = (string)o3["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
+                        tblName1 = (string)o3["expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        
+                        if (createPersp)
+                        {
+                            try
+                            {
+                                Model.Tables[tblName1].Measures[objName1].InPerspective[perspName] = true;
+                            }
+                            catch
+                            {
+                            }
+                        }
                     }
                     catch
                     {
@@ -533,7 +678,18 @@ foreach (var rpt in FileList)
                         string hierName1 = (string)o3["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
                         objName1 = hierName1 + "." + levelName1;
                         objType1 = "Hierarchy";
-                        tblName1 = (string)o3["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];                    
+                        tblName1 = (string)o3["expression"]["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Entity"];
+                        
+                        if (createPersp)
+                        {
+                            try
+                            {
+                                Model.Tables[tblName1].Hierarchies[hierName1].InPerspective[perspName] = true;
+                            }
+                            catch
+                            {
+                            }
+                        }
                     }
                     catch
                     {
@@ -626,9 +782,103 @@ else
     sb_Visuals.Output();
     sb_Bookmarks.Output();
     sb_Pages.Output();
-    sb_Connections.Output();  
+    sb_Connections.Output();
 }
 
+// Add dependencies to the perspective
+if (createPersp)
+{    
+    foreach (var o in Model.AllMeasures.Where(a => a.InPerspective[perspName]).ToList())
+    {
+        // Add measure dependencies
+        var allReferences = o.DependsOn.Deep();
+                            
+        foreach(var dep in allReferences)
+        {
+            //Add dependent columns/measures specified in text file to the perspective
+            var columnDep = dep as Column; if(columnDep != null) columnDep.InPerspective[perspName] = true;
+            var measureDep = dep as Measure; if(measureDep != null) measureDep.InPerspective[perspName] = true;
+        }
+    }
+    
+    // Add hierarchy column dependencies
+    foreach (var o in Model.AllHierarchies.Where(a => a.InPerspective[perspName]).ToList())
+    {
+        string tableName = o.Table.Name;
+        foreach (var lev in o.Levels.ToList())
+        {
+            string hcolName = lev.Column.Name;
+            Model.Tables[tableName].Columns[hcolName].InPerspective[perspName] = true;
+        }
+    }
+    
+    // Add foreign/primary keys
+    foreach (var o in Model.Relationships.ToList())
+    {
+        var fromTable = o.FromTable;
+        var toTable = o.ToTable;
+        var fromColumn = o.FromColumn;
+        var toColumn = o.ToColumn;
+        
+        if (fromTable.InPerspective[perspName] == true && toTable.InPerspective[perspName] == true)
+        {
+            fromColumn.InPerspective[perspName] = true;
+            toColumn.InPerspective[perspName] = true;
+        }
+    }
+
+    // Add auto-date tables
+    if (Model.Tables.Any(a => a.DataCategory == "Time" && a.Columns.Any(b => b.IsKey && a.InPerspective[perspName])))
+    {
+        foreach (var t in Model.Tables.Where(a => a.ObjectTypeName == "Calculated Table" && (a.Name.StartsWith("DateTableTemplate_") || a.Name.StartsWith("LocalDateTable_"))).ToList())
+        {
+            t.InPerspective[perspName] = true;
+        }
+    }
+
+    // Add all columns in calculation groups
+    foreach (var t in Model.CalculationGroups.Where(a => a.InPerspective[perspName]).ToList())
+    {
+        foreach (var c in t.Columns.ToList())
+        {
+            c.InPerspective[perspName] = true;
+        }
+    }
+}
+
+// Show unused objects
+if (createPersp)
+{
+    var sb_Unused = new System.Text.StringBuilder();
+    sb_Unused.Append("TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + newline);
+
+    foreach (var t in Model.Tables.ToList())
+    {
+        foreach (var o in t.Columns.Where(a => a.InPerspective[perspName] == false).ToList())
+        {
+            sb_Unused.Append(o.Table.Name + '\t' + o.Name + '\t' + "Column" + newline);
+        }
+        foreach (var o in t.Measures.Where(a => a.InPerspective[perspName] == false).ToList())
+        {
+            sb_Unused.Append(o.Table.Name + '\t' + o.Name + '\t' + "Measure" + newline);
+        }
+        foreach (var o in t.Hierarchies.Where(a => a.InPerspective[perspName] == false).ToList())
+        {
+            sb_Unused.Append(o.Table.Name + '\t' + o.Name + '\t' + "Hierarchy" + newline);
+        }
+    }
+
+    if (saveToFile)
+    {
+        System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_UnusedObjects.txt", sb_Unused.ToString());
+    }
+    else
+    {
+        sb_Unused.Output();
+    }
+}
+
+// Extra closing bracket for classes
 }
 
 // Classes for each object set
