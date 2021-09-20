@@ -60,7 +60,9 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Bookmarks**
    * Report Name, Bookmark Name, Bookmark Id, Page Id
 * **Connections**
-   * Report Name, Server Name, Database Name, Connection Type 
+   * Report Name, Server Name, Database Name, Connection Type
+* **Unused Objects** 
+   * Table Name, Object Name, Object Type
 
 ### [Master Model](https://www.elegantbi.com/post/mastermodel "Master Model")
 
