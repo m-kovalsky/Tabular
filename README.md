@@ -64,6 +64,16 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Unused Objects** 
    * Table Name, Object Name, Object Type
 
+*Note: Unused Objects lists objects (measures, columns etc.) not used in the report and checks the dependencies listed below. This should be used in conjunction with the 'Remove Unnecessary Columns' [Best Practice Rule](https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules) for the greatest efficacy.*
+
+* Measures
+* Relationships (key columns)
+* Sort-by Columns
+* Calculated Columns
+* Hierarchies
+* Calculation Groups
+* Auto-date Tables
+
 ### [Master Model](https://www.elegantbi.com/post/mastermodel "Master Model")
 
 ### [Metadata Export](https://www.elegantbi.com/post/extractmodelmetadata "Metadata Export")
