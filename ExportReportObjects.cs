@@ -30,7 +30,7 @@ using System.IO.Compression;
 ************************************************************************************************************/
 
 // User Parameters
-string pbiFolderName = @"C:\Desktop\MyReports";
+string pbiFolderName = @"C:\Desktop\MyReport";
 string pbiFile = @"MyReport.pbix";
 bool saveToFile = true;
 bool addPersp = true;
@@ -842,6 +842,32 @@ if (createPersp)
         foreach (var c in t.Columns.ToList())
         {
             c.InPerspective[perspName] = true;
+        }
+    }
+    
+    // Add column dependencies
+    foreach (var c in Model.AllColumns.Where(a => a.InPerspective[perspName]).ToList())
+    {
+        // Add sort-by column dependencies
+        try
+        {
+            c.SortByColumn.InPerspective[perspName] = true;
+        }
+        catch
+        {
+        }
+
+        // Add calculated column dependencies
+        if (c.Type.ToString() == "Calculated")
+        {
+            var allReferences = (Model.Tables[c.Table.Name].Columns[c.Name] as CalculatedColumn).DependsOn.Deep();
+
+            foreach(var dep in allReferences)
+            {
+                // Add dependent columns/measures specified in text file to the perspective
+                var columnDep = dep as Column; if(columnDep != null) columnDep.InPerspective[perspName] = true;
+                var measureDep = dep as Measure; if(measureDep != null) measureDep.InPerspective[perspName] = true;
+            }
         }
     }
 }
