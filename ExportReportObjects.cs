@@ -33,7 +33,7 @@ using System.IO.Compression;
 string pbiFolderName = @"C:\Desktop\MyReport";
 string pbiFile = @"MyReport.pbix";
 bool saveToFile = true;
-bool addPersp = true;
+bool addPersp = false;
 string perspName = "RptObj";
 
 // Do not modify these parameters
@@ -148,16 +148,70 @@ foreach (var rpt in FileList)
     string unformattedJson = File.ReadAllText(jsonFilePath,System.Text.UnicodeEncoding.Unicode);
     string formattedJson = Newtonsoft.Json.Linq.JToken.Parse(unformattedJson).ToString();
     dynamic json = Newtonsoft.Json.Linq.JObject.Parse(formattedJson);
-
+    
     // Connections file
+    string svName = string.Empty;
+    string dbName = string.Empty;
+    string connType = string.Empty;
     string connPath = unzipPath + @"\Connections";
-    string jsonconnFilePath = Path.ChangeExtension(connPath, ".json");
-    File.Move(connPath, jsonconnFilePath); 
+    if (File.Exists(connPath))
+    {        
+        string jsonconnFilePath = Path.ChangeExtension(connPath, ".json");
+        File.Move(connPath, jsonconnFilePath); 
 
-    string unformattedconnJson = File.ReadAllText(jsonconnFilePath,System.Text.Encoding.UTF8);
-    string formattedconnJson = Newtonsoft.Json.Linq.JToken.Parse(unformattedconnJson).ToString();
-    dynamic connjson = Newtonsoft.Json.Linq.JObject.Parse(formattedconnJson);
-
+        string unformattedconnJson = File.ReadAllText(jsonconnFilePath,System.Text.Encoding.UTF8);
+        string formattedconnJson = Newtonsoft.Json.Linq.JToken.Parse(unformattedconnJson).ToString();
+        dynamic connjson = Newtonsoft.Json.Linq.JObject.Parse(formattedconnJson);
+        
+        // Connection info
+        try
+        {
+            foreach (var o in connjson["Connections"].Children())
+            {
+                connType = (string)o["ConnectionType"];
+                try
+                {
+                    
+                    dbName = (string)o["PbiModelDatabaseName"];
+                }
+                catch
+                {
+                }
+                if (connType != "pbiServiceLive")
+                {
+                    try
+                    {
+                        
+                        string x = (string)o["ConnectionString"];
+                        string dsCatch = "Data Source=";
+                        string icCatch = ";Initial Catalog=";
+                        int dsCatchLen = dsCatch.Length;
+                        int icCatchLen = icCatch.Length;
+                        svName = x.Substring(x.IndexOf(dsCatch)+dsCatchLen,x.IndexOf(";")-x.IndexOf(dsCatch)-dsCatchLen);
+                        int svNameLen = svName.Length;
+                        dbName = x.Substring(x.IndexOf(icCatch)+icCatchLen);
+                        
+                    }
+                    catch
+                    {                    
+                    }
+                }            
+            }
+        }
+        catch
+        {
+            try
+            {
+                dbName = (string)connjson["RemoteArtifacts"][0]["DatasetId"];
+                connType = "localPowerQuery";
+            }
+            catch
+            {
+            }
+        }
+        Connections.Add(new Connection {ServerName = svName, DatabaseName = dbName, Type = connType});        
+    }
+    
     //Delete previously created folder
     try
     {
@@ -165,61 +219,8 @@ foreach (var rpt in FileList)
     }
     catch
     {
-    }
-
-    string svName = string.Empty;
-    string dbName = string.Empty;
-    string connType = string.Empty;
-    
-    // Connection info
-    try
-    {
-        foreach (var o in connjson["Connections"].Children())
-        {
-            connType = (string)o["ConnectionType"];
-            try
-            {
+    }    
                 
-                dbName = (string)o["PbiModelDatabaseName"];
-            }
-            catch
-            {
-            }
-            if (connType != "pbiServiceLive")
-            {
-                try
-                {
-                    
-                    string x = (string)o["ConnectionString"];
-                    string dsCatch = "Data Source=";
-                    string icCatch = ";Initial Catalog=";
-                    int dsCatchLen = dsCatch.Length;
-                    int icCatchLen = icCatch.Length;
-                    svName = x.Substring(x.IndexOf(dsCatch)+dsCatchLen,x.IndexOf(";")-x.IndexOf(dsCatch)-dsCatchLen);
-                    int svNameLen = svName.Length;
-                    dbName = x.Substring(x.IndexOf(icCatch)+icCatchLen);
-                    
-                }
-                catch
-                {                    
-                }
-            }            
-        }
-    }
-    catch
-    {
-        try
-        {
-            dbName = (string)connjson["RemoteArtifacts"][0]["DatasetId"];
-            connType = "localPowerQuery";
-        }
-        catch
-        {
-        }
-    }
-    
-    Connections.Add(new Connection {ServerName = svName, DatabaseName = dbName, Type = connType});
-
     // Custom Visuals
     try
     {
