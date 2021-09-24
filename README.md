@@ -62,7 +62,7 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Connections**
    * Report Name, Server Name, Database Name, Connection Type
 * **Unused Objects** 
-   * Table Name, Object Name, Object Type
+   * Report Name, Table Name, Object Name, Object Type
 
 *Note: Unused Objects lists objects (measures, columns etc.) not used in the report and checks the dependencies listed below. This should be used in conjunction with the 'Remove Unnecessary Columns' [Best Practice Rule](https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules) for the greatest efficacy.*
 
