@@ -45,27 +45,26 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 
 ![image](https://user-images.githubusercontent.com/29556918/135612188-681c63be-00f6-4431-8d7a-f521125a490b.png)
 
-
-* **Report Filters**
-   * Report Name, Filter Name, Table Name, Object Name, Object Type, Filter Type
-* **Pages**
-   * Report Name, Page Id, Page Name, Page Number, Page Width, Page Height, Page Hidden Flag, Visual Count 
-* **Page Filters**
-   * Report Name, Page Id, Page Name, Filter Name, Table Name, Object Name, Object Type, Filter Type 
-* **Visuals**
-   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count
-* **Visual Filters**
-   * Report Name, Page Name, Visual Id, Table Name, Object Name, Object Type, Filter Type 
-* **Visuals Objects**
-   * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type
-* **Custom Visuals**
-   * Report Name, Custom Visual Name
 * **Bookmarks**
    * Report Name, Bookmark Name, Bookmark Id, Page Id
 * **Connections**
    * Report Name, Server Name, Database Name, Connection Type
+* **Custom Visuals**
+   * Report Name, Custom Visual Name
+* **Page Filters**
+   * Report Name, Page Id, Page Name, Filter Name, Table Name, Object Name, Object Type, Filter Type 
+* **Pages**
+   * Report Name, Page Id, Page Name, Page Number, Page Width, Page Height, Page Hidden Flag, Visual Count 
+* **Report Filters**
+   * Report Name, Filter Name, Table Name, Object Name, Object Type, Filter Type
 * **Unused Objects** 
    * Report Name, Table Name, Object Name, Object Type
+* **Visual Filters**
+   * Report Name, Page Name, Visual Id, Table Name, Object Name, Object Type, Filter Type 
+* **Visuals Objects**
+   * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type
+* **Visuals**
+   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count
 
 *Note: Unused Objects lists objects (measures, columns etc.) not used in the report and checks the dependencies listed below. This should be used in conjunction with the 'Remove Unnecessary Columns' [Best Practice Rule](https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules) for the greatest efficacy.*
 
