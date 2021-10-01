@@ -43,6 +43,9 @@ Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Edit
 
 Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to export the objects used in a Power BI report (or a collection of Power BI reports within a specified folder). Below shows the output:
 
+![image](https://user-images.githubusercontent.com/29556918/135612188-681c63be-00f6-4431-8d7a-f521125a490b.png)
+
+
 * **Report Filters**
    * Report Name, Filter Name, Table Name, Object Name, Object Type, Filter Type
 * **Pages**
