@@ -16,6 +16,7 @@ System.Windows.Forms.RadioButton existingmodelButton = new System.Windows.Forms.
 System.Windows.Forms.Button goButton = new System.Windows.Forms.Button();
 System.Windows.Forms.ComboBox enterComboBox = new System.Windows.Forms.ComboBox();
 System.Net.WebClient w = new System.Net.WebClient();
+System.Windows.Forms.LinkLabel ebiHome = new System.Windows.Forms.LinkLabel();
 
 // Colors
 System.Drawing.Color visibleColor = Color.Black;
@@ -26,13 +27,16 @@ System.Drawing.Color darkgrayColor =  ColorTranslator.FromHtml("#21262D");
 System.Drawing.Color lightgrayColor =  ColorTranslator.FromHtml("#C9D1D9");
 
 // Fonts
-System.Drawing.Font homeToolNameFont = new Font("Century Gothic", 24);
-System.Drawing.Font stdFont = new Font("Century Gothic", 10);
+string fontName = "Century Gothic";
+System.Drawing.Font homeToolNameFont = new Font(fontName, 24);
+System.Drawing.Font stdFont = new Font(fontName, 10);
+System.Drawing.Font elegantFont = new Font(fontName, 10, FontStyle.Italic);
 
 // Add images from web to Image List
 string urlPrefix = "https://github.com/m-kovalsky/Tabular/raw/master/Icons/";
 string urlSuffix = "Icon.png";
 string toolName = "Perspective Editor";
+string ebiURL = @"https://www.elegantbi.com";
 
 string[] imageURLList = { "Table", "Column", "Measure", "Hierarchy" };
 for (int b = 0; b < imageURLList.Count(); b++)
@@ -53,10 +57,12 @@ imageList.ImageSize = new Size(16, 16);
 newForm.Text = toolName;
 int formWidth = 600;
 int formHeight = 600;
-newForm.TopMost = true;
+newForm.TopLevel = true;
 newForm.Size = new Size(formWidth,formHeight);
 newForm.Controls.Add(newPanel);
 newForm.BackColor = bkgrdColor;
+newForm.MaximumSize = new Size(formWidth,formHeight);
+newForm.MinimumSize = new Size(formWidth,formHeight);
 
 // Panel
 newPanel.Size = new Size(formWidth,formHeight);
@@ -148,6 +154,17 @@ newForm.Controls.Add(existingmodelButton);
 newForm.Controls.Add(enterComboBox);
 newForm.Controls.Add(goButton);
 newForm.Controls.Add(toolLabel);
+newForm.Controls.Add(ebiHome);
+
+ebiHome.Text = "Designed by Elegant BI";
+ebiHome.Size = new Size(200,40);
+ebiHome.Location = new Point(220,400);
+ebiHome.Font = elegantFont;
+
+ebiHome.LinkClicked += (System.Object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e) => {
+
+    System.Diagnostics.Process.Start(ebiURL);
+};
 
 // Label
 nameLabel.Size = new Size(60,40);
@@ -273,6 +290,7 @@ goButton.Click += (System.Object sender4, System.EventArgs e4) => {
     enterComboBox.Visible = false;
     goButton.Visible = false;
     toolLabel.Visible = false;
+    ebiHome.Visible = false;
     
     string p = enterComboBox.Text;
     
