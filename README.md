@@ -48,7 +48,7 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Bookmarks**
    * Report Name, Bookmark Name, Bookmark Id, Page Id
 * **Connections**
-   * Report Name, Server Name, Database Name, Connection Type
+   * Report Name, Server Name, Database Name, Report Id, Connection Type
 * **Custom Visuals**
    * Report Name, Custom Visual Name
 * **Page Filters**
