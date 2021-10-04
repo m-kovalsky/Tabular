@@ -83,7 +83,7 @@ var sb_Visuals = new System.Text.StringBuilder();
 sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "VisualHiddenFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + newline);
 
 var sb_Connections = new System.Text.StringBuilder();
-sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ConnectionType" + newline);
+sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ReportId" + '\t' + "ConnectionType" + newline);
 
 if (pbiFile.Length > 0 && pbiFolderName.Length == 0)
 {
@@ -152,6 +152,7 @@ foreach (var rpt in FileList)
     // Connections file
     string svName = string.Empty;
     string dbName = string.Empty;
+    string rptId = string.Empty;
     string connType = string.Empty;
     string connPath = unzipPath + @"\Connections";
     if (File.Exists(connPath))
@@ -203,13 +204,14 @@ foreach (var rpt in FileList)
             try
             {
                 dbName = (string)connjson["RemoteArtifacts"][0]["DatasetId"];
+                rptId = (string)connjson["RemoteArtifacts"][0]["ReportId"];
                 connType = "localPowerQuery";
             }
             catch
             {
             }
         }
-        Connections.Add(new Connection {ServerName = svName, DatabaseName = dbName, Type = connType});        
+        Connections.Add(new Connection {ServerName = svName, DatabaseName = dbName, Type = connType, ReportID = rptId});        
     }
     
     //Delete previously created folder
@@ -756,7 +758,7 @@ foreach (var rpt in FileList)
     }
     foreach (var x in Connections.ToList())
     {
-        sb_Connections.Append(fileName + '\t' + x.ServerName + '\t' + x.DatabaseName + '\t' + x.Type + newline);
+        sb_Connections.Append(fileName + '\t' + x.ServerName + '\t' + x.DatabaseName + '\t' + x.ReportID + '\t' + x.Type + newline);
     }
 }
 
@@ -994,6 +996,7 @@ public class Connection
     public string ServerName { get; set; }
     public string DatabaseName { get; set; }
     public string Type { get; set; }
+    public string ReportID { get; set; }
 }
 
 static void _() {
