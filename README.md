@@ -62,9 +62,11 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Visual Filters**
    * Report Name, Page Name, Visual Id, Table Name, Object Name, Object Type, Filter Type 
 * **Visuals Objects**
-   * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type
+   * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type, Source
 * **Visuals**
    * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count
+
+*Note: 'Source' within Visual Objects shows as 'Standard' for objects used within rows/columns etc. of visual itself. Objects used for conditional formatting or to set titles, backgrounds etc. will show as such within the 'Source' column.*
 
 *Note: Unused Objects lists objects (measures, columns etc.) not used in the report and checks the dependencies listed below. This should be used in conjunction with the 'Remove Unnecessary Columns' [Best Practice Rule](https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules) for the greatest efficacy.*
 
