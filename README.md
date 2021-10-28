@@ -65,6 +65,8 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
    * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type, Source
 * **Visuals**
    * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count
+* **Visual Interactions**
+   *  Report Name, Page Name, Source Visual ID, Target Visual ID, Type ID, Type
 
 *Note: 'Source' within Visual Objects shows as 'Standard' for objects used within rows/columns etc. of visual itself. Objects used for conditional formatting or to set titles, backgrounds etc. will show as such within the 'Source' column.*
 
