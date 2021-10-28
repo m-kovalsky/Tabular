@@ -85,6 +85,9 @@ sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + 
 var sb_Connections = new System.Text.StringBuilder();
 sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ReportId" + '\t' + "ConnectionType" + newline);
 
+var sb_VisualInteractions = new System.Text.StringBuilder();
+sb_VisualInteractions.Append("ReportName" + '\t' + "PageName" + '\t' + "SourceVisualID" + '\t' + "TargetVisualID" + '\t' + "TypeID" + '\t' + "Type" + newline);
+
 if (pbiFile.Length > 0 && pbiFolderName.Length == 0)
 {
     Error("If specifying the 'pbiFile' you must also specify the 'pbiFolderName'.");
@@ -113,6 +116,7 @@ foreach (var rpt in FileList)
     var PageFilters = new List<PageFilter>();
     var Pages = new List<Page>();
     var Connections = new List<Connection>();
+    var VisualInteractions = new List<VisualInteraction>();
     string fileExt = Path.GetExtension(rpt);
     string fileName = Path.GetFileNameWithoutExtension(rpt);
     string folderName = Path.GetDirectoryName(rpt) + @"\";
@@ -356,6 +360,24 @@ foreach (var rpt in FileList)
         }
         catch
         {            
+        }
+        
+        // Visual Interactions
+        try
+        {
+            foreach (var o2 in pageConfigJson["relationships"].Children())
+            {
+                string sourceViz = (string)o2["source"];
+                string targetViz = (string)o2["target"];
+                int typeID = (int)o2["type"];
+                string[] typeAr = {"blank", "Filter", "Highlight", "None"};
+                string type = typeAr[typeID];
+                
+                VisualInteractions.Add(new VisualInteraction {PageName = pageName, SourceVisualID = sourceViz, TargetVisualID = targetViz, TypeID = typeID, Type = type});
+            }
+        }
+        catch
+        {
         }
 
         Pages.Add(new Page {Id = pageId, Name = pageName, Number = pageNumber, Width = pageWidth, Height = pageHeight, HiddenFlag = pageHid, VisualCount = visualCount });
@@ -966,6 +988,10 @@ foreach (var rpt in FileList)
     {
         sb_Connections.Append(fileName + '\t' + x.ServerName + '\t' + x.DatabaseName + '\t' + x.ReportID + '\t' + x.Type + newline);
     }
+    foreach (var x in VisualInteractions.ToList())
+    {
+        sb_VisualInteractions.Append(fileName + '\t' + x.PageName + '\t' + x.SourceVisualID + '\t' + x.TargetVisualID + '\t' + x.TypeID + '\t' + x.Type + newline);
+    }
 }
 
 // Save to text files or print out results
@@ -980,6 +1006,7 @@ if (saveToFile)
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Bookmarks.txt", sb_Bookmarks.ToString());
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Pages.txt", sb_Pages.ToString());
     System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Connections.txt", sb_Connections.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_VisualInteractions.txt", sb_VisualInteractions.ToString());
 }
 else
 {
@@ -992,6 +1019,7 @@ else
     sb_Bookmarks.Output();
     sb_Pages.Output();
     sb_Connections.Output();
+    sb_VisualInteractions.Output();
 }
 
 // Add dependencies to the perspective
@@ -1204,6 +1232,15 @@ public class Connection
     public string DatabaseName { get; set; }
     public string Type { get; set; }
     public string ReportID { get; set; }
+}
+
+public class VisualInteraction
+{
+    public string PageName { get; set; }
+    public string SourceVisualID { get; set; }
+    public string TargetVisualID { get; set; }
+    public int TypeID { get; set; }
+    public string Type { get; set; }
 }
 
 static void _() {
