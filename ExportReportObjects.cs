@@ -337,7 +337,14 @@ foreach (var rpt in FileList)
         string pageId = (string)o["name"];
         string pageName = (string)o["displayName"];
         string pageFlt = (string)o["filters"];
-        int pageNumber = (int)o["ordinal"];
+        int pageNumber = 0;        
+        try
+        {
+            pageNumber = (int)o["ordinal"];
+        }
+        catch
+        {
+        }       
         int pageWidth = (int)o["width"];
         int pageHeight = (int)o["height"];
         int visualCount = (int)o["visualContainers"].Count;
