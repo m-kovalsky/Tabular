@@ -46,7 +46,7 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 ![image](https://user-images.githubusercontent.com/29556918/135612188-681c63be-00f6-4431-8d7a-f521125a490b.png)
 
 * **Bookmarks**
-   * Report Name, Bookmark Name, Bookmark Id, Page Id
+   * Report Name, Bookmark Name, Bookmark Id, Page Id, Visual Id, Visual Hidden Flag
 * **Connections**
    * Report Name, Server Name, Database Name, Report Id, Connection Type
 * **Custom Visuals**
@@ -64,7 +64,7 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Visuals Objects**
    * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type, Source
 * **Visuals**
-   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count
+   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count, Show Items No Data Flag
 * **Visual Interactions**
    *  Report Name, Page Name, Source Visual ID, Target Visual ID, Type ID, Type
 
