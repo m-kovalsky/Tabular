@@ -128,7 +128,7 @@ SaveFile(textFilePath, sb.ToString());
 var excelApp = new Excel.Application();
 excelApp.Visible = false;
 excelApp.DisplayAlerts = false;
-excelApp.Workbooks.OpenText(textFilePath, Type.Missing, 1, Excel.XlTextParsingType.xlDelimited, Excel.XlTextQualifier.xlTextQualifierNone, false, true, false, false, false, false, false, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true, Type.Missing);
+excelApp.Workbooks.OpenText(textFilePath, 65001, 1, Excel.XlTextParsingType.xlDelimited, Excel.XlTextQualifier.xlTextQualifierNone, false, true, false, false, false, false, false, Type.Missing, Type.Missing, Type.Missing, Type.Missing, true, Type.Missing);
 
 var wb = excelApp.ActiveWorkbook;
 var ws = wb.ActiveSheet as Excel.Worksheet;
