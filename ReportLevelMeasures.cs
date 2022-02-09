@@ -110,6 +110,8 @@ try{
                     sb_Script.Append("m"+i+".Expression = \"" + expr + "\";" + newline);
                     sb_Script.Append("m"+i+".IsHidden = " + hid.ToString().ToLower() + ";" + newline);
                     sb_Script.Append("m"+i+".FormatString = @\"" + fs + "\";" + newline + newline);
+
+                    sb.Append("No" + newline);
                 }
                 i++;
             }        
