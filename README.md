@@ -54,7 +54,7 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Page Filters**
    * Report Name, Page Id, Page Name, Filter Name, Table Name, Object Name, Object Type, Filter Type 
 * **Pages**
-   * Report Name, Page Id, Page Name, Page Number, Page Width, Page Height, Page Hidden Flag, Visual Count 
+   * Report Name, Page Id, Page Name, Page Number, Page Width, Page Height, Page Hidden Flag, Visual Count, Page Background Image, Page Wallpaper Image, Page Type
 * **Report Filters**
    * Report Name, Filter Name, Table Name, Object Name, Object Type, Filter Type
 * **Unused Objects** 
@@ -64,7 +64,7 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Visuals Objects**
    * Report Name, Page Name, Visual Id, Visual Type, Custom Visual Flag, Table Name, Object Name, Object Type, Source
 * **Visuals**
-   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count, Show Items No Data Flag
+   * Report Name, Page Name, Visual Id, Visual Name, Visual Type, Custom Visual Flag, Visual Hidden Flag, X Coordinate, Y Cooridnate, Z Coordinate, Visual Width, Visual Height, Object Count, Show Items No Data Flag, Slicer Type
 * **Visual Interactions**
    *  Report Name, Page Name, Source Visual ID, Target Visual ID, Type ID, Type
 
