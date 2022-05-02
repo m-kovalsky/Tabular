@@ -77,10 +77,10 @@ var sb_Bookmarks = new System.Text.StringBuilder();
 sb_Bookmarks.Append("ReportName" + '\t' + "BookmarkName" + '\t' + "BookmarkId" + '\t' + "PageId" + '\t' + "VisualId" + '\t' + "VisualHiddenFlag" + newline);
 
 var sb_Pages = new System.Text.StringBuilder();
-sb_Pages.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "PageNumber" + '\t' + "PageWidth" + '\t' + "PageHeight" + '\t' + "PageHiddenFlag" + '\t' + "VisualCount" + newline);
+sb_Pages.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "PageNumber" + '\t' + "PageWidth" + '\t' + "PageHeight" + '\t' + "PageHiddenFlag" + '\t' + "VisualCount" + '\t' + "PageBackgroundImage" + '\t' + "PageWallpaperImage" + '\t' + "PageType" + newline);
 
 var sb_Visuals = new System.Text.StringBuilder();
-sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "VisualHiddenFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + '\t' + "ShowItemsNoDataFlag" + newline);
+sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "VisualHiddenFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + '\t' + "ShowItemsNoDataFlag" + '\t' + "SlicerType" + newline);
 
 var sb_Connections = new System.Text.StringBuilder();
 sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ReportId" + '\t' + "ConnectionType" + newline);
@@ -238,7 +238,21 @@ foreach (var rpt in FileList)
             if (resType == 0)
             {            
                 CustomVisuals.Add( new CustomVisual {Name = visualName});
-            }    
+            }
+            else if (resType == 1)
+            {
+                try
+                {
+                    // Create list of images used
+                    foreach (var o2 in o["resourcePackage"]["items"].Children())
+                    {
+                        string imageName = o2["path"];
+                    }
+                }
+                catch
+                {
+                }
+            }
         }
     }
     catch
@@ -348,10 +362,13 @@ foreach (var rpt in FileList)
         int pageWidth = (int)o["width"];
         int pageHeight = (int)o["height"];
         int visualCount = (int)o["visualContainers"].Count;
+        string pageBkgrd = "";
+        string pageWall = "";
         string formattedpagfltJson = Newtonsoft.Json.Linq.JToken.Parse(pageFlt).ToString();
         dynamic pageFltJson = Newtonsoft.Json.Linq.JArray.Parse(formattedpagfltJson);
-        
+        int displayOpt = (int)o["displayOption"];
         bool pageHid = false;
+        string pageType = string.Empty;
         string pageConfig = (string)o["config"];
         string formattedpagconfigJson = Newtonsoft.Json.Linq.JToken.Parse(pageConfig).ToString();
         dynamic pageConfigJson = Newtonsoft.Json.Linq.JObject.Parse(formattedpagconfigJson);
@@ -386,8 +403,48 @@ foreach (var rpt in FileList)
         catch
         {
         }
-
-        Pages.Add(new Page {Id = pageId, Name = pageName, Number = pageNumber, Width = pageWidth, Height = pageHeight, HiddenFlag = pageHid, VisualCount = visualCount });
+        
+        // Page Background
+        try
+        {
+            pageBkgrd = pageConfigJson["objects"]["background"][0]["properties"]["image"]["image"]["url"]["expr"]["ResourcePackageItem"]["ItemName"];
+        }
+        catch
+        {
+        }
+        
+        // Page Wallpaper
+        try
+        {
+            pageWall = pageConfigJson["objects"]["outspace"][0]["properties"]["image"]["image"]["url"]["expr"]["ResourcePackageItem"]["ItemName"];
+        }
+        catch
+        {
+        }
+        
+        // Page Type
+        if (displayOpt == 3 && pageWidth == 320 && pageHeight == 240)
+        {
+            pageType = "Tooltip";
+        }
+        else if (pageWidth == 816 && pageHeight == 1056)
+        {
+            pageType = "Letter";
+        }
+        else if (pageWidth == 960 && pageHeight == 720)            
+        {
+            pageType = "4:3";
+        }
+        else if (pageWidth == 1280 && pageHeight == 720)
+        {
+            pageType = "16:9";
+        }
+        else
+        {
+            pageType = "Custom";
+        }
+        
+        Pages.Add(new Page {Id = pageId, Name = pageName, Number = pageNumber, Width = pageWidth, Height = pageHeight, HiddenFlag = pageHid, VisualCount = visualCount, BackgroundImage = pageBkgrd, WallpaperImage = pageWall, Type = pageType });
 
         // Page-Level Filters
         foreach (var o2 in pageFltJson.Children())
@@ -483,6 +540,7 @@ foreach (var rpt in FileList)
             int objCount = 0;
             bool visHid = false;
             bool showItemsNoData = false;
+            string slicerType = "N/A";
             
             // Show Items With No Data
             try
@@ -496,8 +554,7 @@ foreach (var rpt in FileList)
             }
             catch
             {
-            }
-                
+            }                
 
             try
             {
@@ -548,6 +605,26 @@ foreach (var rpt in FileList)
             {
             }
 
+            if (visualType == "slicer")
+            {
+                try
+                {
+                    string sT = (string)configJson["singleVisual"]["objects"]["data"][0]["properties"]["mode"]["expr"]["Literal"]["Value"];
+
+                    if (sT == "'Basic'")
+                    {
+                        slicerType = "List";
+                    }
+                    else if (sT == "'Dropdown'")
+                    {
+                        slicerType = "Dropdown";
+                    }
+                }
+                catch
+                {                    
+                }
+            }
+
             try
             {
                 bool visH = (bool)configJson["singleVisualGroup"]["isHidden"];
@@ -571,6 +648,8 @@ foreach (var rpt in FileList)
                     string tableName = string.Empty;
                     string objectName = string.Empty;
                     string src = string.Empty;
+                    bool isSpark = false;
+                    string sourceLabel = "Standard";
                     
                     try
                     {
@@ -610,6 +689,27 @@ foreach (var rpt in FileList)
                     catch
                     {
                     }
+                    // Sparklines
+                    try
+                    {
+                        objectName = (string)o2["SparklineData"]["Measure"]["Measure"]["Property"];
+                        objectType = "Measure";
+                        src = (string)o2["SparklineData"]["Measure"]["Measure"]["Expression"]["SourceRef"]["Source"];
+                        isSpark = true;
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        objectName = (string)o2["SparklineData"]["Measure"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        objectType = "Column";
+                        src = (string)o2["SparklineData"]["Measure"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Source"];
+                        isSpark = true;
+                    }
+                    catch
+                    {
+                    }                  
 
                     foreach (var t in configJson["singleVisual"]["prototypeQuery"]["From"].Children())
                     {
@@ -654,8 +754,75 @@ foreach (var rpt in FileList)
                             {
                             }
                         }
-                    }                    
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = "Standard"});
+                    }
+                    
+                    if (isSpark)
+                    {
+                        sourceLabel = "Sparkline";
+                    }
+                        
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sourceLabel});
+                    
+                    if (isSpark)
+                    {
+                        try
+                        {
+                            objectName = (string)o2["SparklineData"]["Groupings"][0]["Column"]["Property"];
+                            objectType = "Column";
+                            src = (string)o2["SparklineData"]["Groupings"][0]["Column"]["Expression"]["SourceRef"]["Source"];
+                            isSpark = true;
+                            
+                            foreach (var t in configJson["singleVisual"]["prototypeQuery"]["From"].Children())
+                            {
+                                string n = (string)t["Name"];
+                                string tbl = (string)t["Entity"];
+
+                                if (src == n)
+                                {
+                                    tableName = tbl;
+                                }
+                            }
+                                                        
+                            VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sourceLabel});
+                            
+                            if (createPersp)
+                            {
+                                if (objectType == "Column")
+                                {
+                                    try
+                                    {
+                                        Model.Tables[tableName].Columns[objectName].InPerspective[perspName] = true;
+                                    }
+                                    catch
+                                    {
+                                    }
+                                }
+                                else if (objectType == "Measure")
+                                {
+                                    try
+                                    {
+                                        Model.Tables[tableName].Measures[objectName].InPerspective[perspName] = true;
+                                    }
+                                    catch
+                                    {
+                                    }
+                                }
+                                else if (objectType == "Hierarchy")
+                                {
+                                    try
+                                    {
+                                        Model.Tables[tableName].Hierarchies[objectName].InPerspective[perspName] = true;
+                                    }
+                                    catch
+                                    {
+                                    }
+                                }
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
                 }
             }
             catch
@@ -696,12 +863,195 @@ foreach (var rpt in FileList)
             catch
             {
             }
-            // VisualObjects in Title Text
+            // Objects in Text
             try
             {
+                string sc = "Text";
+                foreach (var o2 in configJson["singleVisual"]["objects"]["text"].Children())
+                {      
+                    try
+                    {
+                        string tableName = (string)o2["properties"]["text"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
+                        string objectName = (string)o2["properties"]["text"]["expr"]["Measure"]["Property"];
+                        string objectType = "Measure";
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }                    
+                }
+            }
+            catch
+            {
+            }
+       
+            // Conditional Formatting (Background Color)
+            try
+            {
+                string sc = "Conditional Formatting (Background Color)";
+                foreach (var o2 in configJson["singleVisual"]["objects"]["values"].Children())
+                {
+                    // Gradient
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];                    
+                        string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Measure";
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+
+                    // Rules
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
+                        string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Measure";                    
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+
+                    // Field value
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Column";                    
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }                
+                }
+            }
+            catch
+            {
+            }
+            // Conditional Formatting (Font Color)
+            try
+            {
+                string sc = "Conditional Formatting (Font Color)";
+                foreach (var o2 in configJson["singleVisual"]["objects"]["values"].Children())
+                {
+                    // Gradient
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];                    
+                        string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Measure";                    
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+
+                    // Rules
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
+                        string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Measure";
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+
+                    // Field value
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Column";
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            // Conditional Formatting (Icon)
+            try
+            {
+                string sc = "Conditional Formatting (Icon)";
+                foreach (var o2 in configJson["singleVisual"]["objects"]["values"].Children())
+                {
+                    // Rules
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["icon"]["value"]["expr"]["Conditional"]["Cases"][0]["Condition"]["Comparison"]["Left"]["Measure"]["Property"];                    
+                        string tableName = (string)o2["properties"]["icon"]["value"]["expr"]["Conditional"]["Cases"][0]["Condition"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Measure";
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+
+                    // Field value
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["icon"]["value"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string tableName = (string)o2["properties"]["icon"]["value"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Column";
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            // Conditional Formatting (WebURL)
+            try
+            {
+                string sc = "Conditional Formatting (WebURL)";
+                foreach (var o2 in configJson["singleVisual"]["objects"]["values"].Children())
+                {
+                    // Field value
+                    try
+                    {
+                        string objectName = (string)o2["properties"]["webURL"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string tableName = (string)o2["properties"]["webURL"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string objectType = "Column";
+                        
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            catch
+            {
+            }
+            
+            // VisualObjects in Title Text
+            try
+            {                
                 string sc = "Title Text";
                 foreach (var o2 in configJson["singleVisual"]["vcObjects"]["title"].Children())
-                {
+                {                    
                     // labels
                     string tableName = (string)o2["properties"]["text"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["text"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
@@ -799,76 +1149,7 @@ foreach (var rpt in FileList)
             {
             }
 
-            // VisualObjects in Conditional Formatting
-            try
-            {
-                foreach (var o2 in configJson["singleVisual"]["objects"]["values"].Children())
-                {
-                    try
-                    {
-                        // Icon
-                        string sc = "Conditional Formatting Icon";
-                        foreach (var o3 in o2["properties"]["icon"]["value"]["expr"]["Conditional"]["Cases"].Children())
-                        {
-                            string tableName = (string)o3["Condition"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
-                            string objectName = (string)o3["Condition"]["Comparison"]["Left"]["Measure"]["Property"];
-                            string objectType = "Measure";
-                            
-                            VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
-                        }
-                    }
-                    catch
-                    {
-                    }
-                    
-                    try
-                    {
-                        // WebURL
-                        string sc = "Conditional Formatting WebURL";
-                        string tableName = (string)o2["properties"]["webURL"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
-                        string objectName = (string)o2["properties"]["webURL"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
-                        string objectType = "Column";
-                        
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
-                    }
-                    catch
-                    {
-                    }
-                    
-                    try
-                    {
-                        // Background
-                        string sc = "Conditional Formatting Background";
-                        string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
-                        string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
-                        string objectType = "Measure";
-                        
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
-                    }
-                    catch
-                    {
-                    }
-                    
-                    try
-                    {
-                        // Font Color
-                        string sc = "Conditional Formatting Font Color";
-                        string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
-                        string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
-                        string objectType = "Measure";
-                        
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount, ShowItemsNoDataFlag = showItemsNoData});
+            Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount, ShowItemsNoDataFlag = showItemsNoData, SlicerType = slicerType });
             
             // Visual Filters
             string visfilter = (string)vc["filters"];
@@ -1049,11 +1330,11 @@ foreach (var rpt in FileList)
     }
     foreach (var x in Pages.ToList())
     {
-        sb_Pages.Append(fileName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Number + '\t' + x.Width + '\t' + x.Height + '\t' + x.HiddenFlag + '\t' + x.VisualCount + newline);
+        sb_Pages.Append(fileName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Number + '\t' + x.Width + '\t' + x.Height + '\t' + x.HiddenFlag + '\t' + x.VisualCount + '\t' + x.BackgroundImage + '\t' + x.WallpaperImage + '\t' + x.Type + newline);
     }
     foreach (var x in Visuals.ToList())
     {
-        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.HiddenFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + '\t' + x.ShowItemsNoDataFlag + newline);
+        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.HiddenFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + '\t' + x.ShowItemsNoDataFlag + '\t' + x.SlicerType + newline);
     }
     foreach (var x in Connections.ToList())
     {
@@ -1265,7 +1546,8 @@ public class Visual
     public int Width { get; set; }
     public int Height { get; set; }
     public int ObjectCount { get; set; }
-    public bool ShowItemsNoDataFlag {get; set; }
+    public bool ShowItemsNoDataFlag { get; set; }
+    public string SlicerType { get; set; }
 }
 
 public class VisualFilter
@@ -1297,7 +1579,10 @@ public class Page
     public int Width { get; set; }
     public int Height { get; set; }
     public bool HiddenFlag { get; set; }
-    public int VisualCount {get; set; }
+    public int VisualCount { get; set; }
+    public string BackgroundImage { get; set; }
+    public string WallpaperImage { get; set; }
+    public string Type { get; set; }
 }
 
 public class Connection
