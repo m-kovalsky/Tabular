@@ -1097,7 +1097,7 @@ foreach (var rpt in FileList)
             catch
             {
             }
-            // VisualObjects in Background
+            // VisualObjects in Background (Gradient)
             try
             {
                 string sc = "Background";
@@ -1114,7 +1114,59 @@ foreach (var rpt in FileList)
             catch
             {
             }
-            // VisualObjects in Border
+            // VisualObjects in Background (Rules)
+            try
+            {
+                string sc = "Background";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["background"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                    string objectType = "Measure";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+            // VisualObjects in Background (Field Value - Column)
+            try
+            {
+                string sc = "Background";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["background"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                    string objectType = "Column";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+            // VisualObjects in Background (Field Value - Measure)
+            try
+            {
+                string sc = "Background";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["background"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                    string objectType = "Measure";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+
+            // VisualObjects in Border (Gradient)
             try
             {
                 string sc = "Border";
@@ -1131,7 +1183,59 @@ foreach (var rpt in FileList)
             catch
             {
             }
-            // VisualObjects in Drop Shadow
+            // VisualObjects in Border (Rules)
+            try
+            {
+                string sc = "Border";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["border"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                    string objectType = "Measure";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+            // VisualObjects in Border (Field Value - Column)
+            try
+            {
+                string sc = "Border";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["border"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                    string objectType = "Column";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+            // VisualObjects in Border (Field Value - Measure)
+            try
+            {
+                string sc = "Border";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["border"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                    string objectType = "Measure";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+
+            // VisualObjects in Drop Shadow (Gradient)
             try
             {
                 string sc = "Drop Shadow";
@@ -1148,6 +1252,57 @@ foreach (var rpt in FileList)
             catch
             {
             }
+            // VisualObjects in Drop Shadow (Rules)
+            try
+            {
+                string sc = "Drop Shadow";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["dropShadow"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                    string objectType = "Measure";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+            // VisualObjects in Drop Shadow (Field Value - Column)
+            try
+            {
+                string sc = "Drop Shadow";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["dropShadow"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                    string objectType = "Column";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }
+            // VisualObjects in Drop Shadow (Field Value - Measure)
+            try
+            {
+                string sc = "Drop Shadow";
+                foreach (var o2 in configJson["singleVisual"]["vcObjects"]["dropShadow"].Children())
+                {
+                    // labels
+                    string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                    string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                    string objectType = "Measure";
+                    
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                }
+            }
+            catch
+            {
+            }            
 
             Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount, ShowItemsNoDataFlag = showItemsNoData, SlicerType = slicerType });
             
