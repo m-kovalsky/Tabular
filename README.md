@@ -41,7 +41,9 @@ Running this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Edit
 
 ### [Export Report Objects](https://www.elegantbi.com/post/exportreportobjects "Export Report Objects")
 
-Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to export the objects used in a Power BI report (or a collection of Power BI reports within a specified folder). Below shows the output:
+Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to export the objects used in a Power BI report (or a collection of Power BI reports within a specified folder). Note: if using Tabular Editor 3, comment out the last line (starting with 'static void') and also comment out the closing bracket in line 2287.
+
+The image below shows an example output:
 
 ![image](https://user-images.githubusercontent.com/29556918/135612188-681c63be-00f6-4431-8d7a-f521125a490b.png)
 
