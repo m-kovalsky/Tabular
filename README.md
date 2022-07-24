@@ -68,7 +68,7 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * **Visual Interactions**
    *  Report Name, Page Name, Source Visual ID, Target Visual ID, Type ID, Type
 
-*Note: If using Tabular Editor 3, comment out the last line (starting with 'static void') and also comment out the closing bracket in line 2287.
+*Note: If using Tabular Editor 3, comment out the last line (starting with 'static void') and also comment out the closing bracket in line 2287.*
 
 *Note: 'Source' within Visual Objects shows as 'Standard' for objects used within rows/columns etc. of visual itself. Objects used for conditional formatting or to set titles, backgrounds etc. will show as such within the 'Source' column.*
 
