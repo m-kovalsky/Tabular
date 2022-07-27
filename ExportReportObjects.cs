@@ -95,7 +95,7 @@ if (pbiFile.Length > 0 && pbiFolderName.Length == 0)
 }    
 else if (pbiFile.Length == 0 && pbiFolderName.Length > 0)
 {
-    foreach (var x in System.IO.Directory.GetFiles(pbiFolderName, "*.pbi"))
+    foreach (var x in System.IO.Directory.GetFiles(pbiFolderName, "*.pbi*"))
     {
         FileList.Add(x);
     }
@@ -2284,7 +2284,7 @@ if (createPersp)
 }
 
 // Extra closing bracket for classes
-}
+} // Comment out this line if using Tabular Editor 3
 
 // Classes for each object set
 public class CustomVisual
@@ -2392,4 +2392,4 @@ public class VisualInteraction
     public string Type { get; set; }
 }
 
-static void _() {
+static void _() { // Comment out this line if using Tabular Editor 3
