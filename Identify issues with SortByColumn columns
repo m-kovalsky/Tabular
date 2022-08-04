@@ -1,0 +1,32 @@
+/*this script identifies sortByColumn columns that have more than one value for the column they sort.*/
+var Dax = @"
+FILTER(
+ADDCOLUMNS (
+    SUMMARIZE (
+        {0},
+        {1}
+    ),
+    ""@order"",
+        CALCULATE (
+        DISTINCTCOUNT ( {2} )
+        ),
+    ""@reps"",
+        calculate(
+        concatenatex(values({2}),{2},""-"")
+        )
+        
+),
+[@order]>1
+
+)";
+
+foreach (var o in Model.AllColumns.Where(t=> t.SortByColumn != null))
+{
+     var table = o.Table.DaxObjectFullName;//Table
+     var column = o.DaxObjectFullName;//Column
+     var sortByCol = o.SortByColumn.DaxObjectFullName;//SortByColumn     
+     var daxDef = string.Format(Dax, table, column, sortByCol);
+     var daxResults = EvaluateDax(daxDef);
+     daxResults.Output();
+       
+ }
