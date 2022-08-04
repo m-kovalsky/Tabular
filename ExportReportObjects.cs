@@ -2167,6 +2167,57 @@ else
 // Add dependencies to the perspective
 if (createPersp)
 {    
+    // RLS
+    var rlsColumnDependencies = 
+    Model.Roles.SelectMany(r => r.TablePermissions)
+        .SelectMany(tp => tp.DependsOn.Columns).Distinct().ToList();
+        
+    var rlsTableDependencies = Model.Roles.SelectMany(r => r.TablePermissions)
+        .SelectMany(tp => tp.DependsOn.Tables).Distinct().ToList();
+
+    var rlsMeasureDependencies = Model.Roles.SelectMany(r => r.TablePermissions)
+        .SelectMany(tp => tp.DependsOn.Tables).Distinct().ToList();
+        
+    foreach (var x in rlsColumnDependencies)
+    {
+        x.InPerspective[perspName] = true;
+    }
+    foreach (var x in rlsTableDependencies)
+    {
+        x.InPerspective[perspName] = true;
+    }
+    foreach (var x in rlsMeasureDependencies)
+    {
+        x.InPerspective[perspName] = true;
+    }
+
+    //OLS
+    foreach (var t in Model.Tables.ToList())
+    {
+        string tableName = t.Name;
+        
+        foreach(var r in Model.Roles.ToList())
+        {
+            string roleName = r.Name;
+            string tableOLS = Model.Tables[tableName].ObjectLevelSecurity[roleName].ToString();
+            if (tableOLS != "Default")
+            {
+                t.InPerspective[perspName] = true;
+            }
+            
+            foreach (var c in t.Columns.ToList())
+            {
+                string colName = c.Name;
+                string colOLS = Model.Tables[tableName].Columns[colName].ObjectLevelSecurity[roleName].ToString();
+                
+                if (colOLS != "Default")
+                {
+                    c.InPerspective[perspName] = true;
+                }
+            }
+        }    
+    }
+    
     foreach (var o in Model.AllMeasures.Where(a => a.InPerspective[perspName]).ToList())
     {
         // Add measure dependencies
@@ -2248,57 +2299,6 @@ if (createPersp)
                 var measureDep = dep as Measure; if(measureDep != null) measureDep.InPerspective[perspName] = true;
             }
         }
-    }
-
-    // RLS
-    var rlsColumnDependencies = 
-    Model.Roles.SelectMany(r => r.TablePermissions)
-        .SelectMany(tp => tp.DependsOn.Columns).Distinct().ToList();
-        
-    var rlsTableDependencies = Model.Roles.SelectMany(r => r.TablePermissions)
-        .SelectMany(tp => tp.DependsOn.Tables).Distinct().ToList();
-
-    var rlsMeasureDependencies = Model.Roles.SelectMany(r => r.TablePermissions)
-        .SelectMany(tp => tp.DependsOn.Tables).Distinct().ToList();
-        
-    foreach (var x in rlsColumnDependencies)
-    {
-        x.InPerspective[perspName] = true;
-    }
-    foreach (var x in rlsTableDependencies)
-    {
-        x.InPerspective[perspName] = true;
-    }
-    foreach (var x in rlsMeasureDependencies)
-    {
-        x.InPerspective[perspName] = true;
-    }
-
-    //OLS
-    foreach (var t in Model.Tables.ToList())
-    {
-        string tableName = t.Name;
-        
-        foreach(var r in Model.Roles.ToList())
-        {
-            string roleName = r.Name;
-            string tableOLS = Model.Tables[tableName].ObjectLevelSecurity[roleName].ToString();
-            if (tableOLS != "Default")
-            {
-                t.InPerspective[perspName] = true;
-            }
-            
-            foreach (var c in t.Columns.ToList())
-            {
-                string colName = c.Name;
-                string colOLS = Model.Tables[tableName].Columns[colName].ObjectLevelSecurity[roleName].ToString();
-                
-                if (colOLS != "Default")
-                {
-                    c.InPerspective[perspName] = true;
-                }
-            }
-        }    
     }
 }
 
