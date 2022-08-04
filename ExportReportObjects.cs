@@ -2249,6 +2249,37 @@ if (createPersp)
             }
         }
     }
+
+    // RLS
+
+
+
+    //OLS
+    foreach (var t in Model.Tables.ToList())
+    {
+        string tableName = t.Name;
+        
+        foreach(var r in Model.Roles.ToList())
+        {
+            string roleName = r.Name;
+            string tableOLS = Model.Tables[tableName].ObjectLevelSecurity[roleName].ToString();
+            if (tableOLS != "Default")
+            {
+                t.InPerspective[perspName] = true;
+            }
+            
+            foreach (var c in t.Columns.ToList())
+            {
+                string colName = c.Name;
+                string colOLS = Model.Tables[tableName].Columns[colName].ObjectLevelSecurity[roleName].ToString();
+                
+                if (colOLS != "Default")
+                {
+                    c.InPerspective[perspName] = true;
+                }
+            }
+        }    
+    }
 }
 
 // Show unused objects
