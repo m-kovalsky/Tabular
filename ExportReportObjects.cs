@@ -2251,8 +2251,28 @@ if (createPersp)
     }
 
     // RLS
+    var rlsColumnDependencies = 
+    Model.Roles.SelectMany(r => r.TablePermissions)
+        .SelectMany(tp => tp.DependsOn.Columns).Distinct().ToList();
+        
+    var rlsTableDependencies = Model.Roles.SelectMany(r => r.TablePermissions)
+        .SelectMany(tp => tp.DependsOn.Tables).Distinct().ToList();
 
-
+    var rlsMeasureDependencies = Model.Roles.SelectMany(r => r.TablePermissions)
+        .SelectMany(tp => tp.DependsOn.Tables).Distinct().ToList();
+        
+    foreach (var x in rlsColumnDependencies)
+    {
+        x.InPerspective[perspName] = true;
+    }
+    foreach (var x in rlsTableDependencies)
+    {
+        x.InPerspective[perspName] = true;
+    }
+    foreach (var x in rlsMeasureDependencies)
+    {
+        x.InPerspective[perspName] = true;
+    }
 
     //OLS
     foreach (var t in Model.Tables.ToList())
