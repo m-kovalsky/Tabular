@@ -80,7 +80,7 @@ var sb_Pages = new System.Text.StringBuilder();
 sb_Pages.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "PageNumber" + '\t' + "PageWidth" + '\t' + "PageHeight" + '\t' + "PageHiddenFlag" + '\t' + "VisualCount" + '\t' + "PageBackgroundImage" + '\t' + "PageWallpaperImage" + '\t' + "PageType" + newline);
 
 var sb_Visuals = new System.Text.StringBuilder();
-sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "VisualHiddenFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + '\t' + "ShowItemsNoDataFlag" + '\t' + "SlicerType" + newline);
+sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "VisualHiddenFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + '\t' + "ShowItemsNoDataFlag" + '\t' + "SlicerType" + '\t' + "ParentGroup" + newline);
 
 var sb_Connections = new System.Text.StringBuilder();
 sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ReportId" + '\t' + "ConnectionType" + newline);
@@ -541,6 +541,15 @@ foreach (var rpt in FileList)
             bool visHid = false;
             bool showItemsNoData = false;
             string slicerType = "N/A";
+            string parentGroup = string.Empty;
+            
+            try
+            {
+                parentGroup = (string)configJson["parentGroupName"];
+            }
+            catch
+            {
+            }         
             
             // Show Items With No Data
             try
@@ -1939,7 +1948,7 @@ foreach (var rpt in FileList)
             {
             }
 
-            Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount, ShowItemsNoDataFlag = showItemsNoData, SlicerType = slicerType });
+            Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount, ShowItemsNoDataFlag = showItemsNoData, SlicerType = slicerType, ParentGroup = parentGroup });
             
             // Visual Filters
             string visfilter = (string)vc["filters"];
@@ -2093,6 +2102,19 @@ foreach (var rpt in FileList)
     {
     }
 
+    // Update for Visual Groups
+    foreach (var x in Visuals.ToList())
+    {
+        if (x.ParentGroup != null)
+        {
+            int pgX = Visuals.Where(a => a.Id == x.ParentGroup).First().X;
+            int pgY = Visuals.Where(a => a.Id == x.ParentGroup).First().Y;
+            
+            x.X = x.X + pgX;
+            x.Y = x.Y + pgY;
+        }
+    }    
+    
     // Add results to StringBuilders
     foreach (var x in CustomVisuals.ToList())
     {
@@ -2124,7 +2146,7 @@ foreach (var rpt in FileList)
     }
     foreach (var x in Visuals.ToList())
     {
-        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.HiddenFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + '\t' + x.ShowItemsNoDataFlag + '\t' + x.SlicerType + newline);
+        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.HiddenFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + '\t' + x.ShowItemsNoDataFlag + '\t' + x.SlicerType + '\t' + x.ParentGroup + newline);
     }
     foreach (var x in Connections.ToList())
     {
@@ -2389,6 +2411,7 @@ public class Visual
     public int ObjectCount { get; set; }
     public bool ShowItemsNoDataFlag { get; set; }
     public string SlicerType { get; set; }
+    public string ParentGroup {get; set; }
 }
 
 public class VisualFilter
