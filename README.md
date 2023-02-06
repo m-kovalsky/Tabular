@@ -15,6 +15,10 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary where the Data Dictionary table is stored in Excel. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models ([XMLA R/W endpoints](https://docs.microsoft.com/en-us/power-bi/admin/service-premium-connect-tools#enable-xmla-read-write "XMLA R/W endpoints") enabled).
 
+### Base Measures
+
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to list out all of the base measures in a given tabular model. A base measure is defined as a measure which does not depend on another measure.
+
 ### [Blank Row Finder](https://www.elegantbi.com/post/findblankrows "Blank Row Finder")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'. This has now been integrated into the Vertipaq Analyzer scripts [(see below)](https://github.com/m-kovalsky/Tabular#vertipaq-annotations) as well as the latest [Best Practice Rules](https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules "Best Practice Rules").
