@@ -9,7 +9,12 @@ string saveType = "B"; // Use 'B' for saving to .bim files, use 'F' for saving t
 foreach (var x in Model.Database.TOMDatabase.Server.Databases)
 {
     string dbName = x.ToString();
-    string fullCmdText = cmdText + @" """ + dbName + @""" -" + saveType + " " + @"""" + folderPath + @"\" + dbName + @".bim"""; 
+    string fullCmdText = cmdText + @" """ + dbName + @""" -" + saveType + " " + @"""" + folderPath + @"\" + dbName;
+   
+    if (saveType == "B")
+    {
+        fullCmdText = fullCmdText + @".bim""";
+    }
     
     System.Diagnostics.Process process = new System.Diagnostics.Process();
     System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo("cmd");
