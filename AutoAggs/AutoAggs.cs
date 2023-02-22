@@ -23,13 +23,18 @@ if (!Model.Tables.Any(y => y.Name == aggTableName))
         {
             var aggPartitionName = p.Name.Replace(tableName,aggTableName);
             var aggQuery = p.Query.Replace(tableName,aggTableName);
-            var pName = Model.Tables[aggTableName].AddPartition(aggPartitionName);
             
-            // Update Data Source
-            pName.DataSource = Model.DataSources[dataSource];
-            
-            // Update Query
-            pName.Query = aggQuery;
+            if (p.SourceType.ToString() == "M")
+            {
+                var pName = Model.Tables[aggTableName].AddMPartition(aggPartitionName);
+                pName.Query = aggQuery;
+            }
+            else
+            {
+                var pName = Model.Tables[aggTableName].AddPartition(aggPartitionName);
+                pName.DataSource = Model.DataSources[dataSource];
+                pName.Query = aggQuery;
+            }
         }
         
         // Remove default partition
@@ -92,8 +97,7 @@ if (!Model.Tables.Any(y => y.Name == aggTableName))
                 
                 // Create agg measure, format same as non-agg measure
                 var newMeasure = Model.Tables[aggTableName].AddMeasure(newMeasureName);
-                newMeasure.Expression = newDAX;
-                FormatDax(newMeasure);
+                newMeasure.Expression = FormatDax(newDAX);
                 newMeasure.IsHidden = true;
                 newMeasure.FormatString = fs;
                 newMeasure.DisplayFolder = df;
@@ -149,8 +153,7 @@ if (!Model.Tables.Any(y => y.Name == aggTableName))
     string dax = sb.ToString(0,sb.Length - 3) + ",0,1)";
 
     var m = Model.Tables[aggTableName].AddMeasure(aggTableName+"check");
-    m.Expression = dax;
-    FormatDax(m);
+    m.Expression = FormatDax(dax);
     m.IsHidden = true;
     
     // Add Agg-check measure to respective perspective(s)
@@ -167,6 +170,5 @@ if (!Model.Tables.Any(y => y.Name == aggTableName))
 // Update non-agg measures to switch between agg & non-agg
 foreach (var a in Model.AllMeasures.Where(a => a.GetAnnotation(aggTableName) == "BaseMeasure").ToList())
 {
-    a.Expression = "IF([" + aggTableName + "check] = 1,[" + a.Name + aggSuffix +"],"+a.Expression+")";
-    FormatDax(a);
+    a.Expression = FormatDax("IF([" + aggTableName + "check] = 1,[" + a.Name + aggSuffix +"],"+a.Expression+")");
 }
