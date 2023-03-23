@@ -46,11 +46,19 @@ if (!Model.Tables.Any(y => y.Name == aggTableName))
     {
         var par = Model.Tables[tableName].Partitions[tableName];
         var aggPar = Model.Tables[aggTableName].Partitions[aggTableName];
-        // Update Data Source
-        aggPar.DataSource = Model.DataSources[dataSource];
         
-        // Update Query
-        aggPar.Query = par.Query.Replace(tableName,aggTableName);
+        if (aggPar.SourceType.ToString() == "M")
+        {
+            aggPar.Query = par.Query;
+        }        
+        else
+        {
+            // Update Data Source
+            aggPar.DataSource = Model.DataSources[dataSource];
+            
+            // Update Query
+            aggPar.Query = par.Query.Replace(tableName,aggTableName);
+        }
     }
 
     foreach (var c in Selected.Columns)
