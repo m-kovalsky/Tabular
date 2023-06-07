@@ -23,7 +23,7 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to quickly make a list of all relationships that contain a blank row in the 'to-table'. This has now been integrated into the Vertipaq Analyzer scripts [(see below)](https://github.com/m-kovalsky/Tabular#vertipaq-annotations) as well as the latest [Best Practice Rules](https://github.com/microsoft/Analysis-Services/tree/master/BestPracticeRules "Best Practice Rules").
 
-### BPA (Best Practice Analyzer)
+### [BPA (Best Practice Analyzer)](https://github.com/m-kovalsky/Tabular/tree/master/BPA "BPA")
 
 The elements in this folder enable you to scan all models within a folder using [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")'s [Best Practice Analyzer](https://docs.tabulareditor.com/te2/Best-Practice-Analyzer.html "Best Practice Analzyer") and show the summarized results in a Power BI report. Below are instructions how to do it:
 
