@@ -3,7 +3,7 @@
 using System.IO;
 using TabularEditor.BestPracticeAnalyzer;
 
-string folderPath = @""; // Enter the folder with your model files
+string folderPath = @"C:\Desktop\MyReport"; // Enter the folder with your model files
 string textFilePath = folderPath + @"\BPAResults.txt"; // This is where the output .txt file is saved
 
 var sb = new System.Text.StringBuilder();
@@ -14,7 +14,20 @@ sb.Append("ModelName" + '\t' + "RuleCategory" + '\t' + "RuleName" + '\t' + "Obje
 string fileTypeBIM = "*.bim";
 string fileTypeDJSON = "database.json";
 string fileTypeTMDL = "model.tmd";
+
+if (Directory.Exists(folderPath) == false)
+{
+    Error("Folder path specified in the 'folderPath' parameter is not valid. Please enter a valid folder path.");
+    return;
+}
+
 string[] files = Directory.GetFiles(folderPath, fileTypeBIM, SearchOption.AllDirectories).Concat(Directory.GetFiles(folderPath, fileTypeDJSON, SearchOption.AllDirectories)).Concat(Directory.GetFiles(folderPath, fileTypeTMDL, SearchOption.AllDirectories)).ToArray();
+
+if (files.Count() == 0)
+{
+    Warning("No model files found in the specified folder. Please specify a folder with one or more model files.");
+    return;
+}
 
 // Loop through each model file and run BPA against the file
 foreach (string filePath in files)
@@ -52,3 +65,5 @@ foreach (string filePath in files)
 }
 
 System.IO.File.WriteAllText(textFilePath, sb.ToString());
+
+Info("BPA Scan Completed. File saved in this folder: " + folderPath);
