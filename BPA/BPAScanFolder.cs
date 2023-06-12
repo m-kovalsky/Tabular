@@ -10,7 +10,7 @@ var sb = new System.Text.StringBuilder();
 string newline = Environment.NewLine;
 sb.Append("ModelName" + '\t' + "RuleCategory" + '\t' + "RuleName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "RuleSeverity" + '\t' + "HasFixExpression" + '\t' + "RuleID" + newline);
 
-// Extract all .bim files from the folderPath
+// Extract all model files from the folderPath
 string fileTypeBIM = "*.bim";
 string fileTypeDJSON = "database.json";
 string fileTypeTMDL = "model.tmd";
