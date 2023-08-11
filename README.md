@@ -37,7 +37,7 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 
 ### [Cancel User Query](https://github.com/m-kovalsky/Tabular/blob/master/CancelUserQuery.cs "Cancel User Query")
 
-Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel user queries over a given threshold. Simply enter the threshold (in seconds) in the 'thresholdSec' parameter.
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel user queries over a given threshold. Simply enter the threshold (in seconds) in the 'thresholdSec' parameter. This script specifically avoids cancelling data refresh operations and can be customized to not cancel queries run by a list of user names.
 
 ### [Data Preview - Table](https://www.elegantbi.com/post/datapreview "Data Preview")
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting a single table within the TOM (Object) Explorer. It will return a data preview of the table.
