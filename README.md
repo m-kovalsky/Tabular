@@ -35,6 +35,10 @@ Run the BPAScanFolder.cs script in [Tabular Editor 2](https://tabulareditor.com/
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel the data refresh of that model.
 
+### [Cancel User Query](https://github.com/m-kovalsky/Tabular/blob/master/CancelUserQuery.cs "Cancel User Query")
+
+Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model to cancel user queries over a given threshold. Simply enter the threshold (in seconds) in the 'thresholdSec' parameter.
+
 ### [Data Preview - Table](https://www.elegantbi.com/post/datapreview "Data Preview")
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") against a live-connected model while selecting a single table within the TOM (Object) Explorer. It will return a data preview of the table.
 
