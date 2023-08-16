@@ -54,4 +54,4 @@ foreach (var m in Model.AllMeasures.ToList())
     }   
 }
 
-Info("DAX for the following objects have been modified accordingly." + newline + newline + sb.ToString());
+Info("Object references have been updated to match the actual table, column or measure name within the model for the following measures:" + newline + newline + sb.ToString());
