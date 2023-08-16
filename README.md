@@ -98,6 +98,9 @@ Run the ExportReportObjects.cs script in [Tabular Editor](https://tabulareditor.
 * Calculation Groups
 * Auto-date Tables
 
+### [Fix Case Sensitive DAX](https://github.com/m-kovalsky/Tabular/blob/master/FixCaseSensitiveDAX.cs "Fix Case Sensitive DAX")
+Running this script in Tabular Editor will update the DAX for all measures to ensure that the case of referenced tables, columns or measures matches the case of the actual table, column or measure name in your model. This is necessary for DirectQuery and DirectLake models.
+
 ### [Master Model](https://www.elegantbi.com/post/mastermodel "Master Model")
 
 ### [Metadata Export](https://www.elegantbi.com/post/extractmodelmetadata "Metadata Export")
