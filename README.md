@@ -15,7 +15,7 @@ Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to create an automated data dictionary where the Data Dictionary table is stored in Excel. This script works for Analysis Services, Azure Analysis Services, and Power BI Premium models ([XMLA R/W endpoints](https://docs.microsoft.com/en-us/power-bi/admin/service-premium-connect-tools#enable-xmla-read-write "XMLA R/W endpoints") enabled).
 
-### Base Measures
+### [Base Measures](https://github.com/m-kovalsky/Tabular/blob/master/BaseMeasures.cs "Base Measures")
 
 Run this script in [Tabular Editor](https://tabulareditor.com/ "Tabular Editor") to list out all of the base measures in a given tabular model. A base measure is defined as a measure which does not depend on another measure.
 
