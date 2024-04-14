@@ -10,7 +10,11 @@ sb.Append("RuleCategory" + '\t' + "RuleName" + '\t' + "ObjectName" + '\t' + "Obj
 
 foreach (var a in bpa.AnalyzeAll().ToList())
 {
-    sb.Append(a.get_Rule().Category + '\t' + a.RuleName + '\t' + a.ObjectName + '\t' + a.ObjectType + '\t' + a.get_Rule().Severity + '\t' + a.CanFix + newline);
+    #if TE3
+        sb.Append(a.get_Rule().Category + '\t' + a.RuleName + '\t' + a.ObjectName + '\t' + a.ObjectType + '\t' + a.get_Rule().Severity + '\t' + a.CanFix + newline);
+    #else
+        sb.Append(a.Rule.Category + '\t' + a.RuleName + '\t' + a.ObjectName + '\t' + a.ObjectType + '\t' + a.Rule.Severity + '\t' + a.CanFix + newline);
+    #endif
 }
 
 sb.Output();
