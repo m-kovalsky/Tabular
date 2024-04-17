@@ -1,4 +1,5 @@
-using TabularEditor.BestPracticeAnalyzer;
+using TabularEditor.BestPracticeAnalyzer; // Use this for Tabular Editor 2
+//using TabularEditor.Shared.BPA; // Use this instead of the first line when using Tabular Editor 3
 
 var bpa = new Analyzer();
 bpa.SetModel(Model);
@@ -10,11 +11,7 @@ sb.Append("RuleCategory" + '\t' + "RuleName" + '\t' + "ObjectName" + '\t' + "Obj
 
 foreach (var a in bpa.AnalyzeAll().ToList())
 {
-    #if TE3
-        sb.Append(a.get_Rule().Category + '\t' + a.RuleName + '\t' + a.ObjectName + '\t' + a.ObjectType + '\t' + a.get_Rule().Severity + '\t' + a.CanFix + newline);
-    #else
-        sb.Append(a.Rule.Category + '\t' + a.RuleName + '\t' + a.ObjectName + '\t' + a.ObjectType + '\t' + a.Rule.Severity + '\t' + a.CanFix + newline);
-    #endif
+    sb.Append(a.Rule.Category + '\t' + a.RuleName + '\t' + a.ObjectName + '\t' + a.ObjectType + '\t' + a.Rule.Severity + '\t' + a.CanFix + newline);
 }
 
 sb.Output();
