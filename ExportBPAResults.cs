@@ -1,4 +1,4 @@
-using TabularEditor.BestPracticeAnalyzer; // Use this for Tabular Editor 2
+using TabularEditor.BestPracticeAnalyzer; 
 //using TabularEditor.Shared.BPA; // Use this instead of the first line when using Tabular Editor 3
 
 var bpa = new Analyzer();
