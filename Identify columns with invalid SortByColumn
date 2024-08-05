@@ -1,0 +1,40 @@
+var Dax = @"
+EVALUATE
+FILTER(
+ADDCOLUMNS (
+    SUMMARIZE (
+        {0},
+        {1}
+    ),
+    ""@order"",
+        CALCULATE (
+        DISTINCTCOUNT ( {2} )
+        ),
+    ""@reps"",
+        calculate(
+        concatenatex(values({2}),{2},""-"")
+        )
+
+),
+[@order]>1
+
+)";
+var sb = new System.Text.StringBuilder();
+string newline = Environment.NewLine;
+sb.Append("Columns With Improper Sorting:" + newline);
+
+foreach (var o in Model.AllColumns.Where(t=> t.SortByColumn != null))
+{
+    string table = o.Table.DaxObjectFullName;//Table
+    string column = o.DaxObjectFullName;//Column
+    string sortByCol = o.SortByColumn.DaxObjectFullName;//SortByColumn     
+    var daxDef = string.Format(Dax, table, column, sortByCol);
+    var daxResults = ExecuteDax(daxDef).Tables[0];
+
+    if (daxResults.Rows.Count > 0)
+    {
+        sb.Append(column + newline);
+    }
+}
+
+sb.Output();
