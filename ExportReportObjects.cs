@@ -3,6 +3,7 @@
 
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 
 /************************************************************************************************************
 
@@ -59,34 +60,34 @@ if (singleFile && addPersp)
 List<string> FileList = new List<string>();
 
 var sb_CustomVisuals = new System.Text.StringBuilder();
-sb_CustomVisuals.Append("ReportName" + '\t' + "CustomVisualName" + newline);
+sb_CustomVisuals.Append("ReportName" + '\t' + "Name" + '\t' + "ReportDate" + newline);
 
 var sb_ReportFilters = new System.Text.StringBuilder();
-sb_ReportFilters.Append("ReportName" + '\t' + "FilterName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
+sb_ReportFilters.Append("ReportName" + '\t' + "DisplayName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType"  + '\t' + "HiddenFilter"  + '\t' + "LockedFilter"  + '\t' + "AppliedFilterVersion"  + '\t' + "ReportDate" + newline);
 
 var sb_VisualObjects = new System.Text.StringBuilder();
-sb_VisualObjects.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "Source" + newline);
+sb_VisualObjects.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualType" + '\t' + "AppliedFilterVersion" + '\t' + "CustomVisualFlag" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "Source" + '\t' + "DisplayName" + '\t' + "ReportDate" + newline);
 
 var sb_VisualFilters = new System.Text.StringBuilder();
-sb_VisualFilters.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
+sb_VisualFilters.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + '\t' + "HiddenFilter"  + '\t' + "LockedFilter"  + '\t' + "AppliedFilterVersion"  + '\t' + "DisplayName" + '\t' + "ReportDate" + newline);
 
 var sb_PageFilters = new System.Text.StringBuilder();
-sb_PageFilters.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "FilterName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + newline);
+sb_PageFilters.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "DisplayName" + '\t' + "TableName" + '\t' + "ObjectName" + '\t' + "ObjectType" + '\t' + "FilterType" + '\t' + "HiddenFilter"  + '\t' + "LockedFilter"  + '\t' + "AppliedFilterVersion"  + '\t' + "ReportDate" + newline);
 
 var sb_Bookmarks = new System.Text.StringBuilder();
-sb_Bookmarks.Append("ReportName" + '\t' + "BookmarkName" + '\t' + "BookmarkId" + '\t' + "PageId" + '\t' + "VisualId" + '\t' + "VisualHiddenFlag" + newline);
+sb_Bookmarks.Append("ReportName" + '\t' + "Name" + '\t' + "Id" + '\t' + "PageId" + '\t' + "VisualId" + '\t' + "VisualHiddenFlag" + '\t' + "ReportDate" + newline);
 
 var sb_Pages = new System.Text.StringBuilder();
-sb_Pages.Append("ReportName" + '\t' + "PageId" + '\t' + "PageName" + '\t' + "PageNumber" + '\t' + "PageWidth" + '\t' + "PageHeight" + '\t' + "PageHiddenFlag" + '\t' + "VisualCount" + '\t' + "PageBackgroundImage" + '\t' + "PageWallpaperImage" + '\t' + "PageType" + newline);
+sb_Pages.Append("ReportName" + '\t' + "Id" + '\t' + "Name" + '\t' + "Number" + '\t' + "Width" + '\t' + "Height" + '\t' + "HiddenFlag" + '\t' + "VisualCount" + '\t' + "BackgroundImage" + '\t' + "WallpaperImage" + '\t' + "Type" + '\t' + "ReportDate" + newline);
 
 var sb_Visuals = new System.Text.StringBuilder();
-sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "VisualId" + '\t' + "VisualName" + '\t' + "VisualType" + '\t' + "CustomVisualFlag" + '\t' + "VisualHiddenFlag" + '\t' + "X_Coordinate" + '\t' + "Y_Coordinate" + '\t' + "Z_Coordinate" + '\t' + "VisualWidth" + '\t' + "VisualHeight" + '\t' + "ObjectCount" + '\t' + "ShowItemsNoDataFlag" + '\t' + "SlicerType" + '\t' + "ParentGroup" + newline);
+sb_Visuals.Append("ReportName" + '\t' + "PageName" + '\t' + "Id" + '\t' + "Name" + '\t' + "Type" + '\t' + "CustomVisualFlag" + '\t' + "HiddenFlag" + '\t' + "X" + '\t' + "Y" + '\t' + "Z" + '\t' + "Width" + '\t' + "Height" + '\t' + "ObjectCount" + '\t' + "ShowItemsNoDataFlag" + '\t' + "SlicerType" + '\t' + "ParentGroup" + '\t' + "ReportDate" + newline);
 
 var sb_Connections = new System.Text.StringBuilder();
-sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ReportId" + '\t' + "ConnectionType" + newline);
+sb_Connections.Append("ReportName" + '\t' + "ServerName" + '\t' + "DatabaseName" + '\t' + "ReportID" + '\t' + "Type" + '\t' + "ReportDate" + newline);
 
 var sb_VisualInteractions = new System.Text.StringBuilder();
-sb_VisualInteractions.Append("ReportName" + '\t' + "PageName" + '\t' + "SourceVisualID" + '\t' + "TargetVisualID" + '\t' + "TypeID" + '\t' + "Type" + newline);
+sb_VisualInteractions.Append("ReportName" + '\t' + "PageName" + '\t' + "SourceVisualID" + '\t' + "TargetVisualID" + '\t' + "TypeID" + '\t' + "Type" + '\t' + "ReportDate" + newline);
 
 if (pbiFile.Length > 0 && pbiFolderName.Length == 0)
 {
@@ -118,44 +119,89 @@ foreach (var rpt in FileList)
     var Connections = new List<Connection>();
     var VisualInteractions = new List<VisualInteraction>();
     string fileExt = Path.GetExtension(rpt);
-    string fileName = Path.GetFileNameWithoutExtension(rpt);
+    string ReportName = Path.GetFileNameWithoutExtension(rpt);
+    string ReportDate = DateTime.Now.ToString("yyyy-MM-dd");
     string folderName = Path.GetDirectoryName(rpt) + @"\";
-    string zipPath = folderName + fileName + ".zip";
-    string unzipPath = folderName + fileName;
+    string zipPath = folderName + ReportName + ".zip";
+    string unzipPath = folderName + ReportName;
 
-    if (! (fileExt == ".pbix" || fileExt == ".pbit"))
-    {
-        Error("'" +rpt+ "is not a valid file. File(s) must be a valid .pbix or .pbit.");
-        return;
-    }
+if (!(fileExt == ".pbix" || fileExt == ".pbit"))
+{
+    Error("'" + rpt + "' is not a valid file. File(s) must be a valid .pbix or .pbit.");
+    return;
+}
 
-    try
+bool extractionSucceeded = false;
+
+try
+{
+    // Make a copy of a pbi and turn it into a zip file
+    File.Copy(rpt, zipPath);
+    // Unzip file
+    System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, unzipPath);
+    extractionSucceeded = true; // Set flag to true if extraction is successful
+}
+catch (System.IO.PathTooLongException)
+{
+    // Log or handle the PathTooLongException if needed
+}
+catch (System.IO.DirectoryNotFoundException)
+{
+    // Log or handle the DirectoryNotFoundException if needed
+}
+catch (System.IO.InvalidDataException ex)
+{
+
+}
+catch (Exception ex)
+{
+    
+}
+finally
     {
-        // Make a copy of a pbi and turn it into a zip file
-        File.Copy(rpt, zipPath);
-        // Unzip file
-        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, unzipPath);
         // Delete zip file
         File.Delete(zipPath);
     }
-    catch
-    {
-        Error("File does not exist. Must use a valid .pbix or .pbit file");
-        return;
-    }
+
+
+
 
     // Layout file
+   
     string layoutPath = unzipPath + @"\Report\Layout";
     string jsonFilePath = Path.ChangeExtension(layoutPath, ".json");
+    
+        if (!File.Exists(layoutPath))
+    {
+        continue; // If Layout file is not found, continue to the next file
+    }
+    
     File.Move(layoutPath, jsonFilePath); 
 
     string unformattedJson = File.ReadAllText(jsonFilePath,System.Text.UnicodeEncoding.Unicode);
     string formattedJson = Newtonsoft.Json.Linq.JToken.Parse(unformattedJson).ToString();
     dynamic json = Newtonsoft.Json.Linq.JObject.Parse(formattedJson);
     
-    // Connections file
+    
+
+
+
+
+
+
+
+// ****Connections file****
+
+
+
+
+
+
+
+
     string svName = string.Empty;
     string dbName = string.Empty;
+    string datetoday = string.Empty;
     string rptId = string.Empty;
     string connType = string.Empty;
     string connPath = unzipPath + @"\Connections";
@@ -169,59 +215,72 @@ foreach (var rpt in FileList)
         dynamic connjson = Newtonsoft.Json.Linq.JObject.Parse(formattedconnJson);
         
         // Connection info
-        try
-        {
-            foreach (var o in connjson["Connections"].Children())
-            {
-                connType = (string)o["ConnectionType"];
-                try
-                {
-                    
-                    dbName = (string)o["PbiModelDatabaseName"];
-                }
-                catch
-                {
-                }
-                if (connType != "pbiServiceLive")
-                {
-                    try
-                    {
-                        
-                        string x = (string)o["ConnectionString"];
-                        string dsCatch = "Data Source=";
-                        string icCatch = ";Initial Catalog=";
-                        int dsCatchLen = dsCatch.Length;
-                        int icCatchLen = icCatch.Length;
-                        svName = x.Substring(x.IndexOf(dsCatch)+dsCatchLen,x.IndexOf(";")-x.IndexOf(dsCatch)-dsCatchLen);
-                        int svNameLen = svName.Length;
-                        dbName = x.Substring(x.IndexOf(icCatch)+icCatchLen);
-                        
-                    }
-                    catch
-                    {                    
-                    }
-                }            
-            }
-        }
-        catch
+try
+{
+    foreach (var o in connjson["Connections"].Children())
+    {
+        connType = (string)o["ConnectionType"];
+
+        // For specific connection types
+        if (connType == "pbiServiceLive" || connType == "pbiServiceXmlaStyleLive")
         {
             try
             {
                 dbName = (string)connjson["RemoteArtifacts"][0]["DatasetId"];
                 rptId = (string)connjson["RemoteArtifacts"][0]["ReportId"];
-                connType = "localPowerQuery";
             }
             catch
             {
             }
         }
+        else
+        {
+            // For other connection types
+            try
+            {
+                dbName = (string)o["PbiModelDatabaseName"];
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                string x = (string)o["ConnectionString"];
+                string dsCatch = "Data Source=";
+                string icCatch = ";Initial Catalog=";
+                int dsCatchLen = dsCatch.Length;
+                int icCatchLen = icCatch.Length;
+
+                svName = x.Substring(x.IndexOf(dsCatch) + dsCatchLen, x.IndexOf(";") - x.IndexOf(dsCatch) - dsCatchLen);
+                dbName = x.Substring(x.IndexOf(icCatch) + icCatchLen);
+            }
+            catch
+            {
+            }
+        }
+    }
+}
+catch
+{
+    // Fallback for localPowerQuery
+    try
+    {
+        dbName = (string)connjson["RemoteArtifacts"][0]["DatasetId"];
+        rptId = (string)connjson["RemoteArtifacts"][0]["ReportId"];
+        connType = "localPowerQuery";
+    }
+    catch
+    {
+    }
+}
         Connections.Add(new Connection {ServerName = svName, DatabaseName = dbName, Type = connType, ReportID = rptId});        
     }
     
     //Delete previously created folder
     try
     {
-        Directory.Delete(folderName + fileName,true);
+        Directory.Delete(folderName + ReportName,true);
     }
     catch
     {
@@ -259,7 +318,22 @@ foreach (var rpt in FileList)
     {
     }
 
-    // Report-Level Filters
+
+
+
+
+
+
+
+    // ****Report-Level Filters****
+
+
+
+
+
+
+
+
     string rptFilters = json["filters"];
 
     try
@@ -269,13 +343,28 @@ foreach (var rpt in FileList)
 
         foreach (var o in rptFiltersJson.Children())
         {
-            string filterName = (string)o["name"];
+            string displayName = (string)o["displayName"];
             string filterType = (string)o["type"];
+            string hiddenfilter = (string)o["isHiddenInViewMode"];
+            string lockedfilter = (string)o["isLockedInViewMode"];
             string objectType = string.Empty;
             string objectName = string.Empty;
             string tableName = string.Empty;
+            string appliedfilterversion = string.Empty;
             
             // Note: Add filter conditions
+
+try
+{
+    if (o != null && o.ContainsKey("filter") && o["filter"].ContainsKey("Version"))
+    {
+        appliedfilterversion = o["filter"]["Version"].ToString();
+    }
+}
+catch (Exception ex)
+{
+}
+
             try
             {
                 objectName = (string)o["expression"]["Column"]["Property"];
@@ -338,40 +427,81 @@ foreach (var rpt in FileList)
             catch
             {
             }           
-            ReportFilters.Add(new ReportFilter {FilterName = filterName, TableName = tableName, ObjectName = objectName, ObjectType = objectType, FilterType = filterType});
+            ReportFilters.Add(new ReportFilter {displayName = displayName, TableName = tableName, ObjectName = objectName, ObjectType = objectType, FilterType = filterType, HiddenFilter = hiddenfilter, LockedFilter = lockedfilter, AppliedFilterVersion = appliedfilterversion});
         }
     }
     catch
     {        
     }
 
-    // Pages
-    foreach (var o in json["sections"].Children())
+
+
+
+
+
+
+
+
+// ****Pages****
+
+
+
+
+
+
+
+
+foreach (var o in json["sections"].Children())
+{
+    string pageId = (string)o["name"];
+    
+    // Check if "displayName" exists in the JSON object before assigning
+    string pageName = o["displayName"] != null ? (string)o["displayName"] : ReportName;
+
+    string pageFlt = (string)o["filters"];
+    int pageNumber = 0;
+    try
     {
-        string pageId = (string)o["name"];
-        string pageName = (string)o["displayName"];
-        string pageFlt = (string)o["filters"];
-        int pageNumber = 0;
-        try
-        {
-            pageNumber = (int)o["ordinal"];
-        }
-        catch
-        {
-        }
-        int pageWidth = (int)o["width"];
-        int pageHeight = (int)o["height"];
-        int visualCount = (int)o["visualContainers"].Count;
-        string pageBkgrd = "";
-        string pageWall = "";
-        string formattedpagfltJson = Newtonsoft.Json.Linq.JToken.Parse(pageFlt).ToString();
-        dynamic pageFltJson = Newtonsoft.Json.Linq.JArray.Parse(formattedpagfltJson);
-        int displayOpt = (int)o["displayOption"];
-        bool pageHid = false;
-        string pageType = string.Empty;
-        string pageConfig = (string)o["config"];
-        string formattedpagconfigJson = Newtonsoft.Json.Linq.JToken.Parse(pageConfig).ToString();
-        dynamic pageConfigJson = Newtonsoft.Json.Linq.JObject.Parse(formattedpagconfigJson);
+        pageNumber = (int)o["ordinal"];
+    }
+    catch
+    {
+    }
+
+    int pageWidth = (int)o["width"];
+    int pageHeight = (int)o["height"];
+    int visualCount = (int)o["visualContainers"].Count;
+    string pageBkgrd = "";
+    string pageWall = "";
+
+    // Use ReportName if pageName is null, empty, or whitespace
+    if (string.IsNullOrWhiteSpace(pageName))
+    {
+        pageName = ReportName;
+    }
+
+string formattedpagfltJson = "";
+if (!string.IsNullOrEmpty(pageFlt))
+{
+    formattedpagfltJson = Newtonsoft.Json.Linq.JToken.Parse(pageFlt).ToString();
+}
+dynamic pageFltJson = string.IsNullOrEmpty(formattedpagfltJson) 
+    ? new Newtonsoft.Json.Linq.JArray() 
+    : Newtonsoft.Json.Linq.JArray.Parse(formattedpagfltJson);
+
+int displayOpt = (int)o["displayOption"];
+bool pageHid = false;
+string pageType = string.Empty;
+string pageConfig = (string)o["config"];
+
+string formattedpagconfigJson = "";
+if (!string.IsNullOrEmpty(pageConfig))
+{
+    formattedpagconfigJson = Newtonsoft.Json.Linq.JToken.Parse(pageConfig).ToString();
+}
+dynamic pageConfigJson = string.IsNullOrEmpty(formattedpagconfigJson) 
+    ? new Newtonsoft.Json.Linq.JObject() 
+    : Newtonsoft.Json.Linq.JObject.Parse(formattedpagconfigJson);
 
         try
         {
@@ -386,7 +516,23 @@ foreach (var rpt in FileList)
         {            
         }
         
-        // Visual Interactions
+
+
+
+
+
+
+
+
+        // ****Visual Interactions****
+
+
+
+
+
+
+
+
         try
         {
             foreach (var o2 in pageConfigJson["relationships"].Children())
@@ -446,16 +592,46 @@ foreach (var rpt in FileList)
         
         Pages.Add(new Page {Id = pageId, Name = pageName, Number = pageNumber, Width = pageWidth, Height = pageHeight, HiddenFlag = pageHid, VisualCount = visualCount, BackgroundImage = pageBkgrd, WallpaperImage = pageWall, Type = pageType });
 
-        // Page-Level Filters
+        
+
+
+
+
+
+
+
+// ****Page-Level Filters****
+
+
+
+
+
+
+
+
         foreach (var o2 in pageFltJson.Children())
         {
-            string pgFltName = (string)o2["name"];
+            string displayName = (string)o2["displayName"];
             string pgFltType = (string)o2["type"];
+            string pghiddenfilter = (string)o2["isHiddenInViewMode"];
+            string pglockedfilter = (string)o2["isLockedInViewMode"];
             string objType = string.Empty;
             string objName = string.Empty;
             string tblName = string.Empty;
+            string pgappliedfilterversion = string.Empty;
             
             // Note: Add filter conditions
+
+try
+{
+    if (o2 != null && o2.ContainsKey("filter") && o2["filter"].ContainsKey("Version"))
+    {
+        pgappliedfilterversion = o2["filter"]["Version"].ToString();
+    }
+}
+catch (Exception ex)
+{
+}
             try
             {
                 objName = (string)o2["expression"]["Column"]["Property"];
@@ -519,10 +695,25 @@ foreach (var rpt in FileList)
             {
             }
 
-            PageFilters.Add(new PageFilter {PageId = pageId, PageName = pageName, FilterName = pgFltName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType });
+            PageFilters.Add(new PageFilter {PageId = pageId, PageName = pageName, displayName = displayName, TableName = tblName, ObjectName = objName, ObjectType = objType, FilterType = pgFltType, HiddenFilter = pghiddenfilter, LockedFilter = pglockedfilter, AppliedFilterVersion = pgappliedfilterversion });
         }
 
-        // Visuals
+
+
+
+
+
+
+
+        // ****Visuals****
+
+
+
+
+
+
+
+
         foreach (var vc in o["visualContainers"].Children())
         {                        
             string config = (string)vc["config"];
@@ -534,6 +725,7 @@ foreach (var rpt in FileList)
             int cz = Convert.ToInt32(Math.Ceiling((double)vc["z"]));
             int cw = Convert.ToInt32(Math.Ceiling((double)vc["width"]));
             int ch = Convert.ToInt32(Math.Ceiling((double)vc["height"]));
+            string displayName2 = (string)vc["displayName"];
             string visualType = string.Empty;
             string visualName = string.Empty;
             bool customVisualFlag = false;
@@ -551,33 +743,37 @@ foreach (var rpt in FileList)
             {
             }         
             
-            // Show Items With No Data
-            try
-            {
-                string sInd = (string)configJson["singleVisual"]["showAllRoles"][0];
-                
-                if (sInd == "Values")
-                {
-                    showItemsNoData = true;
-                }
-            }
-            catch
-            {
-            }                
+        // Show Items With No Data
+    try
+    {
+            string sInd = (string)configJson["singleVisual"]["showAllRoles"][0];
+    
+        // Check for "Values", "Rows", or "Columns"
+        if (sInd == "Values" || sInd == "Rows" || sInd == "Columns")
+        {
+            showItemsNoData = true;
+        }
+    }
+    catch
+    {
+    }
 
-            try
-            {
-                visualType = (string)configJson["singleVisual"]["visualType"];
-            }
-            catch
-            {
-                visualType = "visualGroup";
-            }
-            
-            if (CustomVisuals.Exists(a => a.Name == visualType))
-            {
-                customVisualFlag = true;
-            }
+    // Determine Visual Type
+    try
+    {
+        visualType = (string)configJson["singleVisual"]["visualType"];
+    }
+    catch
+    {
+        visualType = "visualGroup";
+    }
+
+    // Check if the visual type is a custom visual
+    if (CustomVisuals.Exists(a => a.Name == visualType))
+    {
+        customVisualFlag = true;
+    }
+
 
             // Visual Name
             try
@@ -647,7 +843,23 @@ foreach (var rpt in FileList)
             {
             }
 
-            // Visual Objects
+
+
+
+
+
+
+
+
+            // ****Visual Objects****
+
+
+
+
+
+
+
+
             try
             {
                 objCount = configJson["singleVisual"]["prototypeQuery"]["Select"].Count;
@@ -659,7 +871,17 @@ foreach (var rpt in FileList)
                     string src = string.Empty;
                     bool isSpark = false;
                     string sourceLabel = "Standard";
-                    
+                    string displayName = string.Empty;
+            string appliedFilterVersion = string.Empty;
+        try
+        {
+            string objectRef = (string)o2["Name"];
+            displayName = (string)configJson["singleVisual"]["columnProperties"][objectRef]["displayName"];
+        }
+        catch
+        {
+            // Handle the case where displayName is not found
+        }
                     try
                     {
                         objectName = (string)o2["Column"]["Property"];
@@ -677,14 +899,75 @@ foreach (var rpt in FileList)
                     }
                     catch
                     {
+                    }                       
+                    try
+                    {
+                        objectName = (string)o2["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        objectType = "Column";
+                        src = (string)o2["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }   
+                    try
+                    {
+                        objectName = (string)o2["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        objectType = "Column";
+                        src = (string)o2["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }   
+                    try
+                    {
+                        objectName = (string)o2["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Measure"]["Property"];
+                        objectType = "Measure";
+                        src = (string)o2["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Measure"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }   
+                    try
+                    {
+                        objectName = (string)o2["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Measure"]["Property"];
+                        objectType = "Measure";
+                        src = (string)o2["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Measure"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }                      
+                     try
+                    {
+                        objectName = (string)o2["Arithmetic"]["Right"]["Measure"]["Property"];
+                        objectType = "Measure";
+                        src = (string)o2["Arithmetic"]["Right"]["Measure"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
                     }
                     try
                     {
-                        string levelName = (string)o2["HierarchyLevel"]["Level"];
-                        string hierName = (string)o2["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
-                        objectName = hierName + "." + levelName;
-                        objectType = "Hierarchy";
-                        src = (string)o2["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Source"];
+                        objectName = (string)o2["Arithmetic"]["Left"]["Column"]["Property"];
+                        objectType = "Column";
+                        src = (string)o2["Arithmetic"]["Left"]["Column"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }
+                     try
+                    {
+                        objectName = (string)o2["Arithmetic"]["Left"]["Measure"]["Property"];
+                        objectType = "Measure";
+                        src = (string)o2["Arithmetic"]["Left"]["Measure"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        objectName = (string)o2["Arithmetic"]["Right"]["Column"]["Property"];
+                        objectType = "Column";
+                        src = (string)o2["Arithmetic"]["Right"]["Column"]["Expression"]["SourceRef"]["Source"];
                     }
                     catch
                     {
@@ -694,6 +977,26 @@ foreach (var rpt in FileList)
                         objectName = (string)o2["Aggregation"]["Expression"]["Column"]["Property"];
                         objectType = "Column";
                         src = (string)o2["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        objectName = (string)o2["Aggregation"]["Expression"]["Measure"]["Property"];
+                        objectType = "Measure";
+                        src = (string)o2["Aggregation"]["Expression"]["Measure"]["Expression"]["SourceRef"]["Source"];
+                    }
+                    catch
+                    {
+                    }
+                    try
+                    {
+                        string levelName = (string)o2["HierarchyLevel"]["Level"];
+                        string hierName = (string)o2["HierarchyLevel"]["Expression"]["Hierarchy"]["Hierarchy"];
+                        objectName = hierName + "." + levelName;
+                        objectType = "Hierarchy";
+                        src = (string)o2["HierarchyLevel"]["Expression"]["Hierarchy"]["Expression"]["SourceRef"]["Source"];
                     }
                     catch
                     {
@@ -718,7 +1021,18 @@ foreach (var rpt in FileList)
                     }
                     catch
                     {
-                    }                  
+                    }     
+                    
+                    try
+                    {
+
+                appliedFilterVersion = (string)configJson["singleVisual"]["objects"]["general"][0]["properties"]["filter"]["filter"]["Version"];
+                    }
+                catch
+                {
+
+                }
+        
 
                     foreach (var t in configJson["singleVisual"]["prototypeQuery"]["From"].Children())
                     {
@@ -770,7 +1084,7 @@ foreach (var rpt in FileList)
                         sourceLabel = "Sparkline";
                     }
                         
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sourceLabel});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, AppliedFilterVersion = appliedFilterVersion, displayName = displayName, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sourceLabel});
                     
                     if (isSpark)
                     {
@@ -792,7 +1106,7 @@ foreach (var rpt in FileList)
                                 }
                             }
                                                         
-                            VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sourceLabel});
+                            VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, displayName = displayName, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sourceLabel});
                             
                             if (createPersp)
                             {
@@ -851,9 +1165,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -867,9 +1182,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -883,9 +1199,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -899,9 +1216,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -925,9 +1243,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -941,9 +1260,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -957,9 +1277,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -973,9 +1294,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -999,9 +1321,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1015,9 +1338,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1031,9 +1355,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1047,9 +1372,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1072,9 +1398,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["start"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["start"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1088,9 +1415,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["start"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["start"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1113,9 +1441,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["end"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["end"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1129,9 +1458,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["end"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["end"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1154,9 +1484,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1170,9 +1501,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1186,9 +1518,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1202,9 +1535,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["labelColor"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1228,9 +1562,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1244,9 +1579,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1260,9 +1596,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1276,9 +1613,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["titleColor"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1301,9 +1639,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1317,9 +1656,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1333,9 +1673,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1349,9 +1690,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1371,9 +1713,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["text"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];                    
                         string objectName = (string)o2["properties"]["text"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1395,9 +1738,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1408,9 +1752,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";                    
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1421,9 +1766,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";                    
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1433,9 +1779,10 @@ foreach (var rpt in FileList)
                     {
                         string tableName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["backColor"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                         
                     }
                     catch
@@ -1457,9 +1804,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";                    
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1470,9 +1818,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1483,9 +1832,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1507,9 +1857,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["icon"]["value"]["expr"]["Conditional"]["Cases"][0]["Condition"]["Comparison"]["Left"]["Measure"]["Property"];                    
                         string tableName = (string)o2["properties"]["icon"]["value"]["expr"]["Conditional"]["Cases"][0]["Condition"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1520,9 +1871,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["icon"]["value"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["icon"]["value"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1544,9 +1896,10 @@ foreach (var rpt in FileList)
                     {
                         string objectName = (string)o2["properties"]["webURL"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
                         string tableName = (string)o2["properties"]["webURL"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                     catch
                     {
@@ -1569,9 +1922,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["text"]["expr"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["text"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1585,9 +1939,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["text"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["text"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1609,9 +1964,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1625,9 +1981,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1641,9 +1998,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1657,9 +2015,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["fontColor"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, displayName = displayName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1681,9 +2040,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1697,9 +2057,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1713,9 +2074,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Column";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1729,9 +2091,10 @@ foreach (var rpt in FileList)
                         // labels
                         string tableName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                         string objectName = (string)o2["properties"]["background"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                         string objectType = "Measure";
                         
-                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                        VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                     }
                 }
                 catch
@@ -1750,9 +2113,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1767,9 +2131,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1784,9 +2149,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Column";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName,  VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1801,9 +2167,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1819,9 +2186,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1836,9 +2204,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1853,9 +2222,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                    string displayName = (string)o2["displayName"];
                     string objectType = "Column";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1870,9 +2240,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1888,9 +2259,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["FillRule"]["Input"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1905,9 +2277,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Conditional"]["Cases"][0]["Condition"]["And"]["Left"]["Comparison"]["Left"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1922,9 +2295,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Aggregation"]["Expression"]["Column"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Column";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1939,9 +2313,10 @@ foreach (var rpt in FileList)
                     // labels
                     string tableName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Expression"]["SourceRef"]["Entity"];
                     string objectName = (string)o2["properties"]["color"]["solid"]["color"]["expr"]["Measure"]["Property"];
+                        string displayName = (string)o2["displayName"];
                     string objectType = "Measure";
                     
-                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
+                    VisualObjects.Add(new VisualObject {PageName = pageName, VisualId = visualId, displayName = displayName, VisualType = visualType, CustomVisualFlag = customVisualFlag, ObjectName = objectName, TableName = tableName, ObjectType = objectType, Source = sc});
                 }
             }
             catch
@@ -1950,7 +2325,23 @@ foreach (var rpt in FileList)
 
             Visuals.Add(new Visual {PageName = pageName, Id = visualId, Name = visualName, Type = visualType, CustomVisualFlag = customVisualFlag, HiddenFlag = visHid, X = cx, Y = cy, Z = cz, Width = cw, Height = ch, ObjectCount = objCount, ShowItemsNoDataFlag = showItemsNoData, SlicerType = slicerType, ParentGroup = parentGroup });
             
-            // Visual Filters
+            
+
+
+
+
+
+
+
+// ****Visual Filters****
+
+
+
+
+
+
+
+
             string visfilter = (string)vc["filters"];
             
             if (visfilter != null)
@@ -1960,12 +2351,27 @@ foreach (var rpt in FileList)
                                 
                 foreach (var o3 in visfilterJson.Children())
                 {                  
+                    string displayName = (string)o3["displayName"];
                     string filterType = (string)o3["type"];
+                    string hiddenfilter = (string)o3["isHiddenInViewMode"];
+                    string lockedfilter = (string)o3["isLockedInViewMode"];
                     string objType1 = string.Empty;
                     string objName1 = string.Empty;
                     string tblName1 = string.Empty;
-                    
-                    // Note: Add filter conditions
+            string appliedfilterversion = string.Empty;
+            
+            // Note: Add filter conditions
+
+try
+{
+    if (o3 != null && o3.ContainsKey("filter") && o3["filter"].ContainsKey("Version"))
+    {
+        appliedfilterversion = o3["filter"]["Version"].ToString();
+    }
+}
+catch (Exception ex)
+{
+}
                     try
                     {
                         objName1 = (string)o3["expression"]["Column"]["Property"];
@@ -2006,6 +2412,302 @@ foreach (var rpt in FileList)
                     catch
                     {
                     }
+                    
+                            try
+        {
+            objName1 = (string)o3["expression"]["Aggregation"]["Expression"]["Column"]["Property"];
+            tblName1 = (string)o3["expression"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Column";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+try
+        {
+            objName1 = (string)o3["expression"]["Aggregation"]["Expression"]["Measure"]["Property"];
+            tblName1 = (string)o3["expression"]["Aggregation"]["Expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Measure";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+                             try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Measure"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Measure";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+                             try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Column"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Column"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Column";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Measure"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Measure";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Column"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Column"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Column";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Column"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
+            objType1 = "Column";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Column"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Column"]["Expresssion"]["SourceRef"]["Entity"];
+            objType1 = "Column";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Right"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Column"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Right"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Column";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Left"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Column"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Left"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Column"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Column";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Right"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Measure"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Right"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Measure";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Left"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Measure"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Left"]["ScopedEval"]["Expression"]["Aggregation"]["Expression"]["Measure"]["Expression"]["SourceRef"]["Entity"];
+            objType1 = "Measure";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Measure"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Left"]["Aggregation"]["Expression"]["Measure"]["Expresssion"]["SourceRef"]["Entity"];
+            objType1 = "Measure";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+         try
+        {
+            objName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Measure"]["Property"];
+            tblName1 = (string)o3["expression"]["Arithmetic"]["Right"]["Aggregation"]["Expression"]["Measure"]["Expresssion"]["SourceRef"]["Entity"];
+            objType1 = "Measure";
+            
+            if (createPersp)
+            {
+                try
+                {
+                    Model.Tables[tblName1].Columns[objName1].InPerspective[perspName] = true;
+                }
+                catch
+                {
+                    // Handle exception
+                }
+            }
+        }
+        catch
+        {
+        }
+                    
                     try
                     {
                         string levelName1 = (string)o3["expression"]["HierarchyLevel"]["Level"];
@@ -2028,13 +2730,29 @@ foreach (var rpt in FileList)
                     catch
                     {
                     }
-                    VisualFilters.Add(new VisualFilter {PageName = pageName, VisualId = visualId, TableName = tblName1, ObjectName = objName1, ObjectType = objType1, FilterType = filterType });
+                    VisualFilters.Add(new VisualFilter {PageName = pageName, VisualId = visualId, displayName = displayName, TableName = tblName1, ObjectName = objName1, ObjectType = objType1, FilterType = filterType, HiddenFilter = hiddenfilter, LockedFilter = lockedfilter, AppliedFilterVersion = appliedfilterversion });
                 }
             }
         }
     }
 
-    // Bookmarks
+    
+
+
+
+
+
+
+
+// ****Bookmarks****
+
+
+
+
+
+
+
+
     try
     {
         string configEnd = (string)json["config"];
@@ -2118,59 +2836,59 @@ foreach (var rpt in FileList)
     // Add results to StringBuilders
     foreach (var x in CustomVisuals.ToList())
     {
-        sb_CustomVisuals.Append(fileName + '\t' + x.Name + newline);
+        sb_CustomVisuals.Append(ReportName + '\t' + x.Name + '\t' + ReportDate +  newline);
     }
     foreach (var x in ReportFilters.ToList())
     {
-        sb_ReportFilters.Append(fileName + '\t' + x.FilterName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
+        sb_ReportFilters.Append(ReportName + '\t' + x.displayName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + '\t' + x.HiddenFilter + '\t' + x.LockedFilter + '\t' + x.AppliedFilterVersion + '\t' + ReportDate + newline);
     }
     foreach (var x in PageFilters.ToList())
     {
-        sb_PageFilters.Append(fileName + '\t' + x.PageId + '\t' + x.PageName + '\t' + x.FilterName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
+        sb_PageFilters.Append(ReportName + '\t' + x.PageId + '\t' + x.PageName + '\t' + x.displayName + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + '\t' + x.HiddenFilter + '\t' + x.LockedFilter + '\t' + x.AppliedFilterVersion + '\t' + ReportDate + newline);
     }
     foreach (var x in VisualFilters.ToList())
     {
-        sb_VisualFilters.Append(fileName + '\t' + x.PageName + '\t' + x.VisualId + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + newline);
+        sb_VisualFilters.Append(ReportName + '\t' + x.PageName + '\t' + x.VisualId + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.FilterType + '\t' + x.HiddenFilter + '\t' + x.LockedFilter + '\t' + x.AppliedFilterVersion + '\t' + x.displayName + '\t' + ReportDate + newline);
     }
     foreach (var x in VisualObjects.ToList())
     {
-        sb_VisualObjects.Append(fileName + '\t' + x.PageName + '\t' + x.VisualId + '\t' + x.VisualType + '\t' + x.CustomVisualFlag + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.Source + newline);
+        sb_VisualObjects.Append(ReportName + '\t' + x.PageName + '\t' + x.VisualId + '\t' + x.VisualType + '\t' + x.AppliedFilterVersion + '\t' + x.CustomVisualFlag + '\t' + x.TableName + '\t' + x.ObjectName + '\t' + x.ObjectType + '\t' + x.Source + '\t' + x.displayName + '\t' + ReportDate + newline);
     }
     foreach (var x in Bookmarks.ToList())
     {
-        sb_Bookmarks.Append(fileName + '\t' + x.Name + '\t' + x.Id + '\t' + x.PageId + '\t' + x.VisualId + '\t' + x.VisualHiddenFlag + newline);
+        sb_Bookmarks.Append(ReportName + '\t' + x.Name + '\t' + x.Id + '\t' + x.PageId + '\t' + x.VisualId + '\t' + x.VisualHiddenFlag + '\t' + ReportDate + newline);
     }
     foreach (var x in Pages.ToList())
     {
-        sb_Pages.Append(fileName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Number + '\t' + x.Width + '\t' + x.Height + '\t' + x.HiddenFlag + '\t' + x.VisualCount + '\t' + x.BackgroundImage + '\t' + x.WallpaperImage + '\t' + x.Type + newline);
+        sb_Pages.Append(ReportName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Number + '\t' + x.Width + '\t' + x.Height + '\t' + x.HiddenFlag + '\t' + x.VisualCount + '\t' + x.BackgroundImage + '\t' + x.WallpaperImage + '\t' + x.Type + '\t' + ReportDate + newline);
     }
     foreach (var x in Visuals.ToList())
     {
-        sb_Visuals.Append(fileName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.HiddenFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + '\t' + x.ShowItemsNoDataFlag + '\t' + x.SlicerType + '\t' + x.ParentGroup + newline);
+        sb_Visuals.Append(ReportName + '\t' + x.PageName + '\t' + x.Id + '\t' + x.Name + '\t' + x.Type + '\t' + x.CustomVisualFlag + '\t' + x.HiddenFlag + '\t' + x.X + '\t' + x.Y + '\t' + x.Z + '\t' + x.Width + '\t' + x.Height + '\t' + x.ObjectCount + '\t' + x.ShowItemsNoDataFlag + '\t' + x.SlicerType + '\t' + x.ParentGroup + '\t' + ReportDate + newline);
     }
     foreach (var x in Connections.ToList())
     {
-        sb_Connections.Append(fileName + '\t' + x.ServerName + '\t' + x.DatabaseName + '\t' + x.ReportID + '\t' + x.Type + newline);
+        sb_Connections.Append(ReportName + '\t' + x.ServerName + '\t' + x.DatabaseName + '\t' + x.ReportID + '\t' + x.Type + '\t' + ReportDate + newline);
     }
     foreach (var x in VisualInteractions.ToList())
     {
-        sb_VisualInteractions.Append(fileName + '\t' + x.PageName + '\t' + x.SourceVisualID + '\t' + x.TargetVisualID + '\t' + x.TypeID + '\t' + x.Type + newline);
+        sb_VisualInteractions.Append(ReportName + '\t' + x.PageName + '\t' + x.SourceVisualID + '\t' + x.TargetVisualID + '\t' + x.TypeID + '\t' + x.Type + '\t' + ReportDate +    newline);
     }
 }
 
 // Save to text files or print out results
 if (saveToFile)
 {    
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_CustomVisuals.txt", sb_CustomVisuals.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_ReportFilters.txt", sb_ReportFilters.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_PageFilters.txt", sb_PageFilters.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_VisualFilters.txt", sb_VisualFilters.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_VisualObjects.txt", sb_VisualObjects.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Visuals.txt", sb_Visuals.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Bookmarks.txt", sb_Bookmarks.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Pages.txt", sb_Pages.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_Connections.txt", sb_Connections.ToString());
-    System.IO.File.WriteAllText(pbiFolderName+@"\"+savePrefix+"_VisualInteractions.txt", sb_VisualInteractions.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"CustomVisuals.txt", sb_CustomVisuals.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"ReportFilters.txt", sb_ReportFilters.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"PageFilters.txt", sb_PageFilters.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"VisualFilters.txt", sb_VisualFilters.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"VisualObjects.txt", sb_VisualObjects.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"Visuals.txt", sb_Visuals.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"Bookmarks.txt", sb_Bookmarks.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"Pages.txt", sb_Pages.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"Connections.txt", sb_Connections.ToString());
+    System.IO.File.WriteAllText(pbiFolderName+@"\"+"VisualInteractions.txt", sb_VisualInteractions.ToString());
 }
 else
 {
@@ -2363,6 +3081,7 @@ if (createPersp)
 public class CustomVisual
 {
     public string Name { get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class Bookmark
@@ -2372,27 +3091,35 @@ public class Bookmark
     public string PageId { get; set; }
     public string VisualId { get; set; }
     public bool VisualHiddenFlag { get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class ReportFilter
 {
-    public string FilterName { get; set; }
+    public string displayName { get; set; }
     public string TableName { get; set; }
     public string ObjectName { get; set; }
     public string ObjectType { get; set; }
     public string FilterType { get; set; }
+    public string HiddenFilter { get; set; }
+    public string LockedFilter { get; set; }
+    public string AppliedFilterVersion { get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class VisualObject
 {
     public string PageName { get; set; }
+    public string displayName { get; set; }
     public string VisualId { get; set; }
     public string VisualType { get; set; }
+    public string AppliedFilterVersion { get; set; }
     public bool CustomVisualFlag { get; set; }
     public string TableName { get; set; }
     public string ObjectName { get; set; }
     public string ObjectType { get; set; }
     public string Source { get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class Visual
@@ -2412,6 +3139,7 @@ public class Visual
     public bool ShowItemsNoDataFlag { get; set; }
     public string SlicerType { get; set; }
     public string ParentGroup {get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class VisualFilter
@@ -2422,17 +3150,26 @@ public class VisualFilter
     public string ObjectName { get; set; }
     public string ObjectType { get; set; }
     public string FilterType { get; set; }
+    public string HiddenFilter { get; set; }
+    public string LockedFilter { get; set; }
+    public string AppliedFilterVersion { get; set; }
+    public string displayName { get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class PageFilter
 {
     public string PageId { get; set; }
     public string PageName { get; set; }
-    public string FilterName {get; set; }
+    public string displayName {get; set; }
     public string TableName { get; set; }
     public string ObjectName { get; set; }
     public string ObjectType { get; set; }
-    public string FilterType { get; set; }    
+    public string FilterType { get; set; }   
+    public string HiddenFilter { get; set; }
+    public string LockedFilter { get; set; } 
+    public string AppliedFilterVersion { get; set; }
+    public string ReportDate { get; set; } 
 }
 
 public class Page
@@ -2447,6 +3184,7 @@ public class Page
     public string BackgroundImage { get; set; }
     public string WallpaperImage { get; set; }
     public string Type { get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class Connection
@@ -2455,6 +3193,7 @@ public class Connection
     public string DatabaseName { get; set; }
     public string Type { get; set; }
     public string ReportID { get; set; }
+    public string ReportDate { get; set; }
 }
 
 public class VisualInteraction
@@ -2464,6 +3203,7 @@ public class VisualInteraction
     public string TargetVisualID { get; set; }
     public int TypeID { get; set; }
     public string Type { get; set; }
+    public string ReportDate { get; set; }
 }
 
 static void _() { // Comment out this line if using Tabular Editor 3
